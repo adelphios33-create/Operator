@@ -29,7 +29,7 @@ Normalerweise reichen die Fenster von Hauptbank und Firmentresor.
   wb wert <Firma>                                Firmenwert mit allen Einzelteilen
   wb schilder                                    Schild-Sicherung: Stand prüfen (liste | wiederherstellen | auto an/aus)
   wb schild <x> <y> <z> [leeren | zurueck]       gesicherten Schildtext zeigen, absichtlich leeren, älteren nehmen
-  wb kurs <Währung> <Dukes>                      Auszahlungskurs, z. B. wb kurs Goldbarren 140
+  wb kurs <Währung> <Coins>                      Auszahlungskurs, z. B. wb kurs Goldbarren 140
   wb abrechnen <Firma|Immobilie|Partei> <Monate> manuell abrechnen
   wb anteile <Firma> <Verkäufer> <Käufer> <Prozent> <Preis>
   wb immo neu <Name> <Besitzer> <Wert> <Miete/Monat> <Kosten/Monat>
@@ -41,7 +41,12 @@ Normalerweise reichen die Fenster von Hauptbank und Firmentresor.
   wb kredit prüfen <Firma|Partei> <Summe> <Monate>   Regeln prüfen, ohne zu buchen
   wb kredit neu <Firma|Partei> <Summe> <Monate> [Zweck]   Kredit vergeben und auszahlen
   wb kredit regeln <MaxMonate> <MaxQuote%> <Zins%>   Obergrenzen fest: 36 Monate, 40 %. Nur senken möglich. Zins Standard 8 %
-  wb kredit löschen <Nr>                         Kredit streichen (ohne Buchung)";
+  wb kredit löschen <Nr>                         Kredit streichen (ohne Buchung)
+  wb abm <Firma>                                 erweiterte Verwaltung der Firma anzeigen (Personal, Verträge ...)
+  wb abm <Firma> an|aus                          erweiterte Verwaltung ein-/ausschalten (Daten bleiben)
+  wb abm <Firma> modul <Personal|Lieferanten|Kunden|Produkte|Projekte|Logistik> an|aus
+  wb abm <Firma> löhne                           offene Löhne zahlen (Handbetrieb)
+  wb reset person|firma|stadt <Name> ja          Guthaben auf 0 setzen (ohne 'ja' nur Vorschau)";
 
         public static string Ausfuehren(Bank bank, IList<string> a, int heute)
         {
@@ -54,6 +59,55 @@ Normalerweise reichen die Fenster von Hauptbank und Firmentresor.
                 {
                     case "übersicht": case "uebersicht": case "liste":
                         return Uebersicht(bank, heute);
+
+                    case "abm":
+                        {
+                            Min(a, 2);
+                            var u = bank.Firma(a[1]);
+                            if (a.Count == 2)
+                            {
+                                var sb = new StringBuilder();
+                                sb.AppendLine(u.Name + ": erweiterte Verwaltung " + (u.AbmAn ? "AN" : "aus") + ", Module: " + (u.AbmModule.Length > 0 ? u.AbmModule : "keine")
+                                    + ", Löhne " + (u.LohnManuell ? "manuell (" + u.LohnOffen + " Monat/e offen)" : "automatisch"));
+                                Abm.FirmaBeschreiben(bank, u, sb, heute);
+                                return sb.ToString().TrimEnd();
+                            }
+                            if (Ist(a[2], "an", "aus")) return Abm.AnSetzen(u, Ist(a[2], "an"), heute);
+                            if (Ist(a[2], "modul"))
+                            {
+                                Min(a, 5);
+                                string m = Abm.Module.FirstOrDefault(x => Ist(x, a[3]));
+                                if (m == null) return "Module: " + string.Join(", ", Abm.Module);
+                                return Abm.ModulSetzen(u, m, Ist(a[4], "an", "ja"), heute);
+                            }
+                            if (Ist(a[2], "löhne", "loehne")) return Abm.LoehneZahlen(bank, u, heute);
+                            return "wb abm <Firma> [an|aus | modul <Name> an|aus | löhne]";
+                        }
+
+                    case "reset":
+                        {
+                            Min(a, 3);
+                            bool ja = a.Count > 3 && Ist(a[3], "ja");
+                            if (Ist(a[1], "stadt", "bank", "region"))
+                            {
+                                string folgen = bank.StadtResetFolgen(a[2]);
+                                if (!ja) return folgen + " Zum Ausführen: wb reset stadt \"" + a[2] + "\" ja";
+                                return "Erledigt. " + Betrag(bank.StadtZuruecksetzen(a[2], heute)) + " " + bank.Stand.Waehrung + " entfernt.";
+                            }
+                            if (Ist(a[1], "firma"))
+                            {
+                                var u = bank.Firma(a[2]);
+                                if (!ja) return "Guthaben von " + u.Name + " (" + Betrag(u.Konto) + ") würde auf 0 gesetzt. Zum Ausführen: wb reset firma \"" + u.Name + "\" ja";
+                                return u.Name + ": " + Betrag(bank.FirmaZuruecksetzen(u.Name, heute)) + " entfernt, Guthaben jetzt 0.";
+                            }
+                            if (Ist(a[1], "person", "partei", "regierung"))
+                            {
+                                var p = bank.ParteiHolen(a[2]);
+                                if (!ja) return "Konto von " + p.Name + " (" + Betrag(p.Konto) + ") würde auf 0 gesetzt. Zum Ausführen: wb reset person \"" + p.Name + "\" ja";
+                                return p.Name + ": " + Betrag(bank.ParteiZuruecksetzen(p.Name, heute)) + " entfernt, Konto jetzt 0.";
+                            }
+                            return "wb reset person|firma|stadt <Name> ja";
+                        }
 
                     case "partei":
                         Min(a, 3);
@@ -149,7 +203,7 @@ Normalerweise reichen die Fenster von Hauptbank und Firmentresor.
                             decimal k = Zahl(a[2]);
                             if (k <= 0) throw new WirtschaftsFehler("Der Kurs muss größer als 0 sein.");
                             w.Kurs = k;
-                            return "1 " + w.Name + " = " + Betrag(k) + " Dukes Guthaben.";
+                            return "1 " + w.Name + " = " + Betrag(k) + " Coins Guthaben.";
                         }
 
                     case "mitarbeiterwert":

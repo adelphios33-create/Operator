@@ -144,7 +144,7 @@
 				<simplebutton name="btnSteuerMinus" depth="3" pos="426,-78" width="36" height="40" font_size="30" caption="-" />
 				<textfield name="txtSteuer" depth="3" pos="466,-78" width="120" height="40" font_size="26" character_limit="6" />
 				<simplebutton name="btnSteuerPlus" depth="3" pos="590,-78" width="36" height="40" font_size="30" caption="+" />
-				<label depth="3" pos="14,-128" width="196" height="28" font_size="24" color="200,200,200" justify="left" text="Mitarbeiter" />
+				<label depth="3" pos="14,-128" width="196" height="28" font_size="24" color="200,200,200" justify="left" text="{wbmitlabel}" />
 				<label depth="3" pos="220,-128" width="196" height="28" font_size="24" color="200,200,200" justify="left" text="Immobilienwert" />
 				<label depth="3" pos="426,-128" width="200" height="28" font_size="24" color="200,200,200" justify="left" text="Fahrzeuge, Maschinen" />
 				<simplebutton name="btnMitarbeiterMinus" depth="3" pos="14,-156" width="36" height="40" font_size="30" caption="-" />
@@ -171,7 +171,8 @@
 				<label depth="3" pos="24,-386" width="600" height="26" font_size="22" color="180,180,180" justify="left" text="{wbnaechste}" />
 				<label depth="3" pos="24,-412" width="600" height="26" font_size="22" color="[white]" justify="left" text="{wbwert}" />
 				<label depth="3" pos="24,-438" width="604" height="24" font_size="16" color="180,180,180" justify="left" text="{wbwertteile}" />
-				<label depth="3" pos="24,-464" width="600" height="28" font_size="24" color="255,170,90" justify="left" text="{wbguthaben}" />
+				<label depth="3" pos="24,-464" width="400" height="28" font_size="22" color="255,170,90" justify="left" text="{wbguthaben}" />
+				<simplebutton name="btnErweitert" depth="3" pos="430,-458" width="196" height="38" font_size="22" caption="Erweitert ..." />
 				<simplebutton name="btnTrennen" depth="3" pos="14,-502" width="200" height="42" font_size="26" caption="Tresor trennen" />
 				<label depth="3" pos="236,-506" width="130" height="30" font_size="26" color="200,200,200" justify="right" text="Läuft:" />
 				<label depth="3" pos="372,-506" width="60" height="30" font_size="28" color="[white]" justify="center" text="{wblaeuft}" />
@@ -241,7 +242,7 @@
 
 
 	<!-- ============ BÖRSE ============ -->
-	<window name="wbBoerseFenster" pos="-400, 358" width="800" height="796" anchor="CenterCenter" controller="WbBoerse, Wirtschaft" cursor_area="true">
+	<window name="wbBoerseFenster" pos="-400, 428" width="800" height="856" anchor="CenterCenter" controller="WbBoerse, Wirtschaft" cursor_area="true">
 		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
 			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_coin"/>
 			<label style="header.name" text="BÖRSE" width="110" />
@@ -252,9 +253,9 @@
 			<simplebutton name="btnTab4" depth="3" pos="546,-3" width="132" height="38" font_size="22" caption="Ereignisse" />
 			<label depth="2" pos="790,-8" width="90" height="32" font_size="26" color="200,200,200" justify="right" pivot="topright" text="{wbkopf}" />
 		</panel>
-		<rect name="content" pos="0,-46" width="800" height="750" depth="1">
-			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="800" height="750" color="[black]" type="sliced" fillcenter="false" />
-			<sprite depth="1" color="[darkGrey]" type="sliced" width="800" height="750" />
+		<rect name="content" pos="0,-46" width="800" height="810" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="800" height="810" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="800" height="810" />
 			<rect name="regionwahl" pos="0,0" width="800" height="44" depth="2" visible="{wbfirmenwahl}">
 				<label depth="3" pos="14,-14" width="110" height="32" font_size="28" color="200,200,200" justify="left" text="Region" />
 				<simplebutton name="btnRegionZurueck" depth="3" pos="130,-4" width="44" height="38" font_size="30" caption="&lt;" />
@@ -294,8 +295,9 @@
 				<label depth="3" pos="14,-366" width="170" height="26" font_size="22" color="150,200,240" justify="left" text="Schuldenquote" />
 				<label depth="3" pos="190,-366" width="300" height="26" font_size="22" color="[white]" justify="left" text="{wbschuldenquote}" />
 				<label depth="3" pos="786,-368" width="290" height="26" font_size="20" color="180,180,180" justify="right" pivot="topright" text="{wbgeldtresor}" />
-				<simplebutton name="btnGeldtresorAufloesen" depth="3" pos="14,-398" width="380" height="40" font_size="24" caption="Geldtresor auflösen" />
-				<simplebutton name="btnFirmaLoeschen" depth="3" pos="406,-398" width="380" height="40" font_size="24" caption="Firma löschen (liquidieren)" />
+				<simplebutton name="btnGeldtresorAufloesen" depth="3" pos="14,-398" width="250" height="40" font_size="21" caption="Geldtresor auflösen" />
+				<simplebutton name="btnFirmaReset" depth="3" pos="274,-398" width="252" height="40" font_size="21" caption="Guthaben zurücksetzen" />
+				<simplebutton name="btnFirmaLoeschen" depth="3" pos="536,-398" width="250" height="40" font_size="21" caption="Firma löschen" />
 			</rect>
 			<rect name="liste" pos="0,-146" width="380" height="330" depth="2" visible="{wbliste}">
 				<label depth="3" pos="14,0" width="350" height="30" font_size="26" color="150,200,240" justify="left" text="Namen (anklicken)" />
@@ -349,7 +351,7 @@
 				<label depth="3" pos="390,-312" width="396" height="26" font_size="18" color="180,180,180" justify="left" text="{wbbankinfo}" />
 				<simplebutton name="btnRegZuweisen" depth="3" pos="390,-338" width="396" height="36" font_size="22" caption="Gewählte Regierung für diese Bank" />
 			</rect>
-			<rect name="neuperson" pos="0,-524" width="800" height="170" depth="2" visible="{wbtab3}">
+			<rect name="neuperson" pos="0,-524" width="800" height="216" depth="2" visible="{wbtab3}">
 				<label depth="3" pos="14,0" width="772" height="32" font_size="26" color="255,170,90" justify="left" text="Neue Person / Regierung / Bank  (Name eintippen)" />
 				<label depth="3" pos="14,-40" width="60" height="30" font_size="26" color="200,200,200" justify="left" text="Name" />
 				<textfield name="txtNeuPerson" depth="3" pos="80,-36" width="420" height="40" font_size="28" character_limit="40" />
@@ -360,6 +362,8 @@
 				<simplebutton name="btnBankNeu" depth="3" pos="14,-128" width="260" height="40" font_size="26" caption="Bank anlegen" />
 				<simplebutton name="btnBankUmbenennen" depth="3" pos="282,-128" width="250" height="40" font_size="26" caption="Bank umbenennen" />
 				<simplebutton name="btnBankLoeschen" depth="3" pos="540,-128" width="246" height="40" font_size="26" caption="Bank löschen" />
+				<simplebutton name="btnPersonReset" depth="3" pos="14,-174" width="380" height="40" font_size="22" caption="Geld zurücksetzen (gewählter Name)" />
+				<simplebutton name="btnStadtReset" depth="3" pos="406,-174" width="380" height="40" font_size="22" caption="Stadt zurücksetzen (gewählte Bank)" />
 			</rect>
 			<rect name="tab4" pos="0,-146" width="800" height="440" depth="2" visible="{wbtab4}">
 				<label depth="3" pos="14,0" width="772" height="28" font_size="24" color="255,170,90" justify="left" text="{wbsstatus}" />
@@ -392,8 +396,8 @@
 				<label depth="3" pos="14,-352" width="772" height="24" font_size="20" color="150,200,240" justify="left" text="Protokoll (neueste oben)" />
 				<label depth="3" pos="14,-376" width="772" height="62" font_size="18" color="[white]" justify="left" text="{wbsprotokoll}" />
 			</rect>
-			<label depth="3" pos="14,-706" width="620" height="30" font_size="22" color="255,220,120" justify="left" text="{wbmeldung}" />
-			<simplebutton name="btnSchliessen" depth="3" pos="646,-700" width="140" height="42" font_size="28" caption="Schließen" />
+			<label depth="3" pos="14,-752" width="620" height="56" font_size="20" color="255,220,120" justify="left" text="{wbmeldung}" />
+			<simplebutton name="btnSchliessen" depth="3" pos="646,-760" width="140" height="42" font_size="28" caption="Schließen" />
 		</rect>
 	</window>
 
@@ -497,6 +501,147 @@
 			<label depth="3" pos="14,-630" width="470" height="30" font_size="22" color="255,220,120" justify="left" text="{wbmeldung}" />
 			<simplebutton name="btnKZurueck" depth="3" pos="494,-622" width="140" height="42" font_size="26" caption="Zurück" />
 			<simplebutton name="btnSchliessen" depth="3" pos="646,-622" width="140" height="42" font_size="28" caption="Schließen" />
+		</rect>
+	</window>
+
+	<!-- ============ ERWEITERTE VERWALTUNG (Advanced Business Management), aus dem Firmentresor ============ -->
+	<window name="wbAbmFenster" pos="-450, 393" width="900" height="786" anchor="CenterCenter" controller="WbAbm, Wirtschaft" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_coin"/>
+			<label style="header.name" text="ERWEITERTE VERWALTUNG" width="420" />
+			<label depth="2" pos="890,-8" width="440" height="32" font_size="26" color="[white]" justify="right" pivot="topright" text="{abmfirma}" />
+		</panel>
+		<rect name="content" pos="0,-46" width="900" height="740" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="900" height="740" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="900" height="740" />
+			<simplebutton name="btnAT0" depth="3" pos="14,-6" width="120" height="38" font_size="17" caption="-" />
+			<simplebutton name="btnAT1" depth="3" pos="138,-6" width="120" height="38" font_size="17" caption="-" />
+			<simplebutton name="btnAT2" depth="3" pos="262,-6" width="120" height="38" font_size="17" caption="-" />
+			<simplebutton name="btnAT3" depth="3" pos="386,-6" width="120" height="38" font_size="17" caption="-" />
+			<simplebutton name="btnAT4" depth="3" pos="510,-6" width="120" height="38" font_size="17" caption="-" />
+			<simplebutton name="btnAT5" depth="3" pos="634,-6" width="120" height="38" font_size="17" caption="-" />
+			<simplebutton name="btnAT6" depth="3" pos="758,-6" width="120" height="38" font_size="17" caption="-" />
+
+			<!-- Übersicht: ein-/ausschalten, Module, Lohnabrechnung -->
+			<rect name="uebersicht" pos="0,0" width="900" height="740" depth="2" visible="{abmtab0}">
+				<simplebutton name="btnAbmAn" depth="3" pos="14,-60" width="420" height="44" font_size="24" caption="-" />
+				<simplebutton name="btnMod0" depth="3" pos="14,-116" width="420" height="40" font_size="22" caption="-" />
+				<simplebutton name="btnMod1" depth="3" pos="14,-162" width="420" height="40" font_size="22" caption="-" />
+				<simplebutton name="btnMod2" depth="3" pos="14,-208" width="420" height="40" font_size="22" caption="-" />
+				<simplebutton name="btnMod3" depth="3" pos="14,-254" width="420" height="40" font_size="22" caption="-" />
+				<simplebutton name="btnMod4" depth="3" pos="14,-300" width="420" height="40" font_size="22" caption="-" />
+				<simplebutton name="btnMod5" depth="3" pos="14,-346" width="420" height="40" font_size="22" caption="-" />
+				<simplebutton name="btnLohnArt" depth="3" pos="14,-400" width="420" height="40" font_size="22" caption="-" />
+				<simplebutton name="btnLoehneZahlen" depth="3" pos="14,-446" width="420" height="40" font_size="22" caption="Offene Löhne jetzt zahlen" />
+				<label depth="3" pos="14,-500" width="420" height="140" font_size="17" color="180,180,180" justify="left" text="Ausschalten löscht nichts: alle Daten bleiben gespeichert. Umsatz und Ausgaben im Firmentresor zählen weiter als 'sonstiger Umsatz' und 'sonstige Ausgaben'; Verträge und Löhne kommen in derselben Monatsbuchung dazu (eine Steuerrechnung, keine Doppelbuchung)." />
+				<label depth="3" pos="450,-60" width="436" height="560" font_size="19" color="[white]" justify="left" text="{abmuebersicht}" />
+			</rect>
+
+			<!-- Modul ist aus -->
+			<rect name="modulaus" pos="0,0" width="900" height="740" depth="2" visible="{abmaus}">
+				<label depth="3" pos="14,-70" width="872" height="90" font_size="24" color="255,220,120" justify="left" text="{abmaustext}" />
+			</rect>
+
+			<!-- Liste und Bearbeiten -->
+			<rect name="liste" pos="0,0" width="900" height="740" depth="2" visible="{abmliste}">
+				<simplebutton name="btnE0" depth="3" pos="14,-60" width="300" height="38" font_size="18" caption="-" />
+				<simplebutton name="btnE1" depth="3" pos="14,-102" width="300" height="38" font_size="18" caption="-" />
+				<simplebutton name="btnE2" depth="3" pos="14,-144" width="300" height="38" font_size="18" caption="-" />
+				<simplebutton name="btnE3" depth="3" pos="14,-186" width="300" height="38" font_size="18" caption="-" />
+				<simplebutton name="btnE4" depth="3" pos="14,-228" width="300" height="38" font_size="18" caption="-" />
+				<simplebutton name="btnE5" depth="3" pos="14,-270" width="300" height="38" font_size="18" caption="-" />
+				<simplebutton name="btnE6" depth="3" pos="14,-312" width="300" height="38" font_size="18" caption="-" />
+				<simplebutton name="btnE7" depth="3" pos="14,-354" width="300" height="38" font_size="18" caption="-" />
+				<simplebutton name="btnEZurueck" depth="3" pos="14,-402" width="50" height="38" font_size="26" caption="&lt;" />
+				<label depth="3" pos="70,-406" width="188" height="30" font_size="20" color="200,200,200" justify="center" text="{abmseite}" />
+				<simplebutton name="btnEVor" depth="3" pos="264,-402" width="50" height="38" font_size="26" caption="&gt;" />
+				<simplebutton name="btnNeu1" depth="3" pos="14,-450" width="300" height="40" font_size="22" caption="-" />
+				<simplebutton name="btnNeu2" depth="3" pos="14,-496" width="300" height="40" font_size="22" caption="-" visible="{abmneu2an}" />
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmsuchean}">
+					<label depth="3" pos="14,-548" width="300" height="28" font_size="20" color="150,200,240" justify="left" text="Lieferant suchen (Name, Branche, Produkt)" />
+					<textfield name="txtSuche" depth="3" pos="14,-578" width="300" height="38" font_size="20" character_limit="60" />
+					<simplebutton name="btnSuchen" depth="3" pos="14,-622" width="146" height="38" font_size="20" caption="Suchen" />
+					<simplebutton name="btnSucheNeu" depth="3" pos="166,-622" width="148" height="38" font_size="18" caption="Als neu anlegen" />
+				</rect>
+				<label depth="3" pos="330,-56" width="556" height="30" font_size="24" color="255,170,90" justify="left" text="{abmtitel}" />
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmeditor}">
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile0}">
+					<label depth="3" pos="330,-96" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel0}" />
+					<textfield name="txtF0" depth="3" pos="555,-92" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW0" depth="3" pos="840,-92" width="46" height="34" font_size="22" caption="»" visible="{abmwahl0}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile1}">
+					<label depth="3" pos="330,-132" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel1}" />
+					<textfield name="txtF1" depth="3" pos="555,-128" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW1" depth="3" pos="840,-128" width="46" height="34" font_size="22" caption="»" visible="{abmwahl1}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile2}">
+					<label depth="3" pos="330,-168" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel2}" />
+					<textfield name="txtF2" depth="3" pos="555,-164" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW2" depth="3" pos="840,-164" width="46" height="34" font_size="22" caption="»" visible="{abmwahl2}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile3}">
+					<label depth="3" pos="330,-204" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel3}" />
+					<textfield name="txtF3" depth="3" pos="555,-200" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW3" depth="3" pos="840,-200" width="46" height="34" font_size="22" caption="»" visible="{abmwahl3}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile4}">
+					<label depth="3" pos="330,-240" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel4}" />
+					<textfield name="txtF4" depth="3" pos="555,-236" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW4" depth="3" pos="840,-236" width="46" height="34" font_size="22" caption="»" visible="{abmwahl4}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile5}">
+					<label depth="3" pos="330,-276" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel5}" />
+					<textfield name="txtF5" depth="3" pos="555,-272" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW5" depth="3" pos="840,-272" width="46" height="34" font_size="22" caption="»" visible="{abmwahl5}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile6}">
+					<label depth="3" pos="330,-312" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel6}" />
+					<textfield name="txtF6" depth="3" pos="555,-308" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW6" depth="3" pos="840,-308" width="46" height="34" font_size="22" caption="»" visible="{abmwahl6}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile7}">
+					<label depth="3" pos="330,-348" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel7}" />
+					<textfield name="txtF7" depth="3" pos="555,-344" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW7" depth="3" pos="840,-344" width="46" height="34" font_size="22" caption="»" visible="{abmwahl7}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile8}">
+					<label depth="3" pos="330,-384" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel8}" />
+					<textfield name="txtF8" depth="3" pos="555,-380" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW8" depth="3" pos="840,-380" width="46" height="34" font_size="22" caption="»" visible="{abmwahl8}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile9}">
+					<label depth="3" pos="330,-420" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel9}" />
+					<textfield name="txtF9" depth="3" pos="555,-416" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW9" depth="3" pos="840,-416" width="46" height="34" font_size="22" caption="»" visible="{abmwahl9}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile10}">
+					<label depth="3" pos="330,-456" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel10}" />
+					<textfield name="txtF10" depth="3" pos="555,-452" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW10" depth="3" pos="840,-452" width="46" height="34" font_size="22" caption="»" visible="{abmwahl10}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile11}">
+					<label depth="3" pos="330,-492" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel11}" />
+					<textfield name="txtF11" depth="3" pos="555,-488" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW11" depth="3" pos="840,-488" width="46" height="34" font_size="22" caption="»" visible="{abmwahl11}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile12}">
+					<label depth="3" pos="330,-528" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel12}" />
+					<textfield name="txtF12" depth="3" pos="555,-524" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW12" depth="3" pos="840,-524" width="46" height="34" font_size="22" caption="»" visible="{abmwahl12}" />
+				</rect>
+				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile13}">
+					<label depth="3" pos="330,-564" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel13}" />
+					<textfield name="txtF13" depth="3" pos="555,-560" width="280" height="34" font_size="20" character_limit="200" />
+					<simplebutton name="btnW13" depth="3" pos="840,-560" width="46" height="34" font_size="22" caption="»" visible="{abmwahl13}" />
+				</rect>
+					<simplebutton name="btnESpeichern" depth="3" pos="330,-606" width="270" height="40" font_size="24" caption="Speichern" />
+					<simplebutton name="btnELoeschen" depth="3" pos="610,-606" width="276" height="40" font_size="24" caption="Löschen" />
+				</rect>
+			</rect>
+
+			<label depth="3" pos="14,-656" width="720" height="60" font_size="20" color="255,220,120" justify="left" text="{abmmeldung}" />
+			<simplebutton name="btnAbmSchliessen" depth="3" pos="746,-690" width="140" height="42" font_size="26" caption="Schließen" />
 		</rect>
 	</window>
 

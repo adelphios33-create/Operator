@@ -314,7 +314,7 @@ namespace Wirtschaft.Spiel
             return "Goldbarren:  " + Befehle.Betrag(z[Gold]) + "\n"
                  + "Silberbarren:  " + Befehle.Betrag(z[Silber]) + "\n"
                  + "Old Cash (Scheine):  " + Befehle.Betrag(z[Schein]) + "\n"
-                 + "Dukes (Münzen):  " + Befehle.Betrag(z[Muenze]);
+                 + "Coins (Münzen):  " + Befehle.Betrag(z[Muenze]);
         }
 
         // ---------- Block-Ereignisse ----------
@@ -484,7 +484,7 @@ public class BlockGeldtresor : BlockLoot
         var bank = WirtschaftMod.Bank;
         var h = Geldtresor.HalterAmGeldtresor(bank, BlockHilfe.Position(_blockPos));
         if (h == null) return "[E] Geldtresor (nicht verbunden)";
-        return "[E] Geldtresor " + h.Name + ": " + Befehle.Betrag(h.Konto) + " Dukes";
+        return "[E] Geldtresor " + h.Name + ": " + Befehle.Betrag(h.Konto) + " Coins";
     }
 
     public override bool HasBlockActivationCommands(WorldBase _world, BlockValue _blockValue, int _clrIdx, Vector3i _blockPos, EntityAlive _entityFocusing)

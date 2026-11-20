@@ -1,4 +1,4 @@
-# Wirtschaft – Anleitung (Version 1.9)
+# Wirtschaft – Anleitung (Version 2.0)
 
 Hauptbank und Firmentresor haben jetzt eigene Fenster. Pro Firma gibst du drei Werte ein, der Mod rechnet und bucht:
 
@@ -225,3 +225,43 @@ Die Erst-Sicherung vom 14.11.2026 enthält alle 657 beschriebenen Schilder aus d
 - Die Pfeile am Hauptbank-Block blättern nur noch durch Regierungen.
 - Konsole: `wb bank loeschen <Name>`, `wb bank umbenennen <alt> <neu>`.
 - Beim ersten Laden eines älteren Spielstands wird automatisch aufgeräumt: steht bei einer Bank eine Person als Regierung und gibt es die Standard-Regierung „Regierung <Bank>“, wird wieder diese eingetragen.
+
+## Neu in 2.0: Erweiterte Verwaltung (Advanced Business Management)
+Optional pro Firma. Ohne sie rechnet alles genau wie bisher.
+
+**Öffnen:** Firmentresor (E) > Knopf **„Erweitert …“**. Reiter: Übersicht, Personal, Lieferanten, Kunden, Produkte, Projekte, Logistik.
+
+**Übersicht:** „Erweiterte Verwaltung: AUS/AN“ schaltet für diese Firma ein. Darunter jedes Modul einzeln ([x] = an). Ausschalten löscht nichts, die Daten wirken nur nicht mehr.
+
+**Keine Doppelbuchung:**
+- Umsatz und Ausgaben im Firmentresor sind ab jetzt „sonstiger Umsatz“ und „sonstige Ausgaben“. Kundenverträge kommen zum Umsatz dazu, Löhne zu den Ausgaben, in derselben Monatsbuchung (eine Steuerrechnung).
+- Beim ersten Einschalten von Personal wird die alte Mitarbeiterzahl als Gruppe „Bisherige Mitarbeiter“ mit „Lohn schon in Ausgaben? = Ja“ übernommen. Die zählt als Köpfe, kostet aber nichts extra. Willst du deren Lohn lieber hier führen: Lohn eintragen, auf „Nein“ stellen und die sonstigen Ausgaben im Firmentresor um denselben Betrag senken.
+- Mit Personal an ist die Mitarbeiterzahl im Firmentresor nur Anzeige (Summe aus der Personalliste, zählt für Firmenwert und Börse).
+
+**Personal:** Einzelne Mitarbeiter (Name, Position, Tätigkeit, Abteilung, Lohn, Status, Bonus, Provision % vom Umsatz) und Gruppen (z. B. 10 Verkäufer × 1.500). Befördern = Position und Lohn ändern, Speichern. Status Beurlaubt/Deaktiviert = kein Lohn.
+- **Lohnkonto:** Steht bei „Person (Lohnkonto)“ ein Name, geht sein Lohn jeden Monat auf das Konto dieser Person (z. B. Francis). Gibt es die Person noch nicht, wird sie mit 0 angelegt. Abheben wie immer an der Hauptbank oder über ihren Geldtresor. Der Banker sieht den Lohn als Einkommen.
+- **Lohnabrechnung automatisch:** mit der Monatsbuchung, vor der Steuer.
+- **Manuell:** jede Monatsbuchung merkt einen offenen Monat vor, „Offene Löhne jetzt zahlen“ bucht sie vom Firmenkonto (nach der Steuer, also ohne Steuerersparnis).
+
+**Lieferanten:** Suchfeld (Name, Branche, Produkt) findet Firmen der Spielwelt und Lieferanten, die andere Firmen schon kennen. Treffer anklicken = übernehmen. „Als neu anlegen“ legt einen neuen Partner an. Gibt es den Namen schon als Firma, wird verknüpft statt doppelt angelegt. Mehrere Lieferanten für dasselbe Produkt sind erlaubt (Preise vergleichen).
+
+**Verhandeln:** Mit dem Unternehmer (KI-Figur) dieser Lieferfirma reden. Er kennt seine Lieferbeziehungen und verhandelt mit eigenen Interessen (Gegenangebote, Preiserhöhungen, Ablehnung). Eine Einigung trägst du selbst unter Lieferanten > Vereinbarungen ein, durch das Gespräch fließt kein Geld. Der Operator kann Lieferanten ebenfalls spielen.
+
+**Kunden & Verträge:** Kunde, Vertrag, Leistung, Wert pro Monat, Beginn, Laufzeit (0 = unbefristet), Abrechnung, Status, Kündigungsfrist. Nur Status „Aktiv“ zählt zum Umsatz. Abgelaufene Verträge stehen automatisch auf „Beendet“. Die Abrechnung (monatlich, Quartal, jährlich) ist nur Info, gebucht wird der Monatswert jeden Monat.
+
+**Produkte:** Name, Kategorie, Einkaufs- und Verkaufspreis, Bestand, Mindestbestand (in der Liste mit ! markiert). Kein Geld wird automatisch gebucht.
+
+**Projekte:** Titel, Verantwortlich, Beteiligte, geschätzte Kosten, Zeitraum, Status (Idee bis Abgebrochen). Nur Planung, kein Geld.
+
+**Logistik:** Lieferaufträge mit Status. Bei „Geliefert“ wird die Menge einmal beim Produkt gleichen Namens auf den Bestand gebucht. Transportkosten sind nur Info.
+
+**Game Operator:** sieht alle Firmen mit erweiterter Verwaltung (Personal, Lieferanten, Verträge, Lager, Lieferungen, Projekte) und schlägt passende Ereignisse vor. Er ändert nichts selbst: Vorschläge sind keine Tatsachen.
+
+## Neu in 2.0: Geld zurücksetzen (Börsenterminal)
+Immer zweimal drücken (Rückfrage). Nur das Guthaben wird 0. Kredite, Anteile, Firmendaten und Verträge bleiben. Ein Geldtresor wird beim nächsten Abgleich leer.
+- **Person oder Regierung:** Reiter Personen, links anklicken, „Geld zurücksetzen“.
+- **Firma:** Reiter Firmen, Firma wählen, „Guthaben zurücksetzen“.
+- **Stadt:** Reiter Personen, rechts die Bank wählen, „Stadt zurücksetzen“: alle Firmenkonten der Stadt und die Staatskasse ihrer Regierung. Personen gehören zu keiner Stadt und bleiben.
+- Konsole: `wb reset person|firma|stadt <Name>` zeigt die Vorschau, mit `ja` am Ende wird ausgeführt. `wb abm <Firma>` zeigt die erweiterte Verwaltung.
+
+Die Währung heißt jetzt überall „Coins“ (ältere Spielstände werden beim Laden umgestellt).

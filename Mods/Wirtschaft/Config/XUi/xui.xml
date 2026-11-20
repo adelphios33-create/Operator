@@ -15,5 +15,8 @@
 	<window_group name="wbKredit" defaultSelected="content">
 		<window name="wbKreditFenster" />
 	</window_group>
+	<window_group name="wbAbm" defaultSelected="content">
+		<window name="wbAbmFenster" />
+	</window_group>
 </append>
 </configs>

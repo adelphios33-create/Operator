@@ -470,6 +470,12 @@ Antworte auf Deutsch, als gesprochener Text ohne Markdown, normalerweise in vier
                 string immo = Immo.FuerKi(r.Stadt ?? "");
                 if (immo.Length > 0) sb.AppendLine(immo);
             }
+            // Unternehmer-Figur: eigene Firmendaten und Geschäftsbeziehungen (z. B. als Lieferant) aus der erweiterten Verwaltung
+            if (!string.IsNullOrEmpty(r.FirmaName))
+            {
+                string partner = WirtschaftBruecke.AbmBericht("partner:" + r.FirmaName);
+                if (partner.Length > 0) sb.AppendLine(partner);
+            }
             if (r.Finanzen)
             {
                 string fin = WirtschaftBruecke.FinanzBericht(r.Stadt ?? "");

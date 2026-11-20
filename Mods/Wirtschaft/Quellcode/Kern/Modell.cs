@@ -104,6 +104,19 @@ namespace Wirtschaft.Kern
         [XmlAttribute] public int SonderUnten;
         [XmlAttribute] public int SonderOben;
 
+        // ---- Advanced Business Management (optional, siehe Abm.cs). Ausschalten löscht nichts. ----
+        /// <summary>Erweiterte Verwaltung für diese Firma an.</summary>
+        [XmlAttribute] public bool AbmAn;
+        /// <summary>Gewählte Module, mit Komma getrennt: Personal, Lieferanten, Kunden, Produkte, Projekte, Logistik.</summary>
+        [XmlAttribute] public string AbmModule = "";
+        /// <summary>True = Löhne werden nicht mit der Monatsbuchung abgezogen, sondern per Knopf "Löhne zahlen".</summary>
+        [XmlAttribute] public bool LohnManuell;
+        /// <summary>Handbetrieb: so viele Monatslöhne sind noch nicht bezahlt.</summary>
+        [XmlAttribute] public int LohnOffen;
+        /// <summary>Laufende Nummer für ABM-Datensätze.</summary>
+        [XmlAttribute] public int AbmNr;
+        public List<AbmEintrag> Abm = new List<AbmEintrag>();
+
         public List<Anteil> Anteile = new List<Anteil>();
         public List<Buchung> Verlauf = new List<Buchung>();
         /// <summary>Protokoll der Sonderereignisse (automatisch und manuell).</summary>
@@ -170,7 +183,7 @@ namespace Wirtschaft.Kern
         [XmlAttribute] public string AktivePartei = "";
         /// <summary>Ereignis-Meldungen im Spiel an/aus (nur für Favoriten).</summary>
         [XmlAttribute] public bool SonderBenachrichtigung = true;
-        [XmlAttribute] public string Waehrung = "Dukes";
+        [XmlAttribute] public string Waehrung = "Coins";
         [XmlAttribute] public int TageProMonat = 7;
         /// <summary>Testmodus: ein "Tag" dauert so viele Ingame-Minuten (0 = aus, normale Spieltage).</summary>
         [XmlAttribute] public int TestMinuten;

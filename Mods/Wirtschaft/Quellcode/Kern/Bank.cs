@@ -60,7 +60,7 @@ namespace Wirtschaft.Kern
             // Auszahlungs-Währungen: Kurs in Dukes, abgeleitet aus den Handelswerten des Spiels.
             if (Stand.Waehrungen.Count == 0)
             {
-                Stand.Waehrungen.Add(new Zahlungsmittel { Item = "casinoCoin", Name = "Dukes", Kurs = 1m });
+                Stand.Waehrungen.Add(new Zahlungsmittel { Item = "casinoCoin", Name = "Coins", Kurs = 1m });
                 Stand.Waehrungen.Add(new Zahlungsmittel { Item = "oldCash", Name = "Old Cash", Kurs = 20m });
                 Stand.Waehrungen.Add(new Zahlungsmittel { Item = "resourceSilverNugget", Name = "Silberbarren", Kurs = 500m });
                 Stand.Waehrungen.Add(new Zahlungsmittel { Item = "resourceGoldNugget", Name = "Goldbarren", Kurs = 5000m });
@@ -82,12 +82,18 @@ namespace Wirtschaft.Kern
                 }
                 Stand.StaatStand = 1;
             }
+            // Die Währung heißt überall "Coins".
+            if (string.IsNullOrEmpty(Stand.Waehrung) || string.Equals(Stand.Waehrung, "Dukes", StringComparison.OrdinalIgnoreCase)) Stand.Waehrung = "Coins";
+            foreach (var zm in Stand.Waehrungen) if (string.Equals(zm.Name, "Dukes", StringComparison.OrdinalIgnoreCase)) zm.Name = "Coins";
             ZeitNeuStarten = Stand.Version < 4;
             Stand.Version = 4;
         }
 
         /// <summary>True, wenn ein älterer Spielstand geladen wurde: alle Firmen zählen ab heute neu.</summary>
         public bool ZeitNeuStarten;
+
+        /// <summary>Aktueller Spieltag (vom Spiel gesetzt), für Vorschauen mit Kundenverträgen.</summary>
+        public int Heute;
 
         public void AlleAbHeute(int heute)
         {
@@ -371,6 +377,13 @@ namespace Wirtschaft.Kern
             foreach (var k in Stand.Kredite) if (Gleich(k.Nehmer, vorher)) k.Nehmer = neu;
             foreach (var b in Stand.Banken) if (Gleich(b.Regierung, vorher)) b.Regierung = neu;
             if (Gleich(Stand.AktivePartei, vorher)) Stand.AktivePartei = neu;
+            // Erweiterte Verwaltung: Lohnkonten und Kunden ziehen mit
+            foreach (var u in Stand.Unternehmen)
+                foreach (var e in u.Abm)
+                {
+                    if (e.Art == "Mitarbeiter" && Gleich(e.Hol("Konto"), vorher)) e.Setz("Konto", neu);
+                    if (e.Art == "Vertrag" && Gleich(e.Hol("Kunde"), vorher)) e.Setz("Kunde", neu);
+                }
             return p;
         }
 
@@ -440,6 +453,13 @@ namespace Wirtschaft.Kern
             foreach (var i in Stand.Immobilien) if (Gleich(i.Besitzer, alt)) i.Besitzer = b.Name;
             foreach (var k in Stand.Kredite) if (Gleich(k.Nehmer, alt)) k.Nehmer = b.Name;
             foreach (var bk in Stand.Banken) if (Gleich(bk.Regierung, alt)) bk.Regierung = "";
+            // Erweiterte Verwaltung: Lohnkonto fällt weg (der Mitarbeiter bleibt, sein Lohn geht dann an niemanden)
+            foreach (var u in Stand.Unternehmen)
+                foreach (var e in u.Abm.Where(w => w.Art == "Mitarbeiter" && Gleich(w.Hol("Konto"), alt)))
+                {
+                    e.Setz("Konto", "");
+                    e.Setz("Notiz", (e.Hol("Notiz") + " | Lohnkonto " + alt + " gelöscht").Trim(' ', '|'));
+                }
 
             Stand.Parteien.Remove(p);
             if (Gleich(Stand.AktivePartei, alt))
@@ -612,6 +632,7 @@ namespace Wirtschaft.Kern
         /// <summary>Vom Spiel bei jedem neuen Spieltag aufgerufen. Bucht volle Monate der aktiven Partei.</summary>
         public List<Rechnung> Tageswechsel(int heute)
         {
+            Heute = heute;
             var ergebnisse = new List<Rechnung>();
             int t = Stand.TageProMonat;
 
@@ -693,6 +714,12 @@ namespace Wirtschaft.Kern
             {
                 decimal anteil = AnteilVon(f, p.Name);
                 if (anteil > 0) s += Runden(Vorschau(f).Einkommen * anteil / 100m);
+                // Lohn als Angestellter (erweiterte Verwaltung, automatische Lohnabrechnung)
+                if (Abm.LohnAutomatisch(f))
+                {
+                    decimal um = f.UmsatzMonat + Abm.VertragsUmsatzJetzt(f, Heute, Stand.TageProMonat);
+                    foreach (var kv in Abm.Lohnempfaenger(f, um)) if (Gleich(kv.Key, p.Name)) s += kv.Value;
+                }
             }
             return s;
         }
@@ -817,20 +844,112 @@ namespace Wirtschaft.Kern
         /// <summary>Rechnet für X Monate durch, ohne zu buchen.</summary>
         public static Rechnung Rechne(string name, decimal umsatz, decimal ausgaben, decimal steuersatz, int monate)
         {
+            return RechneGesamt(name, Runden(umsatz * monate), Runden(ausgaben * monate), steuersatz, monate);
+        }
+
+        /// <summary>Wie Rechne, aber mit Gesamtbeträgen für alle Monate (eine einzige Steuerrechnung).</summary>
+        public static Rechnung RechneGesamt(string name, decimal umsatzGesamt, decimal ausgabenGesamt, decimal steuersatz, int monate)
+        {
             var r = new Rechnung { Name = name, Monate = monate };
-            r.Umsatz = Runden(umsatz * monate);
-            r.Ausgaben = Runden(ausgaben * monate);
+            r.Umsatz = Runden(umsatzGesamt);
+            r.Ausgaben = Runden(ausgabenGesamt);
             r.Zwischensumme = r.Umsatz - r.Ausgaben;
             r.Steuer = r.Zwischensumme > 0 ? Math.Ceiling(r.Zwischensumme * steuersatz / 100m) : 0m;   // ganze Coins, aufgerundet
             r.Einkommen = r.Zwischensumme - r.Steuer;
             return r;
         }
 
-        public Rechnung Vorschau(Unternehmen u) { return Rechne(u.Name, u.UmsatzMonat, u.AusgabenMonat, u.Steuersatz, 1); }
+        public Rechnung Vorschau(Unternehmen u) { return RechneFirma(u, u.UmsatzMonat, u.AusgabenMonat, u.Steuersatz); }
+
+        /// <summary>Ein Monat einer Firma mit den angegebenen Werten, plus erweiterte Verwaltung (Kundenverträge, automatische Löhne).
+        /// Ohne erweiterte Verwaltung genau wie Rechne.</summary>
+        public Rechnung RechneFirma(Unternehmen u, decimal umsatz, decimal ausgaben, decimal steuersatz)
+        {
+            decimal vert = Abm.VertragsUmsatzJetzt(u, Heute, Stand.TageProMonat);
+            decimal lohn = Abm.LohnAutomatisch(u) ? Abm.LohnMonat(u, umsatz + vert) : 0m;
+            return RechneGesamt(u.Name, Runden(umsatz) + vert, Runden(ausgaben) + lohn, steuersatz, 1);
+        }
+
+        /// <summary>Löhne an die Konten der Personen (Mitarbeiter mit Lohnkonto). Das Geld ist beim Aufrufer schon vom Firmenkonto abgezogen.</summary>
+        public void LoehneAuszahlen(Unternehmen u, List<KeyValuePair<string, decimal>> empfaenger, int monate, int heute)
+        {
+            var summe = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+            foreach (var kv in empfaenger) { decimal b; summe.TryGetValue(kv.Key, out b); summe[kv.Key] = b + kv.Value * monate; }
+            foreach (var kv in summe)
+            {
+                var p = ParteiOderNull(kv.Key);
+                if (p == null) { Buchen(Stand.Kassenbuch, heute, "Lohn " + u.Name + " an " + kv.Key + " (Person fehlt, nicht gutgeschrieben)", kv.Value); continue; }
+                p.Konto += kv.Value;
+                Buchen(Stand.Kassenbuch, heute, "Lohn " + u.Name + " an " + p.Name, kv.Value);
+            }
+        }
+
+        public void VerlaufBuchen(Unternehmen u, int heute, string text, decimal betrag) { Buchen(u.Verlauf, heute, text, betrag); }
+
+        // ---------- Geld zurücksetzen (Börsenterminal, immer mit Rückfrage) ----------
+        // Nur das Guthaben wird 0. Kredite, Anteile, Firmendaten und die erweiterte Verwaltung bleiben unverändert.
+        // Hat die Person oder Firma einen Geldtresor, passt das Spiel die Geldgegenstände darin beim nächsten Abgleich an (dann leer).
+
+        public decimal ParteiZuruecksetzen(string name, int heute)
+        {
+            var p = ParteiHolen(name);
+            decimal alt = p.Konto;
+            p.Konto = 0m;
+            Buchen(Stand.Kassenbuch, heute, "Guthaben zurückgesetzt: " + p.Name + " (vorher " + Befehle.Betrag(alt) + ")", -alt);
+            return alt;
+        }
+
+        public decimal FirmaZuruecksetzen(string name, int heute)
+        {
+            var u = Firma(name);
+            decimal alt = u.Konto;
+            u.Konto = 0m;
+            Buchen(u.Verlauf, heute, "Guthaben zurückgesetzt (vorher " + Befehle.Betrag(alt) + ")", -alt);
+            Buchen(Stand.Kassenbuch, heute, "Guthaben zurückgesetzt: Firma " + u.Name + " (vorher " + Befehle.Betrag(alt) + ")", -alt);
+            return alt;
+        }
+
+        /// <summary>Was ein Stadt-Reset betrifft, als Satz für die Rückfrage.</summary>
+        public string StadtResetFolgen(string bank)
+        {
+            var b = BankhausHolen(bank);
+            var firmen = FirmenDerBank(b.Name);
+            var reg = ParteiOderNull(b.Regierung);
+            decimal summe = firmen.Sum(f => f.Konto) + (reg != null ? reg.Konto : 0m);
+            return "Stadt " + b.Name + ": " + firmen.Count + " Firmenkonten" + (reg != null ? " und die Staatskasse von " + reg.Name : "")
+                 + " werden auf 0 gesetzt (zusammen " + Befehle.Betrag(summe) + " " + Stand.Waehrung + "). Personen, Kredite und Anteile bleiben unverändert.";
+        }
+
+        public decimal StadtZuruecksetzen(string bank, int heute)
+        {
+            var b = BankhausHolen(bank);
+            decimal summe = 0m;
+            foreach (var f in FirmenDerBank(b.Name)) summe += FirmaZuruecksetzen(f.Name, heute);
+            var reg = ParteiOderNull(b.Regierung);
+            if (reg != null) summe += ParteiZuruecksetzen(reg.Name, heute);
+            return summe;
+        }
 
         public Rechnung FirmaAbrechnen(Unternehmen u, int monate, int heute)
         {
-            var r = Rechne(u.Name, u.UmsatzMonat, u.AusgabenMonat, u.Steuersatz, monate);
+            // Erweiterte Verwaltung: Kundenverträge zählen zum Umsatz, automatische Löhne zu den Ausgaben - in DERSELBEN Rechnung
+            // (eine Steuer, eine Buchung). Ohne erweiterte Verwaltung sind beide 0 und alles rechnet wie bisher.
+            int t = Stand.TageProMonat;
+            decimal vert = 0m, lohn = 0m;
+            bool lohnAuto = Abm.LohnAutomatisch(u);
+            var empfaenger = new List<KeyValuePair<string, decimal>>();
+            for (int k = monate - 1; k >= 0; k--)
+            {
+                decimal v = Abm.VertragsUmsatzAm(u, heute - k * t, t);
+                vert += v;
+                if (lohnAuto)
+                {
+                    lohn += Abm.LohnMonat(u, u.UmsatzMonat + v);
+                    empfaenger.AddRange(Abm.Lohnempfaenger(u, u.UmsatzMonat + v));
+                }
+            }
+            if (Abm.ModulAn(u, Abm.Personal) && u.LohnManuell) u.LohnOffen += monate;
+            var r = RechneGesamt(u.Name, Runden(u.UmsatzMonat * monate) + vert, Runden(u.AusgabenMonat * monate) + lohn, u.Steuersatz, monate);
 
             if (r.Steuer > 0)
             {
@@ -842,7 +961,15 @@ namespace Wirtschaft.Kern
             // Das Einkommen (oder ein Verlust) bleibt als Guthaben in der Firma. Auszahlen an der Hauptbank.
             u.Konto += r.Einkommen;
             r.Ruecklage = r.Einkommen;
-            Buchen(u.Verlauf, heute, (r.Einkommen < 0 ? "Verlust (" : "Einkommen (") + monate + " Monat/e)", r.Einkommen);
+            Buchen(u.Verlauf, heute, (r.Einkommen < 0 ? "Verlust (" : "Einkommen (") + monate + " Monat/e"
+                + (vert > 0 ? ", davon Verträge " + Befehle.Betrag(vert) : "") + (lohn > 0 ? ", nach Löhnen " + Befehle.Betrag(lohn) : "") + ")", r.Einkommen);
+            // Die Löhne sind oben schon als Ausgaben abgezogen; hier gehen sie nur an die Personen mit Lohnkonto (kein zweiter Abzug).
+            if (empfaenger.Count > 0)
+            {
+                LoehneAuszahlen(u, empfaenger, 1, heute);
+                foreach (var kv in empfaenger) r.Auszahlungen.Add(kv);
+            }
+            foreach (var ende in Abm.VertraegeAuslaufen(u, heute, t)) Buchen(u.Verlauf, heute, "Vertrag ausgelaufen: " + ende, 0m);
             return r;
         }
 

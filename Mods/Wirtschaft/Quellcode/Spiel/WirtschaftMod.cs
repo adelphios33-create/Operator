@@ -44,6 +44,7 @@ namespace Wirtschaft.Spiel
                 ordner = GameIO.GetSaveGameDir();
                 Bank = new Bank(Speicher.Laden(ordner));
                 letzterTag = Heute;
+                Bank.Heute = letzterTag;
                 if (Bank.ZeitNeuStarten) Bank.AlleAbHeute(letzterTag);   // älterer Spielstand: keine Nachzahlung auf einen Schlag
                 Geldtresor.Start(Bank);   // Geldtresor (Banking): Kurse einmalig umstellen
                 Schilder.Laden(ordner);   // Schild-Sicherung
@@ -156,6 +157,21 @@ namespace Wirtschaft.Spiel
             if (Bank == null) return "";
             try { return Befehle.FinanzBericht(Bank, stadt ?? ""); }
             catch (Exception e) { return "Finanzdaten nicht lesbar: " + e.Message; }
+        }
+
+        /// <summary>Erweiterte Unternehmensdaten (Advanced Business Management) für die KI.
+        /// "" = alle Firmen mit erweiterter Verwaltung (für den Game Operator), "partner:Firmenname" = eigene Daten und
+        /// Geschäftsbeziehungen dieser Firma (für eine KI-Figur, die sie führt). Leer, wenn es nichts gibt.</summary>
+        public static string AbmBericht(string filter)
+        {
+            if (Bank == null) return "";
+            try
+            {
+                filter = filter ?? "";
+                if (filter.StartsWith("partner:", StringComparison.OrdinalIgnoreCase)) return Abm.PartnerBericht(Bank, filter.Substring(8), Heute);
+                return Abm.Bericht(Bank, Heute);
+            }
+            catch (Exception e) { Log.Warning("[Wirtschaft] AbmBericht: " + e.Message); return ""; }
         }
 
         /// <summary>Monatsraten für einen Betrag, z. B. für ein Immobilienangebot.</summary>

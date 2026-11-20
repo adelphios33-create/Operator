@@ -556,6 +556,7 @@ public class XUiC_WbTresor : XUiController
         FensterHilfe.Knopf(this, "btnBankVor", (s, m) => { bankWahl++; RefreshBindings(true); });
         FensterHilfe.Knopf(this, "btnAnlegen", (s, m) => AnlegenUndVerbinden());
         FensterHilfe.Knopf(this, "btnTrennen", (s, m) => Trennen());
+        FensterHilfe.Knopf(this, "btnErweitert", (s, m) => Erweitert());
         txtRegMit = FensterHilfe.Feld(this, "txtRegMit", FeldGeaendert);
         txtRegAus = FensterHilfe.Feld(this, "txtRegAus", FeldGeaendert);
         FensterHilfe.Knopf(this, "btnRegMitMinus", (s, m) => PlusReg(txtRegMit, -1m, 1000000m));
@@ -587,6 +588,7 @@ public class XUiC_WbTresor : XUiController
         wahlIdx = 0;
         bankWahl = 0;
         regWahl = 0;
+        if (B != null) B.Heute = WirtschaftMod.Heute;
         FelderLaden();
         RefreshBindings(true);
     }
@@ -635,7 +637,9 @@ public class XUiC_WbTresor : XUiController
         decimal um, aus, st, d;
         FensterHilfe.Werte(u, txtUmsatz, txtAusgaben, txtSteuer, out um, out aus, out st);
         u.UmsatzMonat = um; u.AusgabenMonat = aus; u.Steuersatz = st;
-        if (txtMitarbeiter != null && Befehle.VersucheZahl(FensterHilfe.Lesen(txtMitarbeiter), out d) && d >= 0 && d <= 100000) u.Mitarbeiter = (int)d;
+        // Mit erweiterter Personalverwaltung zählt die Personalliste (Feld hier nur Anzeige).
+        if (Abm.ModulAn(u, Abm.Personal)) Abm.Abgleichen(u);
+        else if (txtMitarbeiter != null && Befehle.VersucheZahl(FensterHilfe.Lesen(txtMitarbeiter), out d) && d >= 0 && d <= 100000) u.Mitarbeiter = (int)d;
         if (txtImmo != null && Befehle.VersucheZahl(FensterHilfe.Lesen(txtImmo), out d) && d >= 0) u.Immobilienwert = d;
         if (txtFahrzeuge != null && Befehle.VersucheZahl(FensterHilfe.Lesen(txtFahrzeuge), out d) && d >= 0) u.Fahrzeugwert = d;
     }
@@ -731,6 +735,19 @@ public class XUiC_WbTresor : XUiController
         Melden(g.Name + (an ? ": Staatsausgaben laufen." : ": Staatsausgaben pausiert."));
     }
 
+    /// <summary>Erweiterte Verwaltung (Advanced Business Management) dieser Firma öffnen.</summary>
+    void Erweitert()
+    {
+        var u = Firma;
+        if (u == null) return;
+        Uebernehmen();
+        WirtschaftMod.Speichern();
+        string name = u.Name;
+        xui.playerUI.windowManager.CloseIfOpen(Gruppe);
+        var sp = GameManager.Instance == null || GameManager.Instance.World == null ? null : GameManager.Instance.World.GetPrimaryPlayer();
+        if (!XUiC_WbAbm.Oeffnen(sp, name)) Log.Warning("[Wirtschaft] Fenster 'Erweitert' konnte nicht geöffnet werden.");
+    }
+
     void Trennen()
     {
         var u = Firma;
@@ -751,10 +768,11 @@ public class XUiC_WbTresor : XUiController
         {
             decimal um, aus, st;
             FensterHilfe.Werte(u, txtUmsatz, txtAusgaben, txtSteuer, out um, out aus, out st);
-            r = Bank.Rechne(u.Name, um, aus, st, 1);
+            r = bank.RechneFirma(u, um, aus, st);
         }
         switch (_bindingName)
         {
+            case "wbmitlabel": _value = u != null && Abm.ModulAn(u, Abm.Personal) ? "Mitarbeiter (Personal)" : "Mitarbeiter"; return true;
             case "wbverbunden": _value = u != null ? "true" : "false"; return true;
             case "wbfrei": _value = (u == null && Reg == null) ? "true" : "false"; return true;
             case "wbregierung": _value = Reg != null ? "true" : "false"; return true;
@@ -783,7 +801,18 @@ public class XUiC_WbTresor : XUiController
             case "wbsteuer": _value = r == null ? "-" : FensterHilfe.B(r.Steuer); return true;
             case "wbeinkommen": _value = r == null ? "-" : FensterHilfe.B(r.Einkommen); return true;
             case "wbeinkommentext": _value = "= Einkommen der Firma"; return true;
-            case "wbnaechste": _value = (u == null || bank == null) ? "" : FensterHilfe.Naechste(bank, u); return true;
+            case "wbnaechste":
+                {
+                    if (u == null || bank == null) { _value = ""; return true; }
+                    _value = FensterHilfe.Naechste(bank, u);
+                    if (u.AbmAn)
+                    {
+                        decimal vert = Abm.VertragsUmsatzJetzt(u, WirtschaftMod.Heute, bank.Stand.TageProMonat);
+                        decimal lohn = Abm.LohnAutomatisch(u) ? Abm.LohnMonat(u, u.UmsatzMonat + vert) : 0m;
+                        _value += "  |  inkl. Verträge " + FensterHilfe.B(vert) + ", Löhne " + FensterHilfe.B(lohn) + (u.LohnManuell && u.LohnOffen > 0 ? " (" + u.LohnOffen + " M offen)" : "");
+                    }
+                    return true;
+                }
             case "wbguthaben": _value = u == null ? "" : "Guthaben: " + FensterHilfe.B(u.Konto) + "  (auszahlen an der Hauptbank)"; return true;
             case "wbwert":
                 _value = u == null ? "" : "Firmenwert (Börse): " + FensterHilfe.B(bank.Firmenwert(u)) + "   |   1 % = " + FensterHilfe.B(bank.AnteilPreis(u, 1m));
@@ -937,6 +966,9 @@ public class XUiC_WbBoerse : XUiController
         FensterHilfe.Knopf(this, "btnSAlleAus", (s, m) => SonderAuswahl(false));
         FensterHilfe.Knopf(this, "btnGeldtresorAufloesen", (s, m) => GeldtresorAufloesen());
         FensterHilfe.Knopf(this, "btnFirmaLoeschen", (s, m) => FirmaLoeschen());
+        FensterHilfe.Knopf(this, "btnFirmaReset", (s, m) => FirmaReset());
+        FensterHilfe.Knopf(this, "btnPersonReset", (s, m) => PersonReset());
+        FensterHilfe.Knopf(this, "btnStadtReset", (s, m) => StadtReset());
         FensterHilfe.Knopf(this, "btnSchliessen", (s, m) => xui.playerUI.windowManager.CloseIfOpen(Gruppe));
     }
 
@@ -1267,6 +1299,54 @@ public class XUiC_WbBoerse : XUiController
             person = p.Name;
             WirtschaftMod.Speichern();
             Melden(alt + " heißt jetzt " + p.Name + ".");
+        }
+        catch (WirtschaftsFehler f) { Melden(f.Message); }
+    }
+
+    // ---------- Geld zurücksetzen (immer mit Rückfrage: zweimal drücken) ----------
+
+    void PersonReset()
+    {
+        if (B == null) return;
+        if (person == "") { Melden("Erst links eine Person oder Regierung anklicken."); return; }
+        var p = B.ParteiOderNull(person);
+        if (p == null) return;
+        if (!Bestaetigt("reset:" + p.Name, "Bist du sicher? Konto von " + p.Name + " (" + FensterHilfe.B(p.Konto) + ") wird auf 0 gesetzt. Kredite und Anteile bleiben. Nochmal 'Geld zurücksetzen' drücken.")) return;
+        try
+        {
+            decimal alt = B.ParteiZuruecksetzen(p.Name, WirtschaftMod.Heute);
+            WirtschaftMod.Speichern();
+            Melden(p.Name + ": " + FensterHilfe.B(alt) + " entfernt, Konto ist jetzt 0.");
+        }
+        catch (WirtschaftsFehler f) { Melden(f.Message); }
+    }
+
+    void FirmaReset()
+    {
+        var u = Firma;
+        if (B == null || u == null) { Melden("Erst oben eine Firma wählen."); return; }
+        if (!Bestaetigt("freset:" + u.Name, "Bist du sicher? Guthaben von " + u.Name + " (" + FensterHilfe.B(u.Konto) + ") wird auf 0 gesetzt. Firmendaten bleiben. Nochmal drücken.")) return;
+        try
+        {
+            decimal alt = B.FirmaZuruecksetzen(u.Name, WirtschaftMod.Heute);
+            WirtschaftMod.Speichern();
+            Melden(u.Name + ": " + FensterHilfe.B(alt) + " entfernt, Guthaben ist jetzt 0.");
+        }
+        catch (WirtschaftsFehler f) { Melden(f.Message); }
+    }
+
+    void StadtReset()
+    {
+        if (B == null) return;
+        var h = BankGewaehlt();
+        if (h == null) { Melden("Es gibt noch keine Bank (Stadt)."); return; }
+        try
+        {
+            string folgen = B.StadtResetFolgen(h.Name);
+            if (!Bestaetigt("sreset:" + h.Name, "Bist du sicher? " + folgen + " Nochmal 'Stadt zurücksetzen' drücken.")) return;
+            decimal summe = B.StadtZuruecksetzen(h.Name, WirtschaftMod.Heute);
+            WirtschaftMod.Speichern();
+            Melden("Stadt " + h.Name + " zurückgesetzt: " + FensterHilfe.B(summe) + " entfernt.");
         }
         catch (WirtschaftsFehler f) { Melden(f.Message); }
     }

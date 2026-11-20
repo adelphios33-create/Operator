@@ -70,6 +70,19 @@ namespace Figuren.Spiel
         }
 
         public static string FinanzBericht(string stadt) { return Rufen("FinanzBericht", new[] { typeof(string) }, new object[] { stadt ?? "" }); }
+
+        static bool abmFehlt;
+
+        /// <summary>Erweiterte Unternehmensdaten (Advanced Business Management): "" = alle Firmen (Operator), "partner:Firma" = für einen Unternehmer.
+        /// Leer, wenn die Wirtschaft-Mod sie (noch) nicht anbietet.</summary>
+        public static string AbmBericht(string filter)
+        {
+            var t = Typ;
+            if (t == null || abmFehlt) return "";
+            if (t.GetMethod("AbmBericht", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null) == null) { abmFehlt = true; return ""; }
+            string s = Rufen("AbmBericht", new[] { typeof(string) }, new object[] { filter ?? "" });
+            return s.StartsWith("NEIN:") ? "" : s;
+        }
         public static string RatenText(decimal summe) { return Rufen("RatenText", new[] { typeof(decimal) }, new object[] { summe }); }
         public static string KreditPruefen(string nehmer, decimal summe, int monate) { return Rufen("KreditPruefen", new[] { typeof(string), typeof(decimal), typeof(int) }, new object[] { nehmer, summe, monate }); }
         public static string KreditVergeben(string nehmer, decimal summe, int monate, string zweck) { return Rufen("KreditVergeben", new[] { typeof(string), typeof(decimal), typeof(int), typeof(string) }, new object[] { nehmer, summe, monate, zweck ?? "" }); }

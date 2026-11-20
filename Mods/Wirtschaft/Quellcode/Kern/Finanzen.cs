@@ -193,6 +193,9 @@ namespace Wirtschaft.Kern
             }
 
             bank.Stand.Unternehmen.Remove(u);
+            // Erweiterte Verwaltung anderer Firmen: Verknüpfung mit dieser Firma lösen, der Eintrag bleibt als externer Partner
+            foreach (var f in bank.Stand.Unternehmen)
+                foreach (var e in f.Abm.Where(w => w.Art == "Lieferant" && Gleich(w.Hol("Firma"), u.Name))) e.Setz("Firma", "");
             Buchen(bank.Stand.Kassenbuch, heute, "Firma " + u.Name + " gelöscht", 0m);
             return "Firma " + u.Name + " gelöscht" + (teile.Count > 0 ? " (" + string.Join(", ", teile.ToArray()) + ")." : ".");
         }
