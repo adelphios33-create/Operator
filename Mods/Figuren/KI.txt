@@ -1,0 +1,33 @@
+# Einstellungen für KI-Figuren (Typ 2)
+# LM Studio: Modell laden, dann im Bereich "Developer" den Server starten (Standard-Port 1234).
+# Nach Änderungen im Spiel: F1, npc ki
+
+Adresse: http://127.0.0.1:1234/v1/chat/completions
+# Name des Modells in LM Studio. Wird er mitgeschickt, lädt LM Studio das Modell beim ersten Gespräch selbst (dauert dann kurz länger).
+# Leer lassen = das Modell, das gerade geladen ist (Fehler "No models loaded", wenn keins geladen ist).
+Modell: google/gemma-4-26b-a4b-qat
+# Obergrenze für die Länge einer Antwort (ca. 1 Token = 0,75 Wörter). Die Kürze steuert vor allem die Anweisung,
+# das hier ist nur die Bremse gegen Monologe. Wird eine Antwort abgeschnitten, endet sie beim letzten ganzen Satz.
+MaxTokens: 260
+# 0.7 bis 0.9: lebendig und abwechslungsreich. Höher = kreativer, aber mehr Unsinn.
+Temperatur: 0.8
+# 0.85 bis 0.95
+TopP: 0.9
+# Bremse gegen Wiederholungen (1.0 = aus, 1.05 bis 1.15 empfohlen)
+Wiederholung: 1.1
+# Wie viele letzte Nachrichten die Figur wörtlich behält und mitliest. Ältere werden automatisch zu einer Erinnerung verdichtet.
+Verlauf: 20
+# Sekunden, bis aufgegeben wird
+Zeitlimit: 120
+
+# Städte der Welt (Auswahl beim Einrichten von Grundrollen und beim Immobilien-Schild). Neue Stadt einfach anhängen, z. B. Nashville.
+Städte: Springfield, Berlin, LZ, WS
+
+# Weltfakten für alle Figuren. Nur Fakten hierher, keine Verhaltensregeln (die stehen im Mod selbst).
+[welt]
+Die Welt ist 7 Days to Die nach der Apokalypse (Region Kubixe County). Draußen Zombies, die Überlebenden leben in befestigten Städten.
+Städte: Berlin (BN, Hauptstadt, groß, wenig kontrolliert), LZ (Schneelandschaft, strengere Gesetze, per Zug mit Berlin verbunden, Partnerstadt), WS (West Sector nahe LZ, in Einflusszonen aufgeteilt) und Springfield (Wüste, per Flughafen erreichbar, wächst). Kampfsport und Boxen sind in BN, LZ und WS sehr verbreitet.
+Jede Stadt hat eine eigene Bank und eine Regierung mit einem Bürgermeister, die Steuern von den Firmen kassiert. Bezahlt wird mit Coins, daneben gibt es Old Cash, Silber- und Goldbarren.
+Zuständigkeiten: Der Bürgermeister macht Genehmigungen, Grundbucheintragungen, Firmenanmeldungen, Börsen- und Firmenthemen. Der Banker ist zugleich Immobilienmakler. Das Militär übernimmt zusammen mit dem Waffenhändler die Säuberung von Gebäuden, die noch voller Zombies sind.
+Immobilienkauf: erst die Säuberung, dann Genehmigung und Gebühr beim Bürgermeister, dann der Preis vom Makler inklusive aller Nebenkosten.
+Konten, Firmen, Käufe und Zahlungen führt der Spieler selbst an der Hauptbank, am Firmentresor und am Börsenterminal aus.

@@ -1,0 +1,27 @@
+<configs>
+  <append xpath="/blocks">
+
+    <!-- Figur aufstellen: beim Platzieren erscheint statt der Puppe ein NPC, der zum Spieler schaut -->
+    <block name="figAufstellen">
+      <property name="Extends" value="decoMannequinMale" />
+      <property name="Class" value="FigurAufstellen, Figuren" />
+      <property name="CreativeMode" value="Player" />
+      <property name="CustomIcon" value="decoMannequinMale" />
+      <property name="DescriptionKey" value="figAufstellenDesc" />
+      <property name="Group" value="Building,advBuilding" />
+      <property name="FilterTags" value="MC_building,SC_decor" />
+    </block>
+
+    <!-- Immobilien-Schild: Holzschild 1x1 an die Wand. E = Objekt eintragen (Stadt, Art, Preis). Banker und Bürgermeister kennen es dann. -->
+    <block name="immoSchild">
+      <property name="Extends" value="playerSignWood1x1" />
+      <property name="Class" value="Immobilienschild, Figuren" />
+      <property name="CreativeMode" value="Player" />
+      <property name="CustomIcon" value="playerSignWood1x1" />
+      <property name="DescriptionKey" value="immoSchildDesc" />
+      <property name="Group" value="Building,advBuilding" />
+      <property name="FilterTags" value="MC_building,SC_decor" />
+    </block>
+
+  </append>
+</configs>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xml>
+	<Name value="Wirtschaft" />
+	<DisplayName value="Wirtschaft - Bank, Firmen, Steuern" />
+	<Description value="Parteien, Unternehmen, Steuern, Anteile und Immobilien fuer Rollenspiel. Hauptbank und Firmentresor als Bloecke mit eigenem Fenster (E)." />
+	<Author value="Adelphios und Claude" />
+	<Version value="1.9.0" />
+	<Website value="" />
+	<SkipWithAntiCheat value="true" />
+</xml>

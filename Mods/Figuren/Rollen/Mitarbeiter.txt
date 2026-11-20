@@ -1,0 +1,32 @@
+# FESTE FIGUR Mitarbeiter (Arbeiter, Angestellter, Lagerist ...): kurzer Klick-Dialog ohne KI. Zufallsname.
+# Varianten: "Text A || Text B" = bei jedem Gespräch zufällig eine davon.
+Name: Mitarbeiter
+Titel: Mitarbeiter in {Stadt}
+Vorlage: ja
+Namen: Kevin, Marco, Sven, Dennis, Lukas, Florian, Rene, Mario, Patrick, Daniel, Sascha, Robert, Andi, Hakan, Milan, Basti
+Aussehen: Zivil, Bob, Joel, Jen, ZivilFrauKittel, ZivilFrauJung1, ZivilFrauJung2, ZivilFrauJung3, ZivilFrauJung4, ZivilFrauJung5
+Frauennamen: Steffi, Nicole, Sarah, Melanie, Jana, Lisa, Katrin
+Leitung: nein
+
+[start]
+Hallo. Kann ich helfen? Ich hab aber gleich Pause. || Ja bitte? Der Chef ist gerade nicht da. || Moment, ich muss das noch fertig machen ... so. Was gibt's? || Oh, Kundschaft. Was darf's sein?
+> Wie läuft die Arbeit? -> arbeit
+> Wer ist hier der Chef? -> chef
+> Wie geht's dir? -> befinden
+> Schon gut, tschüss. -> ende
+
+[arbeit]
+Viel zu tun, wenig Leute. Wie immer. || Läuft. Heute ist sogar die Lieferung pünktlich gekommen, ein Wunder. || Ehrlich? Langweilig. Aber besser als draußen bei den Zombies. || Stressig. Wenn noch einer krank wird, mach ich den Laden allein.
+> Klingt hart. -> befinden
+> Wer ist hier der Chef? -> chef
+> Na dann, frohes Schaffen. -> ende
+
+[chef]
+Der Chef? Der ist ganz okay, solange die Zahlen stimmen. || Frag lieber nicht. Er hat heute schlechte Laune. || Der ist unterwegs, Geschäfte machen. Komm später wieder. || Ich sag's mal so: Er zahlt pünktlich. Mehr will ich nicht sagen.
+> Danke. -> ende
+> Und wie geht's dir so? -> befinden
+
+[befinden]
+Müde. Aber der Feierabend kommt bestimmt. || Ganz gut, danke der Nachfrage. Fragt sonst keiner. || Rücken kaputt, Kaffee leer. Sonst super. || Geht. Nach der Schicht geh ich in die Bar.
+> Halt durch. -> ende
+> Bis dann. -> ende

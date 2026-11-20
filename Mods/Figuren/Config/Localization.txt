@@ -1,0 +1,12 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,english,german
+figAufstellen,blocks,Block,,,Place NPC,Figur aufstellen
+figAufstellenDesc,blocks,Block,,,"Place it: an NPC appears and faces you. Hold E on the NPC to set it up.","Platzieren: Ein NPC erscheint und schaut zu dir. E gedrückt halten am NPC zum Einrichten."
+figurName,entityclasses,Entity,,,NPC,Figur
+figurVorlage,entityclasses,Entity,,,NPC,Figur
+figurJoel,entityclasses,Entity,,,NPC Joel,Figur Joel
+figurJen,entityclasses,Entity,,,NPC Jen,Figur Jen
+figurBob,entityclasses,Entity,,,NPC Bob,Figur Bob
+figurHugh,entityclasses,Entity,,,NPC Hugh,Figur Hugh
+figurRekt,entityclasses,Entity,,,NPC Rekt,Figur Rekt
+immoSchild,blocks,Block,,,Property for sale sign,Immobilien-Schild
+immoSchildDesc,blocks,Block,,,"Place it on a wall, then enter city, type and price. Bankers and mayors of that city will know the offer.","An die Wand setzen, dann Stadt, Art und Preis eintragen. Banker und Bürgermeister dieser Stadt kennen das Angebot."

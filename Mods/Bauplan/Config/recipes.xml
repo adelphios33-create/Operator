@@ -1,0 +1,10 @@
+<configs>
+<append xpath="/recipes">
+	<recipe name="bauplanWerkzeug" count="1">
+		<ingredient name="resourceWood" count="1" />
+	</recipe>
+	<recipe name="bauplanAbriss" count="1">
+		<ingredient name="resourceWood" count="1" />
+	</recipe>
+</append>
+</configs>

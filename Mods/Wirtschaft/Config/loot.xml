@@ -1,0 +1,6 @@
+<configs>
+  <!-- Geldtresor (Banking): leerer Behälter mit 40 Plätzen, wird vom Mod befüllt -->
+  <append xpath="/lootcontainers">
+    <lootcontainer name="wbGeldtresorInhalt" count="0" size="8,5" loot_quality_template="qualBaseTemplate" />
+  </append>
+</configs>

@@ -1,0 +1,65 @@
+<configs>
+<append xpath="/windows">
+
+	<!-- ============ BAUPLAN ============ -->
+	<window name="bauplanFenster" pos="-420, 380" width="840" height="760" anchor="CenterCenter" controller="Bauplan, Bauplan" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_coin"/>
+			<label depth="2" pos="42,-6" width="560" height="32" font_size="32" color="[white]" justify="left" text="BAUPLAN – Gebäude kopieren und einfügen" />
+			<label depth="2" pos="830,-8" width="240" height="32" font_size="24" color="200,200,200" justify="right" pivot="topright" text="{bpmodus}" />
+		</panel>
+		<rect name="content" pos="0,-46" width="840" height="714" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="840" height="714" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="840" height="714" />
+
+			<!-- 1. Markierung speichern -->
+			<label depth="3" pos="14,-10" width="400" height="30" font_size="28" color="255,170,90" justify="left" text="1. Markierte Fläche speichern" />
+			<sprite depth="2" pos="10,-42" width="820" height="40" color="26,26,26" type="sliced" />
+			<label depth="3" pos="18,-48" width="804" height="28" font_size="20" color="[white]" justify="left" text="{bpmarkierung}" />
+			<label depth="3" pos="14,-98" width="80" height="30" font_size="24" color="200,200,200" justify="left" text="Name" />
+			<textfield name="txtName" depth="3" pos="84,-94" width="420" height="40" font_size="26" character_limit="48" />
+			<simplebutton name="btnKopieren" depth="3" pos="514,-94" width="312" height="40" font_size="24" caption="Kopieren und speichern" />
+			<simplebutton name="btnHoeherUnten" depth="3" pos="14,-142" width="150" height="36" font_size="18" caption="+1 nach unten" />
+			<simplebutton name="btnHoeherOben" depth="3" pos="170,-142" width="150" height="36" font_size="18" caption="+1 nach oben" />
+			<simplebutton name="btnMarkLoeschen" depth="3" pos="326,-142" width="150" height="36" font_size="18" caption="Markierung weg" />
+			<simplebutton name="btnLeeren" depth="3" pos="482,-142" width="190" height="36" font_size="18" caption="Gebäude entfernen" />
+			<simplebutton name="btnLeerenAlles" depth="3" pos="678,-142" width="148" height="36" font_size="18" caption="Alles leeren" />
+			<label depth="3" pos="14,-184" width="812" height="24" font_size="18" color="180,180,180" justify="left" text="Gebäude entfernen = alles im Rahmen weg, Erde bleibt. Alles leeren = auch Erde und Stein. Je 2x drücken, Rückgängig geht." />
+
+			<!-- 2. Gebäude auswählen und einfügen -->
+			<label depth="3" pos="14,-218" width="400" height="30" font_size="28" color="255,170,90" justify="left" text="2. Gebäude einfügen" />
+			<label depth="3" pos="826,-222" width="200" height="26" font_size="22" color="200,200,200" justify="right" pivot="topright" text="{bpanzahl}" />
+			<simplebutton name="btnFilter" depth="3" pos="14,-254" width="300" height="38" font_size="22" caption="Zeigen: Alle" />
+			<label depth="3" pos="324,-258" width="70" height="30" font_size="22" color="200,200,200" justify="left" text="Suche" />
+			<textfield name="txtSuche" depth="3" pos="394,-254" width="290" height="38" font_size="24" character_limit="40" />
+			<simplebutton name="btnNeuLaden" depth="3" pos="694,-254" width="132" height="38" font_size="20" caption="Neu einlesen" />
+			<simplebutton name="btnL0" depth="3" pos="14,-302" width="500" height="36" font_size="22" caption="-" />
+			<simplebutton name="btnL1" depth="3" pos="14,-342" width="500" height="36" font_size="22" caption="-" />
+			<simplebutton name="btnL2" depth="3" pos="14,-382" width="500" height="36" font_size="22" caption="-" />
+			<simplebutton name="btnL3" depth="3" pos="14,-422" width="500" height="36" font_size="22" caption="-" />
+			<simplebutton name="btnL4" depth="3" pos="14,-462" width="500" height="36" font_size="22" caption="-" />
+			<simplebutton name="btnL5" depth="3" pos="14,-502" width="500" height="36" font_size="22" caption="-" />
+			<simplebutton name="btnL6" depth="3" pos="14,-542" width="500" height="36" font_size="22" caption="-" />
+			<simplebutton name="btnL7" depth="3" pos="14,-582" width="500" height="36" font_size="22" caption="-" />
+			<simplebutton name="btnZurueck" depth="3" pos="14,-626" width="60" height="36" font_size="28" caption="&lt;" />
+			<label depth="3" pos="80,-630" width="374" height="30" font_size="22" color="200,200,200" justify="center" text="{bpseite}" />
+			<simplebutton name="btnVor" depth="3" pos="454,-626" width="60" height="36" font_size="28" caption="&gt;" />
+
+			<sprite depth="2" pos="524,-302" width="302" height="150" color="26,26,26" type="sliced" />
+			<label depth="3" pos="532,-308" width="288" height="138" font_size="20" color="[white]" justify="left" text="{bpauswahl}" />
+			<simplebutton name="btnDrehen" depth="3" pos="524,-462" width="302" height="36" font_size="22" caption="Drehen: 0°" />
+			<simplebutton name="btnLuft" depth="3" pos="524,-502" width="302" height="36" font_size="20" caption="Fläche freiräumen: AN" />
+			<simplebutton name="btnKeller" depth="3" pos="524,-542" width="302" height="36" font_size="20" caption="Keller einsenken: AN" />
+			<simplebutton name="btnPlatzieren" depth="3" pos="524,-584" width="302" height="40" font_size="24" caption="Platzieren (Werkzeug)" />
+			<simplebutton name="btnAbbrechen" depth="3" pos="524,-626" width="148" height="36" font_size="20" caption="Platz. beenden" />
+			<simplebutton name="btnAblage" depth="3" pos="678,-626" width="148" height="36" font_size="20" caption="Zwischenablage" />
+			<simplebutton name="btnLoeschen" depth="3" pos="378,-670" width="150" height="38" font_size="20" caption="Löschen" />
+
+			<label depth="3" pos="14,-672" width="360" height="40" font_size="18" color="255,220,120" justify="left" text="{bpmeldung}" />
+			<simplebutton name="btnRueckgaengig" depth="3" pos="540,-670" width="150" height="38" font_size="20" caption="Rückgängig" />
+			<simplebutton name="btnSchliessen" depth="3" pos="698,-670" width="128" height="38" font_size="22" caption="Schließen" />
+		</rect>
+	</window>
+
+</append>
+</configs>

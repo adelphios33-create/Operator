@@ -1,0 +1,504 @@
+<configs>
+<append xpath="/windows">
+
+	<!-- ============ HAUPTBANK ============ -->
+	<window name="wbHauptbankFenster" pos="-400, 395" width="800" height="790" anchor="CenterCenter" controller="WbHauptbank, Wirtschaft" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_coin"/>
+			<label depth="2" pos="42,-6" width="500" height="32" font_size="32" color="[white]" justify="left" text="{wbbankname}" />
+			<label depth="2" pos="790,-8" width="240" height="32" font_size="26" color="200,200,200" justify="right" pivot="topright" text="{wbkopf}" />
+		</panel>
+		<rect name="content" pos="0,-46" width="800" height="744" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="800" height="744" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="800" height="744" />
+
+			<!-- Einrichten: Hauptbank gehört noch zu keiner Bank -->
+			<rect name="einrichten" pos="0,0" width="800" height="680" depth="2" visible="{wbeinrichten}">
+				<label depth="3" pos="14,-20" width="772" height="34" font_size="30" color="[white]" justify="left" text="Diese Hauptbank gehört noch zu keiner Stadt." />
+				<label depth="3" pos="14,-80" width="772" height="32" font_size="30" color="255,170,90" justify="left" text="Neue Bank eröffnen" />
+				<label depth="3" pos="14,-124" width="370" height="28" font_size="24" color="200,200,200" justify="left" text="Name der Bank / Stadt" />
+				<label depth="3" pos="400,-124" width="386" height="28" font_size="24" color="200,200,200" justify="left" text="Name der Regierung (leer = automatisch)" />
+				<textfield name="txtBankName" depth="3" pos="14,-154" width="370" height="40" font_size="28" character_limit="40" />
+				<textfield name="txtRegierung" depth="3" pos="400,-154" width="386" height="40" font_size="28" character_limit="40" />
+				<simplebutton name="btnBankAnlegen" depth="3" pos="14,-210" width="260" height="42" font_size="28" caption="Bank eröffnen" />
+
+				<label depth="3" pos="14,-292" width="772" height="32" font_size="30" color="255,170,90" justify="left" text="Oder mit einer vorhandenen Bank verbinden" />
+				<simplebutton name="btnBankZurueck" depth="3" pos="14,-338" width="44" height="40" font_size="30" caption="&lt;" />
+				<label depth="3" pos="66,-340" width="440" height="34" font_size="28" color="[white]" justify="center" text="{wbbankwahl}" />
+				<simplebutton name="btnBankVor" depth="3" pos="514,-338" width="44" height="40" font_size="30" caption="&gt;" />
+				<simplebutton name="btnBankVerbinden" depth="3" pos="580,-338" width="206" height="40" font_size="26" caption="Verbinden" />
+				<label depth="3" pos="14,-404" width="772" height="28" font_size="24" color="180,180,180" justify="left" text="Mehrere Hauptbanken können zur selben Bank gehören, z. B. Filialen in einer Stadt." />
+			</rect>
+
+			<!-- Bank: Firmen dieser Stadt -->
+			<rect name="bank" pos="0,0" width="800" height="680" depth="2" visible="{wbbank}">
+				<label depth="3" pos="14,-14" width="110" height="32" font_size="28" color="200,200,200" justify="left" text="Firma" />
+				<simplebutton name="btnFirmaZurueck" depth="3" pos="130,-10" width="44" height="38" font_size="30" caption="&lt;" />
+				<label depth="3" pos="186,-12" width="380" height="34" font_size="32" color="[white]" justify="center" text="{wbfirma}" />
+				<simplebutton name="btnFirmaVor" depth="3" pos="578,-10" width="44" height="38" font_size="30" caption="&gt;" />
+				<label depth="3" pos="636,-14" width="150" height="32" font_size="26" color="200,200,200" justify="right" text="{wbfirmazahl}" />
+
+				<label depth="3" pos="14,-62" width="110" height="32" font_size="28" color="200,200,200" justify="left" text="Besitzer" />
+				<simplebutton name="btnBesitzerZurueck" depth="3" pos="130,-58" width="44" height="38" font_size="30" caption="&lt;" />
+				<label depth="3" pos="186,-60" width="380" height="34" font_size="30" color="[white]" justify="center" text="{wbbesitzer}" />
+				<simplebutton name="btnBesitzerVor" depth="3" pos="578,-58" width="44" height="38" font_size="30" caption="&gt;" />
+				<simplebutton name="btnKredit" depth="3" pos="636,-58" width="150" height="38" font_size="24" caption="Kredit" />
+
+				<label depth="3" pos="14,-110" width="250" height="28" font_size="24" color="200,200,200" justify="left" text="Umsatz / Monat" />
+				<label depth="3" pos="276,-110" width="250" height="28" font_size="24" color="200,200,200" justify="left" text="Ausgaben / Monat" />
+				<label depth="3" pos="538,-110" width="248" height="28" font_size="24" color="200,200,200" justify="left" text="Steuersatz %" />
+				<simplebutton name="btnUmsatzMinus" depth="3" pos="14,-140" width="40" height="40" font_size="30" caption="-" />
+				<textfield name="txtUmsatz" depth="3" pos="58,-140" width="162" height="40" font_size="28" character_limit="15" />
+				<simplebutton name="btnUmsatzPlus" depth="3" pos="224,-140" width="40" height="40" font_size="30" caption="+" />
+				<simplebutton name="btnAusgabenMinus" depth="3" pos="276,-140" width="40" height="40" font_size="30" caption="-" />
+				<textfield name="txtAusgaben" depth="3" pos="320,-140" width="162" height="40" font_size="28" character_limit="15" />
+				<simplebutton name="btnAusgabenPlus" depth="3" pos="486,-140" width="40" height="40" font_size="30" caption="+" />
+				<simplebutton name="btnSteuerMinus" depth="3" pos="538,-140" width="40" height="40" font_size="30" caption="-" />
+				<textfield name="txtSteuer" depth="3" pos="582,-140" width="160" height="40" font_size="28" character_limit="6" />
+				<simplebutton name="btnSteuerPlus" depth="3" pos="746,-140" width="40" height="40" font_size="30" caption="+" />
+
+				<label depth="3" pos="24,-198" width="460" height="30" font_size="28" color="[white]" justify="left" text="Umsatz" />
+				<label depth="3" pos="776,-198" width="280" height="30" font_size="28" color="[white]" justify="right" pivot="topright" text="{wbumsatz}" />
+				<label depth="3" pos="24,-230" width="460" height="30" font_size="28" color="200,200,200" justify="left" text="- Ausgaben" />
+				<label depth="3" pos="776,-230" width="280" height="30" font_size="28" color="200,200,200" justify="right" pivot="topright" text="{wbausgaben}" />
+				<label depth="3" pos="24,-262" width="460" height="30" font_size="28" color="[white]" justify="left" text="= Zwischensumme" />
+				<label depth="3" pos="776,-262" width="280" height="30" font_size="28" color="[white]" justify="right" pivot="topright" text="{wbzwischen}" />
+				<label depth="3" pos="24,-294" width="460" height="30" font_size="28" color="150,200,240" justify="left" text="- Steuer an die Regierung" />
+				<label depth="3" pos="776,-294" width="280" height="30" font_size="28" color="150,200,240" justify="right" pivot="topright" text="{wbsteuer}" />
+				<label depth="3" pos="24,-330" width="500" height="34" font_size="32" color="255,170,90" justify="left" text="{wbeinkommentext}" />
+				<label depth="3" pos="776,-330" width="280" height="34" font_size="32" color="255,170,90" justify="right" pivot="topright" text="{wbeinkommen}" />
+				<label depth="3" pos="24,-372" width="760" height="28" font_size="24" color="180,180,180" justify="left" text="{wbnaechste}" />
+
+				<label depth="3" pos="14,-414" width="120" height="30" font_size="26" color="150,200,240" justify="left" text="Regierung" />
+				<simplebutton name="btnRegZurueck" depth="3" pos="140,-410" width="44" height="38" font_size="30" caption="&lt;" />
+				<label depth="3" pos="192,-412" width="220" height="32" font_size="26" color="[white]" justify="center" text="{wbregname}" />
+				<simplebutton name="btnRegVor" depth="3" pos="418,-410" width="44" height="38" font_size="30" caption="&gt;" />
+				<label depth="3" pos="474,-416" width="312" height="28" font_size="22" color="[white]" justify="left" text="{wbregierung}" />
+				<!-- Läuft: welche Firmen du gerade spielst -->
+				<label depth="3" pos="14,-458" width="140" height="30" font_size="26" color="200,200,200" justify="left" text="Firma läuft" />
+				<label depth="3" pos="156,-458" width="70" height="30" font_size="28" color="[white]" justify="center" text="{wblaeuft}" />
+				<simplebutton name="btnLaeuftAn" depth="3" pos="232,-454" width="80" height="38" font_size="26" caption="An" />
+				<simplebutton name="btnLaeuftAus" depth="3" pos="318,-454" width="80" height="38" font_size="26" caption="Aus" />
+				<label depth="3" pos="420,-458" width="190" height="30" font_size="26" color="200,200,200" justify="right" text="Ganze Stadt" />
+				<simplebutton name="btnStadtAn" depth="3" pos="618,-454" width="80" height="38" font_size="26" caption="An" />
+				<simplebutton name="btnStadtAus" depth="3" pos="706,-454" width="80" height="38" font_size="26" caption="Aus" />
+
+				<!-- Guthaben und Monatslänge -->
+				<label depth="3" pos="14,-502" width="120" height="30" font_size="26" color="200,200,200" justify="left" text="Guthaben" />
+				<label depth="3" pos="140,-504" width="480" height="28" font_size="22" color="[white]" justify="left" text="{wbguthaben}" />
+				<label depth="3" pos="560,-502" width="90" height="30" font_size="24" color="200,200,200" justify="right" text="Monat =" />
+				<textfield name="txtTage" depth="3" pos="656,-498" width="60" height="38" font_size="28" character_limit="3" />
+				<label depth="3" pos="722,-502" width="70" height="30" font_size="24" color="200,200,200" justify="left" text="Tage" />
+
+				<!-- Auszahlen -->
+				<label depth="3" pos="14,-548" width="120" height="30" font_size="26" color="255,170,90" justify="left" text="Auszahlen" />
+				<simplebutton name="btnQuelleZurueck" depth="3" pos="140,-544" width="44" height="38" font_size="30" caption="&lt;" />
+				<label depth="3" pos="192,-546" width="220" height="32" font_size="24" color="[white]" justify="center" text="{wbquelle}" />
+				<simplebutton name="btnQuelleVor" depth="3" pos="418,-544" width="44" height="38" font_size="30" caption="&gt;" />
+				<label depth="3" pos="474,-548" width="90" height="30" font_size="24" color="200,200,200" justify="right" text="Betrag" />
+				<simplebutton name="btnBetragMinus" depth="3" pos="572,-544" width="40" height="38" font_size="30" caption="-" />
+				<textfield name="txtBetrag" depth="3" pos="616,-544" width="126" height="38" font_size="26" character_limit="12" />
+				<simplebutton name="btnBetragPlus" depth="3" pos="746,-544" width="40" height="38" font_size="30" caption="+" />
+				<label depth="3" pos="14,-594" width="120" height="30" font_size="26" color="200,200,200" justify="left" text="als" />
+				<simplebutton name="btnWaehrungZurueck" depth="3" pos="140,-590" width="44" height="38" font_size="30" caption="&lt;" />
+				<label depth="3" pos="192,-592" width="220" height="32" font_size="22" color="[white]" justify="center" text="{wbwaehrung}" />
+				<simplebutton name="btnWaehrungVor" depth="3" pos="418,-590" width="44" height="38" font_size="30" caption="&gt;" />
+				<simplebutton name="btnAuszahlen" depth="3" pos="572,-590" width="214" height="38" font_size="26" caption="Auszahlen" />
+
+				<!-- Neu anlegen -->
+				<label depth="3" pos="14,-644" width="60" height="30" font_size="26" color="200,200,200" justify="left" text="Neu" />
+				<textfield name="txtNeu" depth="3" pos="80,-640" width="300" height="40" font_size="28" character_limit="40" />
+				<simplebutton name="btnNeueFirma" depth="3" pos="392,-640" width="190" height="40" font_size="26" caption="Neue Firma" />
+				<simplebutton name="btnNeuePartei" depth="3" pos="594,-640" width="192" height="40" font_size="26" caption="Neue Person" />
+			</rect>
+
+			<label depth="3" pos="14,-700" width="470" height="30" font_size="22" color="255,220,120" justify="left" text="{wbmeldung}" />
+			<simplebutton name="btnSpeichern" depth="3" pos="494,-694" width="140" height="42" font_size="28" caption="Speichern" />
+			<simplebutton name="btnSchliessen" depth="3" pos="646,-694" width="140" height="42" font_size="28" caption="Schließen" />
+		</rect>
+	</window>
+
+	<!-- ============ FIRMENTRESOR ============ -->
+	<window name="wbTresorFenster" pos="-320, 335" width="640" height="670" anchor="CenterCenter" controller="WbTresor, Wirtschaft" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_coin"/>
+			<label style="header.name" text="FIRMENTRESOR" width="260" />
+			<label depth="2" pos="630,-8" width="330" height="32" font_size="28" color="[white]" justify="right" pivot="topright" text="{wbfirma}" />
+		</panel>
+		<rect name="content" pos="0,-46" width="640" height="624" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="640" height="624" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="640" height="624" />
+
+			<!-- Verbunden: Werte der Firma -->
+			<rect name="verbunden" pos="0,0" width="640" height="560" depth="2" visible="{wbverbunden}">
+				<label depth="3" pos="14,-14" width="612" height="28" font_size="22" color="200,200,200" justify="left" text="{wbbesitzer}" />
+				<label depth="3" pos="14,-50" width="196" height="28" font_size="24" color="200,200,200" justify="left" text="Umsatz / Monat" />
+				<label depth="3" pos="220,-50" width="196" height="28" font_size="24" color="200,200,200" justify="left" text="Ausgaben / Monat" />
+				<label depth="3" pos="426,-50" width="200" height="28" font_size="24" color="200,200,200" justify="left" text="Steuersatz %" />
+				<simplebutton name="btnUmsatzMinus" depth="3" pos="14,-78" width="36" height="40" font_size="30" caption="-" />
+				<textfield name="txtUmsatz" depth="3" pos="54,-78" width="116" height="40" font_size="26" character_limit="15" />
+				<simplebutton name="btnUmsatzPlus" depth="3" pos="174,-78" width="36" height="40" font_size="30" caption="+" />
+				<simplebutton name="btnAusgabenMinus" depth="3" pos="220,-78" width="36" height="40" font_size="30" caption="-" />
+				<textfield name="txtAusgaben" depth="3" pos="260,-78" width="116" height="40" font_size="26" character_limit="15" />
+				<simplebutton name="btnAusgabenPlus" depth="3" pos="380,-78" width="36" height="40" font_size="30" caption="+" />
+				<simplebutton name="btnSteuerMinus" depth="3" pos="426,-78" width="36" height="40" font_size="30" caption="-" />
+				<textfield name="txtSteuer" depth="3" pos="466,-78" width="120" height="40" font_size="26" character_limit="6" />
+				<simplebutton name="btnSteuerPlus" depth="3" pos="590,-78" width="36" height="40" font_size="30" caption="+" />
+				<label depth="3" pos="14,-128" width="196" height="28" font_size="24" color="200,200,200" justify="left" text="Mitarbeiter" />
+				<label depth="3" pos="220,-128" width="196" height="28" font_size="24" color="200,200,200" justify="left" text="Immobilienwert" />
+				<label depth="3" pos="426,-128" width="200" height="28" font_size="24" color="200,200,200" justify="left" text="Fahrzeuge, Maschinen" />
+				<simplebutton name="btnMitarbeiterMinus" depth="3" pos="14,-156" width="36" height="40" font_size="30" caption="-" />
+				<textfield name="txtMitarbeiter" depth="3" pos="54,-156" width="116" height="40" font_size="26" character_limit="6" />
+				<simplebutton name="btnMitarbeiterPlus" depth="3" pos="174,-156" width="36" height="40" font_size="30" caption="+" />
+				<simplebutton name="btnImmoMinus" depth="3" pos="220,-156" width="36" height="40" font_size="30" caption="-" />
+				<textfield name="txtImmo" depth="3" pos="260,-156" width="116" height="40" font_size="26" character_limit="15" />
+				<simplebutton name="btnImmoPlus" depth="3" pos="380,-156" width="36" height="40" font_size="30" caption="+" />
+				<simplebutton name="btnFahrzeugeMinus" depth="3" pos="426,-156" width="36" height="40" font_size="30" caption="-" />
+				<textfield name="txtFahrzeuge" depth="3" pos="466,-156" width="120" height="40" font_size="26" character_limit="15" />
+				<simplebutton name="btnFahrzeugePlus" depth="3" pos="590,-156" width="36" height="40" font_size="30" caption="+" />
+				<sprite depth="2" pos="14,-204" width="612" height="174" color="26,26,26" type="sliced" />
+				<sprite depth="4" pos="24,-342" width="592" height="2" color="255,170,90" type="sliced" />
+				<label depth="3" pos="24,-214" width="360" height="30" font_size="28" color="[white]" justify="left" text="Umsatz" />
+				<label depth="3" pos="616,-214" width="240" height="30" font_size="28" color="[white]" justify="right" pivot="topright" text="{wbumsatz}" />
+				<label depth="3" pos="24,-246" width="360" height="30" font_size="28" color="200,200,200" justify="left" text="- Ausgaben" />
+				<label depth="3" pos="616,-246" width="240" height="30" font_size="28" color="200,200,200" justify="right" pivot="topright" text="{wbausgaben}" />
+				<label depth="3" pos="24,-278" width="360" height="30" font_size="28" color="[white]" justify="left" text="= Zwischensumme" />
+				<label depth="3" pos="616,-278" width="240" height="30" font_size="28" color="[white]" justify="right" pivot="topright" text="{wbzwischen}" />
+				<label depth="3" pos="24,-310" width="360" height="30" font_size="28" color="150,200,240" justify="left" text="- Steuer an die Regierung" />
+				<label depth="3" pos="616,-310" width="240" height="30" font_size="28" color="150,200,240" justify="right" pivot="topright" text="{wbsteuer}" />
+				<label depth="3" pos="24,-346" width="380" height="34" font_size="32" color="255,170,90" justify="left" text="{wbeinkommentext}" />
+				<label depth="3" pos="616,-346" width="240" height="34" font_size="32" color="255,170,90" justify="right" pivot="topright" text="{wbeinkommen}" />
+				<label depth="3" pos="24,-386" width="600" height="26" font_size="22" color="180,180,180" justify="left" text="{wbnaechste}" />
+				<label depth="3" pos="24,-412" width="600" height="26" font_size="22" color="[white]" justify="left" text="{wbwert}" />
+				<label depth="3" pos="24,-438" width="604" height="24" font_size="16" color="180,180,180" justify="left" text="{wbwertteile}" />
+				<label depth="3" pos="24,-464" width="600" height="28" font_size="24" color="255,170,90" justify="left" text="{wbguthaben}" />
+				<simplebutton name="btnTrennen" depth="3" pos="14,-502" width="200" height="42" font_size="26" caption="Tresor trennen" />
+				<label depth="3" pos="236,-506" width="130" height="30" font_size="26" color="200,200,200" justify="right" text="Läuft:" />
+				<label depth="3" pos="372,-506" width="60" height="30" font_size="28" color="[white]" justify="center" text="{wblaeuft}" />
+				<simplebutton name="btnLaeuftAn" depth="3" pos="440,-502" width="88" height="40" font_size="26" caption="An" />
+				<simplebutton name="btnLaeuftAus" depth="3" pos="536,-502" width="90" height="40" font_size="26" caption="Aus" />
+			</rect>
+
+			<!-- Frei: vorhandene Firma verbinden oder neue anlegen -->
+			<rect name="frei" pos="0,0" width="640" height="460" depth="2" visible="{wbfrei}">
+				<label depth="3" pos="14,-12" width="612" height="30" font_size="28" color="255,170,90" justify="left" text="Vorhandene Firma verbinden" />
+				<simplebutton name="btnWahlZurueck" depth="3" pos="14,-50" width="44" height="40" font_size="30" caption="&lt;" />
+				<label depth="3" pos="66,-52" width="400" height="34" font_size="26" color="[white]" justify="center" text="{wbwahl}" />
+				<simplebutton name="btnWahlVor" depth="3" pos="474,-50" width="44" height="40" font_size="30" caption="&gt;" />
+				<simplebutton name="btnVerbinden" depth="3" pos="526,-50" width="100" height="40" font_size="24" caption="Verbinden" />
+
+				<label depth="3" pos="14,-124" width="612" height="30" font_size="28" color="255,170,90" justify="left" text="Oder neue Firma anlegen" />
+				<label depth="3" pos="14,-168" width="100" height="30" font_size="26" color="200,200,200" justify="left" text="Name" />
+				<textfield name="txtNeuFirma" depth="3" pos="120,-164" width="506" height="40" font_size="28" character_limit="40" />
+				<label depth="3" pos="14,-218" width="100" height="30" font_size="26" color="200,200,200" justify="left" text="Bank" />
+				<simplebutton name="btnBankZurueck" depth="3" pos="120,-214" width="44" height="40" font_size="30" caption="&lt;" />
+				<label depth="3" pos="172,-216" width="296" height="34" font_size="26" color="[white]" justify="center" text="{wbbankwahl}" />
+				<simplebutton name="btnBankVor" depth="3" pos="476,-214" width="44" height="40" font_size="30" caption="&gt;" />
+				<simplebutton name="btnAnlegen" depth="3" pos="14,-274" width="300" height="42" font_size="26" caption="Anlegen und verbinden" />
+				<label depth="3" pos="14,-336" width="612" height="28" font_size="22" color="180,180,180" justify="left" text="Besitzer wird die Partei, die du gerade spielst (in der Hauptbank änderbar)." />
+
+				<label depth="3" pos="14,-384" width="612" height="30" font_size="28" color="255,170,90" justify="left" text="Oder eine Regierung verbinden" />
+				<simplebutton name="btnRegZurueck" depth="3" pos="14,-422" width="44" height="40" font_size="30" caption="&lt;" />
+				<label depth="3" pos="66,-424" width="400" height="34" font_size="26" color="[white]" justify="center" text="{wbregwahl}" />
+				<simplebutton name="btnRegVor" depth="3" pos="474,-422" width="44" height="40" font_size="30" caption="&gt;" />
+				<simplebutton name="btnRegVerbinden" depth="3" pos="526,-422" width="100" height="40" font_size="24" caption="Verbinden" />
+			</rect>
+
+			<!-- Regierung: Staatsausgaben und Steuern, Daten dieses Tresors haben Vorrang -->
+			<rect name="regierung" pos="0,0" width="640" height="560" depth="2" visible="{wbregierung}">
+				<label depth="3" pos="14,-14" width="612" height="28" font_size="22" color="200,200,200" justify="left" text="{wbregbesitzer}" />
+				<label depth="3" pos="14,-50" width="196" height="28" font_size="24" color="200,200,200" justify="left" text="Mitarbeiter" />
+				<label depth="3" pos="220,-50" width="406" height="28" font_size="24" color="200,200,200" justify="left" text="Weitere Ausgaben / Monat" />
+				<simplebutton name="btnRegMitMinus" depth="3" pos="14,-78" width="36" height="40" font_size="30" caption="-" />
+				<textfield name="txtRegMit" depth="3" pos="54,-78" width="116" height="40" font_size="26" character_limit="7" />
+				<simplebutton name="btnRegMitPlus" depth="3" pos="174,-78" width="36" height="40" font_size="30" caption="+" />
+				<simplebutton name="btnRegAusMinus" depth="3" pos="220,-78" width="40" height="40" font_size="30" caption="-" />
+				<textfield name="txtRegAus" depth="3" pos="264,-78" width="314" height="40" font_size="26" character_limit="15" />
+				<simplebutton name="btnRegAusPlus" depth="3" pos="582,-78" width="44" height="40" font_size="30" caption="+" />
+				<label depth="3" pos="14,-126" width="612" height="24" font_size="20" color="180,180,180" justify="left" text="Beispiele für weitere Ausgaben: Flughafen, Security, Polizei, Straßen." />
+				<label depth="3" pos="24,-166" width="360" height="30" font_size="28" color="150,200,240" justify="left" text="Steuereinnahmen" />
+				<label depth="3" pos="616,-166" width="240" height="30" font_size="28" color="150,200,240" justify="right" pivot="topright" text="{wbregsteuer}" />
+				<label depth="3" pos="24,-198" width="360" height="30" font_size="28" color="200,200,200" justify="left" text="- Staatsausgaben" />
+				<label depth="3" pos="616,-198" width="240" height="30" font_size="28" color="200,200,200" justify="right" pivot="topright" text="{wbregausgaben}" />
+				<label depth="3" pos="24,-230" width="360" height="26" font_size="22" color="180,180,180" justify="left" text="davon Gehälter" />
+				<label depth="3" pos="616,-230" width="240" height="26" font_size="22" color="180,180,180" justify="right" pivot="topright" text="{wbreggehalt}" />
+				<label depth="3" pos="24,-270" width="380" height="34" font_size="32" color="255,170,90" justify="left" text="= Saldo / Monat" />
+				<label depth="3" pos="616,-270" width="240" height="34" font_size="32" color="255,170,90" justify="right" pivot="topright" text="{wbregsaldo}" />
+				<label depth="3" pos="24,-322" width="600" height="28" font_size="24" color="255,170,90" justify="left" text="{wbregkonto}" />
+				<label depth="3" pos="24,-360" width="600" height="56" font_size="20" color="180,180,180" justify="left" text="Solange keine Regierung mit einem Tresor verbunden ist, läuft sie automatisch. Mit Tresor gelten diese Daten. Steuern kommen immer an." />
+				<simplebutton name="btnRegTrennen" depth="3" pos="14,-502" width="200" height="42" font_size="26" caption="Tresor trennen" />
+				<label depth="3" pos="236,-506" width="130" height="30" font_size="26" color="200,200,200" justify="right" text="Läuft:" />
+				<label depth="3" pos="372,-506" width="60" height="30" font_size="28" color="[white]" justify="center" text="{wbreglaeuft}" />
+				<simplebutton name="btnRegAn" depth="3" pos="440,-502" width="88" height="40" font_size="26" caption="An" />
+				<simplebutton name="btnRegAus" depth="3" pos="536,-502" width="90" height="40" font_size="26" caption="Aus" />
+			</rect>
+
+			<label depth="3" pos="14,-574" width="300" height="30" font_size="22" color="255,220,120" justify="left" text="{wbmeldung}" />
+			<simplebutton name="btnSpeichern" depth="3" pos="330,-568" width="140" height="42" font_size="28" caption="Speichern" />
+			<simplebutton name="btnSchliessen" depth="3" pos="482,-568" width="144" height="42" font_size="28" caption="Schließen" />
+		</rect>
+	</window>
+
+
+	<!-- ============ BÖRSE ============ -->
+	<window name="wbBoerseFenster" pos="-400, 358" width="800" height="796" anchor="CenterCenter" controller="WbBoerse, Wirtschaft" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_coin"/>
+			<label style="header.name" text="BÖRSE" width="110" />
+			<simplebutton name="btnTab0" depth="3" pos="130,-3" width="100" height="38" font_size="22" caption="Firmen" />
+			<simplebutton name="btnTab1" depth="3" pos="234,-3" width="100" height="38" font_size="22" caption="Inhaber" />
+			<simplebutton name="btnTab2" depth="3" pos="338,-3" width="100" height="38" font_size="22" caption="Handel" />
+			<simplebutton name="btnTab3" depth="3" pos="442,-3" width="100" height="38" font_size="22" caption="Personen" />
+			<simplebutton name="btnTab4" depth="3" pos="546,-3" width="132" height="38" font_size="22" caption="Ereignisse" />
+			<label depth="2" pos="790,-8" width="90" height="32" font_size="26" color="200,200,200" justify="right" pivot="topright" text="{wbkopf}" />
+		</panel>
+		<rect name="content" pos="0,-46" width="800" height="750" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="800" height="750" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="800" height="750" />
+			<rect name="regionwahl" pos="0,0" width="800" height="44" depth="2" visible="{wbfirmenwahl}">
+				<label depth="3" pos="14,-14" width="110" height="32" font_size="28" color="200,200,200" justify="left" text="Region" />
+				<simplebutton name="btnRegionZurueck" depth="3" pos="130,-4" width="44" height="38" font_size="30" caption="&lt;" />
+				<label depth="3" pos="186,-6" width="380" height="34" font_size="30" color="150,200,240" justify="center" text="{wbregion}" />
+				<simplebutton name="btnRegionVor" depth="3" pos="578,-4" width="44" height="38" font_size="30" caption="&gt;" />
+				<label depth="3" pos="636,-10" width="150" height="32" font_size="26" color="200,200,200" justify="right" text="{wbregionzahl}" />
+			</rect>
+			<rect name="firmenwahl" pos="0,-46" width="800" height="90" depth="2" visible="{wbfirmenwahl}">
+				<label depth="3" pos="14,-14" width="110" height="32" font_size="28" color="200,200,200" justify="left" text="Firma" />
+				<simplebutton name="btnFirmaZurueck" depth="3" pos="130,-10" width="44" height="38" font_size="30" caption="&lt;" />
+				<label depth="3" pos="186,-12" width="380" height="34" font_size="32" color="[white]" justify="center" text="{wbfirma}" />
+				<simplebutton name="btnFirmaVor" depth="3" pos="578,-10" width="44" height="38" font_size="30" caption="&gt;" />
+				<label depth="3" pos="636,-14" width="150" height="32" font_size="26" color="200,200,200" justify="right" text="{wbfirmazahl}" />
+				<label depth="3" pos="14,-56" width="772" height="28" font_size="22" color="180,180,180" justify="left" text="{wbfirmainfo}" />
+			</rect>
+			<rect name="tab0" pos="0,-146" width="800" height="440" depth="2" visible="{wbtab0}">
+				<!-- Bewertung: Kasten mit Einzelteilen -->
+				<sprite depth="3" pos="14,4" width="772" height="192" color="26,26,26" type="sliced" />
+				<label depth="4" pos="28,-2" width="520" height="28" font_size="24" color="[white]" justify="left" text="{wbumsatztext}" />
+				<label depth="4" pos="772,-2" width="230" height="28" font_size="24" color="[white]" justify="right" pivot="topright" text="{wbumsatz}" />
+				<label depth="4" pos="28,-30" width="520" height="28" font_size="24" color="200,200,200" justify="left" text="{wbmitarbeitertext}" />
+				<label depth="4" pos="772,-30" width="230" height="28" font_size="24" color="200,200,200" justify="right" pivot="topright" text="{wbmitarbeiterwert}" />
+				<label depth="4" pos="28,-58" width="520" height="28" font_size="24" color="200,200,200" justify="left" text="+ Immobilien (Gebäude, Standorte)" />
+				<label depth="4" pos="772,-58" width="230" height="28" font_size="24" color="200,200,200" justify="right" pivot="topright" text="{wbimmo}" />
+				<label depth="4" pos="28,-86" width="520" height="28" font_size="24" color="200,200,200" justify="left" text="+ Fahrzeuge und Maschinen" />
+				<label depth="4" pos="772,-86" width="230" height="28" font_size="24" color="200,200,200" justify="right" pivot="topright" text="{wbfahrzeuge}" />
+				<label depth="4" pos="28,-114" width="520" height="28" font_size="24" color="150,200,240" justify="left" text="{wbertragtext}" />
+				<label depth="4" pos="772,-114" width="230" height="28" font_size="24" color="150,200,240" justify="right" pivot="topright" text="{wbertrag}" />
+				<sprite depth="4" pos="28,-146" width="744" height="2" color="255,170,90" type="sliced" />
+				<label depth="4" pos="28,-152" width="520" height="36" font_size="32" color="255,170,90" justify="left" text="= Firmenwert" />
+				<label depth="4" pos="772,-152" width="340" height="36" font_size="32" color="255,170,90" justify="right" pivot="topright" text="{wbwert}" />
+				<label depth="3" pos="24,-198" width="760" height="28" font_size="24" color="[white]" justify="left" text="{wbpreise}" />
+				<label depth="3" pos="24,-226" width="762" height="26" font_size="20" color="180,180,180" justify="left" text="{wbkennzahl}" />
+				<label depth="3" pos="24,-250" width="762" height="26" font_size="22" color="255,70,70" justify="left" text="{wbkonkurs}" />
+				<label depth="3" pos="14,-276" width="160" height="28" font_size="24" color="150,200,240" justify="left" text="Eigentümer" />
+				<label depth="3" pos="24,-304" width="762" height="58" font_size="22" color="[white]" justify="left" text="{wbeigentuemer}" />
+				<label depth="3" pos="14,-366" width="170" height="26" font_size="22" color="150,200,240" justify="left" text="Schuldenquote" />
+				<label depth="3" pos="190,-366" width="300" height="26" font_size="22" color="[white]" justify="left" text="{wbschuldenquote}" />
+				<label depth="3" pos="786,-368" width="290" height="26" font_size="20" color="180,180,180" justify="right" pivot="topright" text="{wbgeldtresor}" />
+				<simplebutton name="btnGeldtresorAufloesen" depth="3" pos="14,-398" width="380" height="40" font_size="24" caption="Geldtresor auflösen" />
+				<simplebutton name="btnFirmaLoeschen" depth="3" pos="406,-398" width="380" height="40" font_size="24" caption="Firma löschen (liquidieren)" />
+			</rect>
+			<rect name="liste" pos="0,-146" width="380" height="330" depth="2" visible="{wbliste}">
+				<label depth="3" pos="14,0" width="350" height="30" font_size="26" color="150,200,240" justify="left" text="Namen (anklicken)" />
+				<simplebutton name="btnL0" depth="3" pos="14,-34" width="350" height="36" font_size="24" caption="-" />
+				<simplebutton name="btnL1" depth="3" pos="14,-74" width="350" height="36" font_size="24" caption="-" />
+				<simplebutton name="btnL2" depth="3" pos="14,-114" width="350" height="36" font_size="24" caption="-" />
+				<simplebutton name="btnL3" depth="3" pos="14,-154" width="350" height="36" font_size="24" caption="-" />
+				<simplebutton name="btnL4" depth="3" pos="14,-194" width="350" height="36" font_size="24" caption="-" />
+				<simplebutton name="btnL5" depth="3" pos="14,-234" width="350" height="36" font_size="24" caption="-" />
+				<simplebutton name="btnListeZurueck" depth="3" pos="14,-278" width="60" height="38" font_size="28" caption="&lt;" />
+				<label depth="3" pos="80,-282" width="220" height="30" font_size="24" color="200,200,200" justify="center" text="{wbseite}" />
+				<simplebutton name="btnListeVor" depth="3" pos="304,-278" width="60" height="38" font_size="28" caption="&gt;" />
+			</rect>
+			<rect name="tab1" pos="0,-146" width="800" height="440" depth="2" visible="{wbtab1}">
+				<simplebutton name="btnSlotG1" depth="3" pos="390,0" width="396" height="40" font_size="24" caption="Gründer 1" />
+				<simplebutton name="btnSlotG2" depth="3" pos="390,-46" width="396" height="40" font_size="24" caption="Gründer 2" />
+				<simplebutton name="btnG2Keiner" depth="3" pos="390,-92" width="396" height="40" font_size="24" caption="Gründer 2 entfernen" />
+				<label depth="3" pos="390,-142" width="150" height="30" font_size="24" color="200,200,200" justify="left" text="Anteil G1" />
+				<simplebutton name="btnGMinus" depth="3" pos="540,-138" width="44" height="38" font_size="30" caption="-" />
+				<label depth="3" pos="588,-140" width="90" height="32" font_size="28" color="[white]" justify="center" text="{wbgprozent}" />
+				<simplebutton name="btnGPlus" depth="3" pos="682,-138" width="44" height="38" font_size="30" caption="+" />
+				<simplebutton name="btnG10" depth="3" pos="730,-138" width="56" height="38" font_size="24" caption="+10" />
+				<label depth="3" pos="390,-184" width="396" height="28" font_size="22" color="255,220,120" justify="left" text="{wbgrest}" />
+				<simplebutton name="btnGruenderSetzen" depth="3" pos="390,-224" width="396" height="42" font_size="26" caption="Gründer festlegen" />
+				<label depth="3" pos="390,-276" width="396" height="40" font_size="20" color="180,180,180" justify="left" text="Ersetzt alle bisherigen Eigentümer dieser Firma." />
+				<label depth="3" pos="14,-340" width="160" height="28" font_size="24" color="150,200,240" justify="left" text="Eigentümer" />
+				<label depth="3" pos="150,-342" width="636" height="90" font_size="22" color="[white]" justify="left" text="{wbeigentuemer}" />
+			</rect>
+			<rect name="tab2" pos="0,-146" width="800" height="440" depth="2" visible="{wbtab2}">
+				<simplebutton name="btnSlotVerk" depth="3" pos="390,0" width="396" height="40" font_size="24" caption="Verkäufer" />
+				<simplebutton name="btnSlotKaeuf" depth="3" pos="390,-46" width="396" height="40" font_size="24" caption="Käufer" />
+				<label depth="3" pos="390,-100" width="100" height="30" font_size="26" color="200,200,200" justify="left" text="Anteil" />
+				<simplebutton name="btnProzentMinus" depth="3" pos="490,-96" width="44" height="38" font_size="30" caption="-" />
+				<label depth="3" pos="538,-98" width="90" height="32" font_size="28" color="[white]" justify="center" text="{wbprozent}" />
+				<simplebutton name="btnProzentPlus" depth="3" pos="632,-96" width="44" height="38" font_size="30" caption="+" />
+				<simplebutton name="btnProzent10" depth="3" pos="682,-96" width="104" height="38" font_size="24" caption="+10" />
+				<label depth="3" pos="390,-146" width="396" height="30" font_size="26" color="255,170,90" justify="left" text="{wbpreis}" />
+				<simplebutton name="btnVerkaufen" depth="3" pos="390,-188" width="396" height="42" font_size="24" caption="Verkaufen (Käufer zahlt)" />
+				<simplebutton name="btnEintragen" depth="3" pos="390,-238" width="396" height="42" font_size="24" caption="Eintragen (ohne Zahlung)" />
+				<label depth="3" pos="14,-340" width="160" height="28" font_size="24" color="150,200,240" justify="left" text="Eigentümer" />
+				<label depth="3" pos="150,-342" width="636" height="90" font_size="22" color="[white]" justify="left" text="{wbeigentuemer}" />
+			</rect>
+			<rect name="tab3" pos="0,-146" width="800" height="380" depth="2" visible="{wbtab3}">
+				<label depth="3" pos="390,0" width="396" height="36" font_size="32" color="[white]" justify="left" text="{wbperson}" />
+				<label depth="3" pos="390,-48" width="396" height="70" font_size="24" color="[white]" justify="left" text="{wbpersonkonto}" />
+				<label depth="3" pos="390,-130" width="396" height="26" font_size="24" color="150,200,240" justify="left" text="Anteile" />
+				<label depth="3" pos="390,-158" width="396" height="106" font_size="22" color="[white]" justify="left" text="{wbpersonanteile}" />
+				<simplebutton name="btnPBankZurueck" depth="3" pos="390,-268" width="44" height="38" font_size="26" caption="&lt;" />
+				<label depth="3" pos="440,-274" width="302" height="30" font_size="22" color="150,200,240" justify="center" text="{wbbank}" />
+				<simplebutton name="btnPBankVor" depth="3" pos="746,-268" width="44" height="38" font_size="26" caption="&gt;" />
+				<label depth="3" pos="390,-312" width="396" height="26" font_size="18" color="180,180,180" justify="left" text="{wbbankinfo}" />
+				<simplebutton name="btnRegZuweisen" depth="3" pos="390,-338" width="396" height="36" font_size="22" caption="Gewählte Regierung für diese Bank" />
+			</rect>
+			<rect name="neuperson" pos="0,-524" width="800" height="170" depth="2" visible="{wbtab3}">
+				<label depth="3" pos="14,0" width="772" height="32" font_size="26" color="255,170,90" justify="left" text="Neue Person / Regierung / Bank  (Name eintippen)" />
+				<label depth="3" pos="14,-40" width="60" height="30" font_size="26" color="200,200,200" justify="left" text="Name" />
+				<textfield name="txtNeuPerson" depth="3" pos="80,-36" width="420" height="40" font_size="28" character_limit="40" />
+				<simplebutton name="btnNeuePerson" depth="3" pos="512,-36" width="274" height="40" font_size="26" caption="Person anlegen" />
+				<simplebutton name="btnPersonLoeschen" depth="3" pos="14,-82" width="268" height="40" font_size="26" caption="Löschen" />
+				<simplebutton name="btnPersonUmbenennen" depth="3" pos="290,-82" width="200" height="40" font_size="26" caption="Umbenennen" />
+				<simplebutton name="btnRegAnlegen" depth="3" pos="500,-82" width="286" height="40" font_size="26" caption="Regierung anlegen" />
+				<simplebutton name="btnBankNeu" depth="3" pos="14,-128" width="260" height="40" font_size="26" caption="Bank anlegen" />
+				<simplebutton name="btnBankUmbenennen" depth="3" pos="282,-128" width="250" height="40" font_size="26" caption="Bank umbenennen" />
+				<simplebutton name="btnBankLoeschen" depth="3" pos="540,-128" width="246" height="40" font_size="26" caption="Bank löschen" />
+			</rect>
+			<rect name="tab4" pos="0,-146" width="800" height="440" depth="2" visible="{wbtab4}">
+				<label depth="3" pos="14,0" width="772" height="28" font_size="24" color="255,170,90" justify="left" text="{wbsstatus}" />
+				<simplebutton name="btnSAn" depth="3" pos="14,-30" width="186" height="38" font_size="22" caption="An / Aus" />
+				<simplebutton name="btnSProfil" depth="3" pos="206,-30" width="226" height="38" font_size="22" caption="Profil" />
+				<simplebutton name="btnSIntens" depth="3" pos="438,-30" width="170" height="38" font_size="22" caption="Stärke" />
+				<simplebutton name="btnSHaeufig" depth="3" pos="614,-30" width="172" height="38" font_size="22" caption="Häufigkeit" />
+				<simplebutton name="btnSPos" depth="3" pos="14,-72" width="186" height="38" font_size="22" caption="Positive" />
+				<simplebutton name="btnSNeg" depth="3" pos="206,-72" width="226" height="38" font_size="22" caption="Negative" />
+				<simplebutton name="btnSAuto" depth="3" pos="438,-72" width="348" height="38" font_size="22" caption="Grenzen automatisch (Vorschlag)" />
+				<label depth="3" pos="14,-120" width="50" height="30" font_size="22" color="200,200,200" justify="left" text="Min" />
+				<textfield name="txtSMin" depth="3" pos="62,-116" width="110" height="38" font_size="24" character_limit="9" />
+				<label depth="3" pos="180,-120" width="50" height="30" font_size="22" color="200,200,200" justify="left" text="Ziel" />
+				<textfield name="txtSZielVon" depth="3" pos="230,-116" width="110" height="38" font_size="24" character_limit="9" />
+				<label depth="3" pos="346,-120" width="30" height="30" font_size="22" color="200,200,200" justify="left" text="bis" />
+				<textfield name="txtSZielBis" depth="3" pos="378,-116" width="110" height="38" font_size="24" character_limit="9" />
+				<label depth="3" pos="496,-120" width="50" height="30" font_size="22" color="200,200,200" justify="left" text="Max" />
+				<textfield name="txtSMax" depth="3" pos="546,-116" width="110" height="38" font_size="24" character_limit="9" />
+				<simplebutton name="btnSSpeichern" depth="3" pos="664,-116" width="122" height="38" font_size="22" caption="Speichern" />
+				<label depth="3" pos="14,-160" width="772" height="24" font_size="19" color="180,180,180" justify="left" text="{wbsgrenzen}" />
+				<label depth="3" pos="14,-194" width="90" height="30" font_size="22" color="200,200,200" justify="left" text="Manuell" />
+				<textfield name="txtSBetrag" depth="3" pos="104,-190" width="140" height="38" font_size="24" character_limit="9" />
+				<simplebutton name="btnSPlus" depth="3" pos="252,-190" width="264" height="38" font_size="22" caption="+ Ereignis buchen" />
+				<simplebutton name="btnSMinus" depth="3" pos="522,-190" width="264" height="38" font_size="22" caption="- Ereignis buchen" />
+				<simplebutton name="btnSAlleAn" depth="3" pos="14,-236" width="380" height="38" font_size="22" caption="Ganze Auswahl: einschalten" />
+				<simplebutton name="btnSAlleAus" depth="3" pos="406,-236" width="380" height="38" font_size="22" caption="Ganze Auswahl: ausschalten" />
+				<simplebutton name="btnSFavorit" depth="3" pos="14,-280" width="250" height="38" font_size="22" caption="Favorit: aus" />
+				<simplebutton name="btnSBenachricht" depth="3" pos="276,-280" width="510" height="38" font_size="22" caption="Ereignis-Meldungen: AN" />
+				<label depth="3" pos="14,-324" width="772" height="24" font_size="19" color="150,200,240" justify="left" text="{wbsauswahl}" />
+				<label depth="3" pos="14,-352" width="772" height="24" font_size="20" color="150,200,240" justify="left" text="Protokoll (neueste oben)" />
+				<label depth="3" pos="14,-376" width="772" height="62" font_size="18" color="[white]" justify="left" text="{wbsprotokoll}" />
+			</rect>
+			<label depth="3" pos="14,-706" width="620" height="30" font_size="22" color="255,220,120" justify="left" text="{wbmeldung}" />
+			<simplebutton name="btnSchliessen" depth="3" pos="646,-700" width="140" height="42" font_size="28" caption="Schließen" />
+		</rect>
+	</window>
+
+	<!-- ============ GELDTRESOR (BANKING) ============ -->
+	<window name="wbGeldtresorFenster" pos="-320, 260" width="640" height="520" anchor="CenterCenter" controller="WbGeldtresor, Wirtschaft" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_coin"/>
+			<label style="header.name" text="GELDTRESOR (BANKING)" width="300" />
+			<label depth="2" pos="630,-8" width="290" height="32" font_size="28" color="[white]" justify="right" pivot="topright" text="{wbfirma}" />
+		</panel>
+		<rect name="content" pos="0,-46" width="640" height="474" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="640" height="474" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="640" height="474" />
+
+			<!-- Verbunden: Guthaben und Inhalt -->
+			<rect name="verbunden" pos="0,0" width="640" height="410" depth="2" visible="{wbverbunden}">
+				<label depth="3" pos="14,-14" width="612" height="28" font_size="22" color="200,200,200" justify="left" text="{wbinfo}" />
+				<label depth="3" pos="14,-52" width="300" height="34" font_size="30" color="[white]" justify="left" text="Guthaben" />
+				<label depth="3" pos="626,-52" width="300" height="34" font_size="32" color="255,170,90" justify="right" pivot="topright" text="{wbguthaben}" />
+				<label depth="3" pos="14,-94" width="612" height="28" font_size="22" color="180,180,180" justify="left" text="{wbschulden}" />
+				<label depth="3" pos="14,-134" width="300" height="28" font_size="24" color="150,200,240" justify="left" text="Im Tresor" />
+				<label depth="3" pos="34,-166" width="592" height="120" font_size="26" color="[white]" justify="left" text="{wbinhalt}" />
+				<simplebutton name="btnOeffnen" depth="3" pos="14,-298" width="612" height="48" font_size="30" caption="Tresor öffnen" />
+				<simplebutton name="btnWechseln" depth="3" pos="14,-356" width="300" height="42" font_size="22" caption="Andere Firma/Person wählen" />
+				<simplebutton name="btnTrennen" depth="3" pos="326,-356" width="300" height="42" font_size="24" caption="Trennen" />
+			</rect>
+
+			<!-- Frei oder Firma wechseln: manuell wählen -->
+			<rect name="wahl" pos="0,0" width="640" height="410" depth="2" visible="{wbwahlansicht}">
+				<label depth="3" pos="14,-14" width="612" height="32" font_size="28" color="255,170,90" justify="left" text="{wbwahltitel}" />
+				<simplebutton name="btnWahlZurueck" depth="3" pos="14,-56" width="44" height="42" font_size="30" caption="&lt;" />
+				<label depth="3" pos="66,-60" width="508" height="34" font_size="28" color="[white]" justify="center" text="{wbwahl}" />
+				<simplebutton name="btnWahlVor" depth="3" pos="582,-56" width="44" height="42" font_size="30" caption="&gt;" />
+				<label depth="3" pos="14,-232" width="612" height="56" font_size="20" color="200,200,200" justify="left" text="{wbwahlinfo}" />
+				<simplebutton name="btnWahlArt" depth="3" pos="14,-110" width="612" height="40" font_size="22" caption="Anzeigen: Firmen und Personen (anklicken)" />
+				<simplebutton name="btnVerbinden" depth="3" pos="14,-176" width="300" height="46" font_size="28" caption="Verbinden" />
+				<rect name="abbrechen" pos="326,-176" width="300" height="46" depth="3" visible="{wbabbrechen}">
+					<simplebutton name="btnAbbrechen" depth="3" pos="0,0" width="300" height="46" font_size="26" caption="Abbrechen" />
+				</rect>
+				<label depth="3" pos="14,-296" width="612" height="110" font_size="20" color="180,180,180" justify="left" text="Firmen stehen zuerst (die mit dem nächsten Firmentresor vorn), danach die Privatpersonen. Mit &lt; &gt; blättern, mit dem breiten Knopf nur Firmen oder nur Personen anzeigen. Beim Verbinden wird der Tresor neu befüllt. Trennen: das Geld bleibt immer auf dem Konto." />
+			</rect>
+
+			<label depth="3" pos="14,-424" width="440" height="30" font_size="22" color="255,220,120" justify="left" text="{wbmeldung}" />
+			<simplebutton name="btnSchliessen" depth="3" pos="482,-418" width="144" height="42" font_size="28" caption="Schließen" />
+		</rect>
+	</window>
+
+	<!-- ============ FINANZIERUNG (KREDIT) ============ -->
+	<window name="wbKreditFenster" pos="-400, 358" width="800" height="716" anchor="CenterCenter" controller="WbKredit, Wirtschaft" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_coin"/>
+			<label style="header.name" text="FINANZIERUNG" width="260" />
+			<label depth="2" pos="790,-8" width="420" height="32" font_size="28" color="[white]" justify="right" pivot="topright" text="{wbfirma}" />
+		</panel>
+		<rect name="content" pos="0,-46" width="800" height="670" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="800" height="670" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="800" height="670" />
+
+			<label depth="3" pos="14,-14" width="772" height="28" font_size="22" color="200,200,200" justify="left" text="{wbinfo}" />
+			<label depth="3" pos="24,-50" width="400" height="30" font_size="26" color="[white]" justify="left" text="Guthaben der Firma" />
+			<label depth="3" pos="776,-50" width="360" height="30" font_size="26" color="[white]" justify="right" pivot="topright" text="{wbguthaben}" />
+			<label depth="3" pos="24,-82" width="400" height="30" font_size="26" color="200,200,200" justify="left" text="Firmenwert (Börse)" />
+			<label depth="3" pos="776,-82" width="360" height="30" font_size="26" color="200,200,200" justify="right" pivot="topright" text="{wbwert}" />
+			<label depth="3" pos="24,-114" width="300" height="30" font_size="26" color="200,200,200" justify="left" text="Schulden" />
+			<label depth="3" pos="776,-114" width="460" height="30" font_size="26" color="200,200,200" justify="right" pivot="topright" text="{wbschulden}" />
+			<label depth="3" pos="24,-148" width="300" height="32" font_size="28" color="255,170,90" justify="left" text="Schuldenquote" />
+			<label depth="3" pos="776,-148" width="460" height="32" font_size="28" color="255,170,90" justify="right" pivot="topright" text="{wbquote}" />
+
+			<!-- Neuer Kredit -->
+			<label depth="3" pos="14,-198" width="160" height="32" font_size="28" color="255,170,90" justify="left" text="Neuer Kredit" />
+			<label depth="3" pos="180,-202" width="606" height="28" font_size="20" color="255,70,70" justify="left" text="{wbkonkurs}" />
+			<label depth="3" pos="14,-236" width="250" height="28" font_size="24" color="200,200,200" justify="left" text="Betrag" />
+			<label depth="3" pos="276,-236" width="250" height="28" font_size="24" color="200,200,200" justify="left" text="Zins pro Jahr" />
+			<label depth="3" pos="538,-236" width="248" height="28" font_size="24" color="200,200,200" justify="left" text="Laufzeit (Monate)" />
+			<simplebutton name="btnKBetragMinus" depth="3" pos="14,-266" width="40" height="40" font_size="30" caption="-" />
+			<textfield name="txtKBetrag" depth="3" pos="58,-266" width="162" height="40" font_size="28" character_limit="15" />
+			<simplebutton name="btnKBetragPlus" depth="3" pos="224,-266" width="40" height="40" font_size="30" caption="+" />
+			<label depth="3" pos="276,-270" width="250" height="34" font_size="26" color="[white]" justify="left" text="{wbzins}" />
+			<simplebutton name="btnKLaufzeitMinus" depth="3" pos="538,-266" width="40" height="40" font_size="30" caption="-" />
+			<textfield name="txtKLaufzeit" depth="3" pos="582,-266" width="160" height="40" font_size="28" character_limit="3" />
+			<simplebutton name="btnKLaufzeitPlus" depth="3" pos="746,-266" width="40" height="40" font_size="30" caption="+" />
+			<label depth="3" pos="14,-318" width="772" height="28" font_size="22" color="[white]" justify="left" text="{wbvorschau}" />
+			<label depth="3" pos="14,-348" width="772" height="28" font_size="22" color="180,180,180" justify="left" text="{wbvorschau2}" />
+			<simplebutton name="btnKAufnehmen" depth="3" pos="14,-386" width="380" height="44" font_size="28" caption="Kredit aufnehmen" />
+			<label depth="3" pos="406,-390" width="380" height="40" font_size="18" color="180,180,180" justify="left" text="Das Geld kommt sofort aufs Firmenkonto (und in den Geldtresor). Die Rate wird jeden Monat gebucht." />
+
+			<!-- Laufende Kredite -->
+			<label depth="3" pos="14,-450" width="400" height="32" font_size="28" color="255,170,90" justify="left" text="Laufende Kredite" />
+			<label depth="3" pos="786,-452" width="200" height="30" font_size="24" color="200,200,200" justify="right" pivot="topright" text="{wbkreditzahl}" />
+			<simplebutton name="btnKKreditZurueck" depth="3" pos="14,-488" width="44" height="40" font_size="30" caption="&lt;" />
+			<label depth="3" pos="66,-492" width="668" height="30" font_size="24" color="[white]" justify="center" text="{wbkredit}" />
+			<simplebutton name="btnKKreditVor" depth="3" pos="742,-488" width="44" height="40" font_size="30" caption="&gt;" />
+			<label depth="3" pos="14,-534" width="772" height="28" font_size="22" color="180,180,180" justify="center" text="{wbkredit2}" />
+			<label depth="3" pos="14,-576" width="170" height="30" font_size="24" color="200,200,200" justify="left" text="Sondertilgung" />
+			<simplebutton name="btnKTilgungMinus" depth="3" pos="186,-572" width="40" height="40" font_size="30" caption="-" />
+			<textfield name="txtKTilgung" depth="3" pos="230,-572" width="160" height="40" font_size="28" character_limit="15" />
+			<simplebutton name="btnKTilgungPlus" depth="3" pos="394,-572" width="40" height="40" font_size="30" caption="+" />
+			<simplebutton name="btnKTilgen" depth="3" pos="446,-572" width="150" height="40" font_size="24" caption="Tilgen" />
+			<simplebutton name="btnKAlles" depth="3" pos="606,-572" width="180" height="40" font_size="22" caption="Ganz zurückzahlen" />
+
+			<label depth="3" pos="14,-630" width="470" height="30" font_size="22" color="255,220,120" justify="left" text="{wbmeldung}" />
+			<simplebutton name="btnKZurueck" depth="3" pos="494,-622" width="140" height="42" font_size="26" caption="Zurück" />
+			<simplebutton name="btnSchliessen" depth="3" pos="646,-622" width="140" height="42" font_size="28" caption="Schließen" />
+		</rect>
+	</window>
+
+</append>
+</configs>

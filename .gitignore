@@ -1,0 +1,6 @@
+*.dll
+Baufehler.txt
+Sicherung*/
+*.wav
+*.unity3d
+*.onnx

@@ -1,0 +1,47 @@
+<configs>
+  <append xpath="/nav_object_classes">
+
+    <!-- KI-Figuren (Typ 2): blaues Sprechsymbol mit Namen ueber dem Kopf, dazu Kompass und Karte -->
+    <nav_object_class name="figur_ki">
+      <map_settings>
+        <property name="sprite_name" value="ui_game_symbol_talk"/>
+        <property name="min_distance" value="0"/>
+        <property name="max_distance" value="200"/>
+        <property name="color" value="0,200,255,255"/>
+        <property name="has_pulse" value="false"/>
+      </map_settings>
+      <compass_settings>
+        <property name="sprite_name" value="ui_game_symbol_talk"/>
+        <property name="min_distance" value="0"/>
+        <property name="max_distance" value="100"/>
+        <property name="max_scale_distance" value="100"/>
+        <property name="color" value="0,200,255,255"/>
+        <property name="has_pulse" value="false"/>
+        <property name="icon_clamped" value="false" />
+      </compass_settings>
+      <onscreen_settings>
+        <property name="sprite_name" value="ui_game_symbol_talk"/>
+        <property name="min_distance" value="0"/>
+        <property name="max_distance" value="25"/>
+        <property name="color" value="0,200,255,255"/>
+        <property name="has_pulse" value="true"/>
+        <property name="text_type" value="Name"/>
+        <property name="offset" value="0,2.3,0" />
+      </onscreen_settings>
+    </nav_object_class>
+
+    <!-- Normale Figuren (Typ 1): schlichtes weisses Symbol mit Namen, nur aus der Naehe -->
+    <nav_object_class name="figur_npc">
+      <onscreen_settings>
+        <property name="sprite_name" value="ui_game_symbol_talk"/>
+        <property name="min_distance" value="0"/>
+        <property name="max_distance" value="10"/>
+        <property name="color" value="255,255,255,200"/>
+        <property name="has_pulse" value="false"/>
+        <property name="text_type" value="Name"/>
+        <property name="offset" value="0,2.3,0" />
+      </onscreen_settings>
+    </nav_object_class>
+
+  </append>
+</configs>

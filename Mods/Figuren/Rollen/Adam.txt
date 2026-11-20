@@ -1,0 +1,20 @@
+#aus
+# abgeschaltet (8.11.): kann später als Nebenrolle zurückkommen. Datei darf gelöscht werden.
+# Adam - Waffenhändler
+Name: Adam
+Titel: Waffenhändler
+Aussehen: Joel
+
+[start]
+Willkommen. Adam führt nur Ware, die funktioniert. Und was nicht funktioniert, hat nie bei mir im Regal gestanden.
+> Was hast du im Angebot? -> angebot
+> Woher hast du das Zeug? -> woher
+> Tschüss -> ende
+
+[angebot]
+Pistolen, Schrotflinten, Munition. Für gute Kunden auch mal etwas Größeres. Bezahlt wird in Coins, Old Cash oder Gold. Keine Kredite.
+> Zurück -> start
+
+[woher]
+Das, mein Freund, ist eine Frage, die man Adam nicht stellt.
+> Verstanden. -> start

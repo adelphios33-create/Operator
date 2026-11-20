@@ -1,0 +1,37 @@
+# FESTE FIGUR Wachmann (Typ 3): kurzer Klick-Dialog ohne KI, bewaffnet. Zufallsname.
+# Waffe und Haltung sind nur die Vorgabe beim Übernehmen; im Einrichten-Fenster pro Figur änderbar.
+#   Waffe: keine, Pistole, MP, AK, Schrotflinte
+#   Haltung: Friedlich (schießt nie), Wache (schießt auf Zombies), Feindlich (schießt auf Zombies und Spieler)
+Name: Wachmann
+Titel: Wachmann in {Stadt}
+Vorlage: ja
+Namen: Bruno, Kalle, Rocco, Vince, Dragan, Sergej, Hank, Lutz, Ronny, Mike, Boris, Jürgen, Kurt, Toni, Ivo, Gregor
+Aussehen: Rogues, Rekt, ZivilCowboy, ZivilJung2
+Waffe: AK
+Haltung: Wache
+Leitung: nein
+
+[start]
+Halt. Wer da? ... Okay, du darfst passieren. || Bleib auf Abstand, bis ich weiß, wer du bist. || Ruhige Schicht bisher. Was willst du? || Hände da, wo ich sie sehen kann. Gut. Was gibt's? || Ich bin {Name}. Ich pass hier auf, dass nichts reinkommt, was nicht rein soll.
+> Wie ist die Lage? -> lage
+> Wie geht's dir? -> befinden
+> Wer ist dein Chef? -> chef
+> Schon gut, ich geh weiter. -> ende
+
+[lage]
+Heute Nacht kamen drei Stinker an den Zaun. Jetzt nicht mehr. || Ruhig. Zu ruhig, wenn du mich fragst. || Im Norden treibt sich was rum. Ich behalt's im Auge. || Munition wird knapp, aber das Tor hält.
+> Gut zu wissen. -> ende
+> Brauchst du Hilfe? -> hilfe
+
+[befinden]
+Müde. Zwölf Stunden Schicht, und der Kaffee ist alle. || Geht schon. Solange keiner Ärger macht. || Mir geht's gut, wenn's hier ruhig bleibt. || Ehrlich? Die Füße bringen mich um.
+> Halt durch. -> ende
+> Wie ist die Lage? -> lage
+
+[chef]
+Ich werde bezahlt, das reicht dir als Antwort. || Der Bürgermeister zahlt, ich pass auf. So einfach. || Frag lieber nicht. Ich mach meinen Job.
+> Verstanden. -> ende
+
+[hilfe]
+Bring Munition vorbei, dann reden wir. || Halt einfach die Augen offen, wenn du draußen bist. || Nein, ich komm klar. Aber danke.
+> Mach ich. -> ende

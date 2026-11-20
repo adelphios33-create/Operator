@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<xml>
+	<Name value="Figuren" />
+	<DisplayName value="Figuren (NPCs)" />
+	<Description value="Platzierbare NPCs mit Rollen und Dialogen aus Textdateien." />
+	<Author value="Adelphios und Claude" />
+	<Version value="0.19.0" />
+	<SkipWithAntiCheat value="true" />
+</xml>

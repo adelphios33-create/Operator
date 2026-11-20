@@ -1,0 +1,25 @@
+#aus
+# abgeschaltet (8.11.): kann später als Nebenrolle zurückkommen. Datei darf gelöscht werden.
+# Rodrigo - Bauunternehmer
+Name: Rodrigo
+Titel: Bauunternehmer
+Aussehen: Bob
+
+[start]
+Hola, amigo. Rodrigo baut alles: Mauern, Dächer, ganze Straßen. Du hast Land und Geld? Dann hast du Arbeit für mich.
+> Ich will bauen lassen. -> bauen
+> Was kostet das? -> preis
+> Hast du Arbeit für mich? -> arbeit
+> Adiós. -> ende
+
+[bauen]
+Rohbau, halb fertig oder fertig übergeben. Sag mir, was du willst, und wo. Den Rest regeln meine Leute.
+> Zurück -> start
+
+[preis]
+Kommt auf Größe und Zustand an. Rohbau ist billig, schlüsselfertig kostet. Und ja, ich stelle eine Rechnung, auch dem Staat.
+> Zurück -> start
+
+[arbeit]
+Immer. Ich suche Leute, die schwer tragen und nicht viel fragen. Bezahlt wird anständig.
+> Zurück -> start

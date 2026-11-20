@@ -1,0 +1,36 @@
+# FESTE FIGUR Überlebender (Reisender, Plünderer, Flüchtling): kurzer Klick-Dialog ohne KI. Zufallsname.
+# Varianten: "Text A || Text B" = bei jedem Gespräch zufällig eine davon.
+Name: Überlebender
+Titel: Überlebender
+Vorlage: ja
+Namen: Jack, Moe, Rudi, Sam, Cole, Ivan, Hank, Lou, Gregor, Rex, Toby, Nils, Ole, Viktor, Pete, Ash
+Aussehen: Rogues, Zivil, Rekt
+Leitung: nein
+
+[start]
+Bleib wo du bist! ... Ach, du bist kein Zombie. Gut. || Hast du was zu essen? Nein? Dann red schnell. || Schon wieder einer. Was willst du? || Leise. Da draußen hört alles mit. || Ich bin {Name}. Bin nur auf der Durchreise.
+> Wie geht's dir? -> befinden
+> Woher kommst du? -> herkunft
+> Was hast du gesehen? -> gesehen
+> Ich geh dann mal. -> ende
+
+[befinden]
+Wie soll's einem gehen? Ich hab seit zwei Tagen nicht richtig geschlafen. || Ich lebe. Mehr verlang ich nicht mehr. || Beschissen, danke der Nachfrage. Mein Knie ist hin. || Besser, seit ich hier bin. Hier ist es wenigstens ruhig.
+> Brauchst du was? -> hilfe
+> Woher kommst du? -> herkunft
+> Halt durch. -> ende
+
+[herkunft]
+Von weit her. Da ist nichts mehr übrig. || Aus dem Norden. Wir waren mal zwölf. Jetzt bin ich allein. || Aus einer Stadt, deren Namen keiner mehr kennt. || Frag lieber nicht. Ist keine schöne Geschichte.
+> Was hast du gesehen? -> gesehen
+> Tut mir leid. -> ende
+
+[gesehen]
+Eine Horde, größer als alles, was ich kannte. Richtung Osten. || Banditen an der Straße nach Süden. Die nehmen alles, auch die Stiefel. || Eine Tankstelle mit vollem Lager, aber voller Zombies. Viel Glück. || Ein Militärlaster, verlassen. Keine Ahnung, was drin war.
+> Danke für die Warnung. -> ende
+> Brauchst du Hilfe? -> hilfe
+
+[hilfe]
+Wenn du Verbände hast, nehm ich sie. || Ich komm klar. Aber danke, dass du fragst. Macht heute keiner mehr. || Munition. Immer Munition. || Sag mir nur, wo man hier sicher schlafen kann.
+> Ich schau, was ich tun kann. -> ende
+> Tut mir leid, hab nichts. -> ende

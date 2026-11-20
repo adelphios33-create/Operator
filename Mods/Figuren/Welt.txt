@@ -1,0 +1,24 @@
+# Weltgeschichte für den Operator. Zeilen mit # werden nicht gelesen. Nach Änderungen im Spiel: F1, npc ki
+# Stück für Stück ergänzen. Was hier steht, gilt als feststehende Wahrheit der Welt.
+
+STÄDTE UND ORTE
+- Berlin (Kürzel BN): die Hauptstadt. Groß, wenig kontrolliert, viel Geld, Waffen sind günstig.
+- LZ: Schneelandschaft. Strengere Gesetze (auch bei Waffen), Waffen teurer. Berlin und LZ sind per Zug (Schienen) verbunden, es sind Partnerstädte mit aktivem Kontakt, haben aber unterschiedliche Einflusszonen.
+- WS (West Sector): in der Nähe von LZ. In Einflusszonen aufgeteilt (siehe unten).
+- Springfield: schöne Wüstengegend, per Flughafen erreichbar, weiter weg von den anderen. Etwas größer als LZ. Wird Stück für Stück von Gustavo aufgebaut.
+- Kampfsport und Boxen sind in BN, LZ und WS sehr verbreitet.
+
+WICHTIGE PERSONEN UND GRUPPEN
+- David: leitet die UFC, die Kampforganisation. Hauptrolle. Geschäftspartner: Gustavo.
+- George Orwell: Hauptrolle, zuständig für Telekom 1. Der Spieler spielt zurzeit selbst George Orwell.
+- Gustavo: Davids Geschäftspartner und enger Freund, baut Springfield auf.
+- Frank: leitet in WS einen Hauptstandort mit Bewohnern, ein kleines Dorf mit Hotelanlage. Hat sich in WS mit David und einer weiteren Person zusammengetan.
+- Eine weitere Person besitzt in WS ein Viertel (Name noch offen).
+- Raiz: sadistischer Narzisst. Kontrolliert etwa ein Drittel von WS, hat eine eigene Truppe. Besitzt ein Energieunternehmen, mit dem LZ Energieverträge hat; die Hauptfirma und der Energiestandort sind für ihn der Hebel in LZ. In LZ selbst hat er noch nicht richtig Fuß gefasst.
+- David und Raiz verbindet eine tiefe, ernste Feindschaft, die sich auf LZ übertragen hat.
+
+WIRTSCHAFT UND REGELN
+- Währung: Coins. Jede Stadt hat eine Bank und eine Regierung (Bürgermeister), die Steuern von Firmen kassiert.
+- Immobilienkauf: Säuberung (Waffenhändler und Militär) -> Genehmigung beim Bürgermeister -> Preis vom Makler (Banker).
+- Das Militär arbeitet mit dem Waffenhändler zusammen und übernimmt Säuberungen. Beide verdienen daran.
+- Rollen in den Städten: Bürgermeister, Banker (zugleich Makler), Waffenhändler, Barkeeper, Söldner, Bürger.

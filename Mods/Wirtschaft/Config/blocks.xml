@@ -1,0 +1,83 @@
+<configs>
+  <append xpath="/blocks">
+
+    <!-- Hauptbank: Geldautomat-Modell, zeigt alle Parteien, Firmen und Immobilien -->
+    <block name="wbHauptbank">
+      <property name="Class" value="Hauptbank, Wirtschaft" />
+      <property name="CreativeMode" value="Player" />
+      <property name="CustomIcon" value="cntATMSecure" />
+      <property name="DescriptionKey" value="wbHauptbankDesc" />
+      <property name="DisplayType" value="blockHardenedMulti" />
+      <property name="Material" value="Mmetal_hard" />
+      <property name="Shape" value="ModelEntity" />
+      <property name="Model" value="Entities/Commercial/ATMPrefab" />
+      <property name="MultiBlockDim" value="1,2,1" />
+      <property name="ImposterExchange" value="imposterBlock" param1="18" />
+      <property name="WaterFlow" value="permitted" />
+      <property name="Place" value="TowardsPlacer" />
+      <property name="Collide" value="sight,movement,melee,bullet,arrow,rocket" />
+      <property name="Path" value="solid" />
+      <property name="IsTerrainDecoration" value="true" />
+      <property name="MaxDamage" value="5000" />
+      <drop event="Destroy" count="0" />
+      <property name="Group" value="Building,advBuilding" />
+      <property name="FilterTags" value="MC_building,SC_decor" />
+    </block>
+
+    <!-- Firmentresor: Schreibtisch-Safe-Modell, steht beim Geschäft -->
+    <block name="wbFirmentresor">
+      <property name="Class" value="Firmentresor, Wirtschaft" />
+      <property name="CreativeMode" value="Player" />
+      <property name="CustomIcon" value="cntWallSafe" />
+      <property name="DescriptionKey" value="wbFirmentresorDesc" />
+      <property name="DisplayType" value="blockHardened" />
+      <property name="Material" value="Mmetal_hard" />
+      <property name="Shape" value="ModelEntity" />
+      <property name="Model" value="@:Entities/LootContainers/safeMetalDeskClosePrefab.prefab" />
+      <property name="ImposterExchange" value="imposterCTREighth" param1="18" />
+      <property name="WaterFlow" value="permitted" />
+      <property name="Place" value="TowardsPlacerInverted" />
+      <property name="IsTerrainDecoration" value="true" />
+      <property name="StabilitySupport" value="false" />
+      <drop event="Destroy" count="0" />
+      <property name="Group" value="Building,advBuilding" />
+      <property name="FilterTags" value="MC_building,SC_decor" />
+    </block>
+
+    <!-- Börsenterminal: PC mit Monitor und Tastatur, zeigt Firmenwerte, Eigentümer und Anteilshandel -->
+    <block name="wbBoerse">
+      <property name="Extends" value="decoComputerMonitorKeyboardMousePC" />
+      <property name="Class" value="Boerse, Wirtschaft" />
+      <property name="CreativeMode" value="Player" />
+      <property name="CustomIcon" value="decoComputerMonitorKeyboardMousePC" />
+      <property name="DescriptionKey" value="wbBoerseDesc" />
+      <property name="Group" value="Building,advBuilding" />
+      <property name="FilterTags" value="MC_building,SC_decor" />
+    </block>
+
+    <!-- Geldtresor (Banking): Behälter, zeigt das Firmenguthaben als Dukes, Scheine, Silber- und Goldbarren.
+         Neben einen verbundenen Firmentresor stellen und mit E öffnen. -->
+    <block name="wbGeldtresor">
+      <property name="Class" value="Geldtresor, Wirtschaft" />
+      <property name="CreativeMode" value="Player" />
+      <property name="CustomIcon" value="cntWallSafe" />
+      <property name="CustomIconTint" value="f2c040" />
+      <property name="DescriptionKey" value="wbGeldtresorDesc" />
+      <property name="DisplayType" value="blockHardened" />
+      <property name="Material" value="Mmetal_hard" />
+      <property name="Shape" value="ModelEntity" />
+      <property name="Model" value="@:Entities/LootContainers/safeMetalDeskClosePrefab.prefab" />
+      <property name="ImposterExchange" value="imposterCTREighth" param1="18" />
+      <property name="LootList" value="wbGeldtresorInhalt" />
+      <property name="WaterFlow" value="permitted" />
+      <property name="Place" value="TowardsPlacerInverted" />
+      <property name="IsTerrainDecoration" value="true" />
+      <property name="StabilitySupport" value="false" />
+      <property name="MaxDamage" value="5000" />
+      <drop event="Destroy" count="0" />
+      <property name="Group" value="Building,advBuilding" />
+      <property name="FilterTags" value="MC_building,SC_decor" />
+    </block>
+
+  </append>
+</configs>

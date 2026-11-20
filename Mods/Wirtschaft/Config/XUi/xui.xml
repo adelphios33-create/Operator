@@ -1,0 +1,19 @@
+<configs>
+<append xpath="/xui/ruleset[@name='default']">
+	<window_group name="wbHauptbank" defaultSelected="content">
+		<window name="wbHauptbankFenster" />
+	</window_group>
+	<window_group name="wbTresor" defaultSelected="content">
+		<window name="wbTresorFenster" />
+	</window_group>
+	<window_group name="wbBoerse" defaultSelected="content">
+		<window name="wbBoerseFenster" />
+	</window_group>
+	<window_group name="wbGeldtresor" defaultSelected="content">
+		<window name="wbGeldtresorFenster" />
+	</window_group>
+	<window_group name="wbKredit" defaultSelected="content">
+		<window name="wbKreditFenster" />
+	</window_group>
+</append>
+</configs>

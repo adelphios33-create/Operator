@@ -1,0 +1,68 @@
+ROLLENDATEIEN – so funktioniert's
+=================================
+Eine Textdatei pro Charakter in diesem Ordner (Mods/Figuren/Rollen).
+Dateien, die mit _ beginnen (wie diese hier), werden ignoriert.
+Auch eine Datei mit der Zeile #aus wird ignoriert (zum Abschalten einer Rolle).
+Speichern als UTF-8 (Windows-Editor macht das standardmäßig).
+Nach dem Ändern im Spiel: Figur einrichten -> "Rollen neu laden" (oder F1: npc laden).
+
+KOPF (oben in der Datei):
+  Name: Frank            so heißt die Figur im Spiel (muss eindeutig sein)
+  Titel: Barkeeper       steht klein über dem Text
+  Aussehen: Joel         Joel, Jen, Bob, Hugh oder Rekt (Modelle der Händler)
+
+DIALOG (darunter, in Abschnitten):
+  [start]                der erste Abschnitt ist der Gesprächsbeginn
+  Text, den die Figur sagt. Darf mehrere Zeilen haben.
+  Eine leere Zeile macht einen Absatz.
+  > Antwort des Spielers -> zielabschnitt
+  > Tschüss -> ende      "ende" schließt das Gespräch
+
+  Höchstens 4 Antworten pro Abschnitt.
+  Ein Abschnitt ohne Antworten bekommt automatisch "Tschüss".
+  Zeilen mit # am Anfang sind Notizen und werden nicht angezeigt.
+
+KI-FIGUREN (TYP 2):
+  [ki]
+  Persönlichkeit, Backstory, was die Figur weiß und will, wie sie spricht.
+  Mehrere Zeilen sind erlaubt. Je genauer, desto besser.
+
+  Hat eine Datei den Abschnitt [ki], antwortet die Figur frei über LM Studio
+  (Einstellungen in Mods/Figuren/KI.txt). KI-Figuren haben ein blaues Symbol über dem Kopf.
+  Der feste Dialog ([start] usw.) wird dann nicht benutzt und darf fehlen.
+
+Leitung: ja   (im Kopf der Datei) zeigt die Figur im Leitungsfenster (Taste Pos1, im Spiel auch "Leitungsfenster"). Ohne diese Zeile ist sie dort nicht erreichbar.
+
+KI-FIGUREN: GEDÄCHTNIS
+- Jede KI-Figur speichert die letzten 20 Nachrichten wörtlich (Einstellung "Verlauf" in KI.txt).
+- Ältere Nachrichten werden automatisch zu einer Erinnerung verdichtet: Beziehung zum Spieler (Vertrauen x/10), Über den Spieler, Personen, Gemeinsame Erlebnisse, Vereinbarungen und Offenes.
+- Feste Fakten: Im Gesprächsfenster "/merke Text" eingeben, zum Beispiel "/merke Wir haben zusammen die Tankstelle überfallen." Feste Fakten werden nie gekürzt. "/vergiss 2" löscht Fakt 2.
+- Knopf "Gedächtnis" zeigt alles, was die Figur weiß. "Älter"/"Neuer" blättert durch die gespeicherten Nachrichten.
+- Das ganze Gespräch steht zusätzlich als Textdatei im Spielstand-Ordner unter Figuren_Chatprotokoll.
+- Vorlage für neue Figuren: _VORLAGE_KI.txt
+
+
+AUSSEHEN (ab Figuren 0.9.0)
+Zeile "Aussehen:" mit einzelnen Modellen und/oder Gruppen, durch Komma getrennt. Beim Aufstellen wird zufällig eins gewählt.
+Aussehen-Gruppen: Händler (Joel, Bob, Hugh, Rekt), Rogues (4 Männer), Zivil (8 Männer), Männer (alle Männer),
+  Frauen (alle Frauen), RoguesFrauen, ZivilFrauen, alle.
+Einzelne Modelle:
+  Händler:  Joel, Bob, Hugh, Rekt, Jen (Frau)
+  Rogues:   RogueBlonde, RogueCowboy, RogueYoung, RogueAged, RogueFrauAlt, RogueFrauStark, RogueFrauLeder1, RogueFrauLeder2
+  Zivil:    ZivilAlt, ZivilAltKittel, ZivilAltDunkel, ZivilCowboy, ZivilJerry, ZivilJung1, ZivilJung2, ZivilJung3,
+            ZivilFrauAlt, ZivilFrauKittel, ZivilFrauJung1 ... ZivilFrauJung5
+Frauenmodelle werden beim Zufall nur gewählt, wenn die Rolle eine Zeile "Frauennamen:" hat (optional "Frauen-Branchen:").
+Im Einrichten-Fenster: Zeile "Aussehen" mit < > (durch alle 37 Modelle blättern) und "Zufall" (aus der Liste der Rolle).
+
+WAFFEN (Typ 3, ab Figuren 0.11.0)
+Zeile "Waffe:" (keine, Pistole, MP, AK, Schrotflinte) = Vorgabe beim Übernehmen; pro Figur im Einrichten-Fenster änderbar.
+Jede bewaffnete Figur verteidigt sich automatisch gegen Zombies.
+Nur die feste Figur Söldner kann feindlich werden: Konsole "nf1" = alle Söldner feindlich (schießen auf Spieler),
+"nf2" = alle Söldner freundlich. Feindliche Söldner sind verwundbar (150 Lebenspunkte, Kopftreffer doppelt) und sterben. Leiche bleibt 3 Minuten liegen. Einzelne Söldner auch über die Zeile Haltung im Einrichten-Fenster.
+Waffe sitzt schief? An der nächsten Figur nachjustieren: "npc lage x 2" (cm, auch y/z, negativ möglich),
+"npc lage dreh x 15" (Grad), "npc lage" zeigt die Werte, "npc lage null" setzt zurück. Gilt pro Waffe für alle Figuren (Datei Waffenlage.txt).
+
+SOLDATEN (ab 0.13.0)
+Neue Modelle: Soldat1 bis Soldat8 (Menschen-Soldaten mit Gewehr am Körper) und ZombieSoldat (der Soldaten-Zombie aus dem Spiel).
+Sie kommen nie von selbst in den Zufall. Entweder im Einrichten-Fenster mit < > hinblättern,
+oder in der Rolle ausdrücklich nennen, z. B.:   Aussehen: Soldaten        oder   Aussehen: Soldat2, Soldat5, Rogues

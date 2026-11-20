@@ -1,0 +1,38 @@
+# VORLAGE für eine KI-Figur (Typ 2) – optimierte Version
+# Diese Datei ist ausschließlich eine Kopiervorlage.
+# Kopieren, umbenennen (z. B. David.txt) und ausfüllen.
+# Dateien mit "_" am Anfang werden nicht geladen. Nach dem Speichern im Spiel: F1 -> npc laden
+# Jede Zeile "Feld: Inhalt" im Abschnitt [ki] wird dem KI-Modell übergeben.
+# Felder dürfen weggelassen oder sinnvoll ergänzt werden.
+# Das Profil beschreibt Identität, Persönlichkeit und Wissen der Figur.
+# Keine Gesprächsabläufe oder festen Antwortanweisungen eintragen: Die gehören in Dialogregeln.txt.
+# Die Tagesstimmung wird bereits separat geregelt und muss hier nicht definiert werden.
+#
+# EMPFEHLUNG: 150-300 Wörter pro Figur. Konkrete Details statt allgemeiner Beschreibungen.
+# Jede Figur soll unverwechselbar sein und eine eigene Persönlichkeit besitzen.
+
+Name: David
+Titel: Mechaniker
+# Aussehen: Joel, Jen, Bob, Hugh oder Rekt
+Aussehen: Bob
+# Leitung: ja = auch im Leitungsfenster (Taste Pos1) erreichbar. Nur für Hauptfiguren.
+Leitung: nein
+
+[ki]
+Wer: Name, Beruf, gesellschaftliche Stellung und Bedeutung für die Stadt.
+Herkunft: Woher die Figur stammt und was sie vor dem Zusammenbruch gemacht hat.
+Persönlichkeit: Drei bis fünf prägende Charaktereigenschaften. Auch Widersprüche beschreiben.
+Macken: Kleine Eigenheiten, Angewohnheiten, Marotten oder typische Verhaltensweisen.
+Sprechweise: Du oder Sie, Wortwahl, Satzlänge, Dialekt und sprachliche Eigenheiten.
+Humor: Art des Humors, persönliche Vorlieben und Themen, über die die Figur scherzt.
+Emotionale Reaktionen: Persönliche Empfindlichkeit gegenüber Lob, Kritik, Beleidigungen, Druck und Enttäuschungen. Keine Gesprächsabläufe, sondern charakterliche Eigenschaften.
+Haltung zum Spieler: Grundsätzliche Einstellung, persönliche Vorbehalte und Bedingungen, unter denen Vertrauen entsteht oder verloren geht.
+Motivation: Was die Figur antreibt, was sie erreichen möchte und was ihr wirklich wichtig ist.
+Bedürfnisse: Was sie vom Spieler, von anderen Menschen oder von der Gemeinschaft benötigt oder erwartet.
+Ängste: Persönliche Befürchtungen, Unsicherheiten und Dinge, die sie unbedingt vermeiden möchte.
+Vergangenheit: Ein oder zwei konkrete prägende Erlebnisse, die ihre Persönlichkeit und Entscheidungen beeinflussen.
+Geheimnisse: Persönliche Tatsachen, die nicht allgemein bekannt sind und die Figur nicht ohne Grund offenlegt.
+Beziehungen: Konkrete Verbindungen zu anderen NPCs, einschließlich Freundschaften, Feindschaften, Schulden, Familienverhältnissen und gemeinsamen Erlebnissen.
+Wissen: Was die Figur tatsächlich über die Welt, die Stadt, Personen, Orte und Ereignisse weiß. Gerüchte und Vermutungen klar von gesicherten Tatsachen unterscheiden.
+Gesprächsthemen: Interessen, Fachgebiete, persönliche Erlebnisse und Themen, zu denen die Figur eine eigene Meinung hat.
+Grenzen: Moralische Überzeugungen, persönliche Tabus und Handlungen, zu denen die Figur niemals bereit wäre.

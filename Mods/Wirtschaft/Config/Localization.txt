@@ -1,0 +1,11 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,english,german
+wbHauptbank,blocks,Block,,,Main Bank,Hauptbank
+wbHauptbankDesc,blocks,Block,,,"Open with E: companies, government, payouts.","Mit E öffnen: Firmen, Regierung und Auszahlungen."
+wbFirmentresor,blocks,Block,,,Company Safe,Firmentresor
+wbFirmentresorDesc,blocks,Block,,,"Place it at a business, open with E and create or link a company.","Beim Geschäft aufstellen, mit E öffnen, Firma anlegen oder verbinden."
+resourceSilverNugget,items,Item,,,Silver Bar,Silberbarren
+resourceGoldNugget,items,Item,,,Gold Bar,Goldbarren
+wbBoerse,blocks,Block,,,Stock Exchange Terminal,Börsenterminal
+wbBoerseDesc,blocks,Block,,,"Company values, owners and share trading.","Firmenwerte, Eigentümer und Handel mit Firmenanteilen."
+wbGeldtresor,blocks,Block,,,Money Safe (Banking),Geldtresor (Banking)
+wbGeldtresorDesc,blocks,Block,,,"Place next to a linked company safe and open with E: shows the company balance as coins, cash and bars. Taking money out is booked from the balance.","Neben einen verbundenen Firmentresor stellen und mit E öffnen: zeigt das Firmenguthaben als Münzen, Scheine und Barren. Herausnehmen bucht vom Guthaben ab."

@@ -1,0 +1,5 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,english,german
+bauplanWerkzeug,items,Item,,,Blueprint Tool,Bauplan-Werkzeug (blaues Blatt)
+bauplanWerkzeugDesc,items,Item,,,"Left click: corner 1. Right click: corner 2. Right click into the air: window to save and place buildings.","Linksklick: Ecke 1. Rechtsklick: Ecke 2. Rechtsklick in die Luft: Fenster zum Speichern und Einfügen von Gebäuden. Beim Platzieren: Linksklick zweimal = einfügen, Rechtsklick = drehen."
+bauplanAbriss,items,Item,,,Demolition Tool,Abriss-Werkzeug
+bauplanAbrissDesc,items,Item,,,"Left click: the block is removed instantly (any block). Shift + left click: 3x3x3. Right click: bring back the last removal.","Linksklick: Block ist sofort weg (jeder Block, auch Erde und Stein). Shift + Linksklick: 3x3x3 auf einmal. Rechtsklick: letzten Abriss zurückholen. Volle Kisten erst beim zweiten Klick."

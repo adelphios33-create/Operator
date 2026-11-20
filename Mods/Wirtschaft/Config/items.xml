@@ -1,0 +1,17 @@
+<configs>
+	<!-- Silber- und Goldklumpen werden zu Barren: Barren-Symbol (geschmiedetes Eisen) in Silber bzw. Gold eingefärbt.
+	     Der Name kommt aus Localization.txt. -->
+	<append xpath="/items/item[@name='resourceSilverNugget']">
+		<property name="CustomIcon" value="resourceForgedIron"/>
+		<property name="CustomIconTint" value="dfe4ea"/>
+	</append>
+	<append xpath="/items/item[@name='resourceGoldNugget']">
+		<property name="CustomIcon" value="resourceForgedIron"/>
+		<property name="CustomIconTint" value="f2c040"/>
+	</append>
+	<!-- Der Diamant erbt vom Silberklumpen: sein eigenes Symbol behalten -->
+	<append xpath="/items/item[@name='resourceRawDiamond']">
+		<property name="CustomIcon" value="resourceRawDiamond"/>
+		<property name="CustomIconTint" value="ffffff"/>
+	</append>
+</configs>

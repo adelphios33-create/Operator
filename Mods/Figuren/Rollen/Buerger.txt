@@ -1,0 +1,37 @@
+# FESTE FIGUR Bürger: kurzer Klick-Dialog ohne KI. Jeder bekommt einen Zufallsnamen.
+# Varianten: "Text A || Text B" = bei jedem Gespräch zufällig eine davon. {Name} und {Stadt} werden ersetzt.
+Name: Bürger
+Titel: Bürger aus {Stadt}
+Vorlage: ja
+Namen: Paul, Georg, Ben, Emil, Ralf, Tim, Oliver, Stefan, Jakob, Leon, Henri, Armin, Walter, Klaus, Gerhard, Manfred, Peter, Thomas, Harald, Dieter, Jens, Uwe
+Aussehen: Zivil, Händler
+Leitung: nein
+
+[start]
+Oh, hallo. Schöner Tag heute, wenn man die Zombies ignoriert. || Na? Auch noch am Leben? Respekt. || Hm? Ach, du bist's. Was gibt's? || Pass auf, wo du hintrittst, hier liegt überall Glas. || Ich bin {Name}. Neu hier in {Stadt}?
+> Wie geht's dir? -> befinden
+> Was gibt's Neues? -> neues
+> Wo bekomme ich hier was? -> tipps
+> Tschüss. -> ende
+
+[befinden]
+Geht so. Hab die Nacht kaum geschlafen, die Viecher waren laut. || Ganz gut eigentlich. Hab heute sogar was Frisches gegessen. || Frag nicht. Mein Dach leckt und keiner hat Zeit. || Ich lebe noch. Das ist heutzutage schon ein guter Tag.
+> Und sonst so? -> neues
+> Kann ich dir helfen? -> hilfe
+> Pass auf dich auf. -> ende
+
+[neues]
+Man sagt, in der Nacht kam eine Horde vom Osten. || Die Preise beim Händler sind schon wieder gestiegen, eine Frechheit. || Angeblich sucht der Bürgermeister Leute für Bauarbeiten. || In der Bar erzählt man sich, dass jemand eine alte Militärkiste gefunden hat. || Nichts Gutes. Aber auch nichts Schlimmes. Das ist schon was.
+> Interessant. Noch was? -> neues
+> Wo bekomme ich hier was? -> tipps
+> Danke, mach's gut. -> ende
+
+[tipps]
+Für Geld und Kredite gehst du zur Bank. Für ein Bier und Gerüchte in die Bar. || Waffen? Frag den Waffenhändler, aber feilsch nicht zu viel, der mag das nicht. || Wenn du ein Haus suchst: Schau nach den Immobilien-Schildern, die Bank kümmert sich um den Rest. || Wasser gibt's beim Brunnen, aber koch es lieber ab.
+> Danke dir. -> ende
+> Und wie geht's dir so? -> befinden
+
+[hilfe]
+Nett von dir. Wenn du Holz übrig hast, mein Dach würde sich freuen. || Ach was, ich komm klar. Aber danke. || Bring mir mal was Anständiges zu essen mit, dann reden wir.
+> Mach ich. -> ende
+> Mal sehen. -> ende

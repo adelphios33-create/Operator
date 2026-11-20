@@ -1,0 +1,59 @@
+<configs>
+<append xpath="/items">
+	<!-- Class "Cancel" ist Absicht: Die echten Werkzeug-Aktionen setzt Bauplan.dll beim Weltstart ein.
+	     Fehlt die DLL, tun die Werkzeuge nichts, aber das Spiel liest alle Gegenstände normal ein. -->
+	<!-- Bauplan-Werkzeug: Linksklick = Ecke 1, Rechtsklick = Ecke 2, Rechtsklick in die Luft = Fenster.
+	     Im Platzieren-Modus: Linksklick zweimal = einfügen, Rechtsklick = drehen. -->
+	<item name="bauplanWerkzeug">
+		<property name="Tags" value="tool,noMods" />
+		<property name="CreativeMode" value="Player" />
+		<property name="HoldType" value="51" />
+		<property name="Meshfile" value="@:Other/Items/Tools/paintbrushPrefab.prefab" />
+		<property name="Material" value="Mwood" />
+		<property name="CustomIcon" value="resourcePaper" />
+		<property name="CustomIconTint" value="2f6bff" />
+		<property name="DescriptionKey" value="bauplanWerkzeugDesc" />
+		<property name="DegradationBreaksAfter" value="false" />
+		<property name="CrosshairUpAfterShot" value="false" />
+		<property name="Stacknumber" value="1" />
+		<property name="EconomicValue" value="10" />
+		<property name="Group" value="Tools/Traps" />
+		<property class="Action0">
+			<property name="Class" value="Cancel" />
+			<property name="Delay" value="0.3" />
+			<property name="Range" value="100" />
+		</property>
+		<property class="Action1">
+			<property name="Class" value="Cancel" />
+			<property name="Delay" value="0.3" />
+			<property name="Range" value="100" />
+		</property>
+	</item>
+	<!-- Abriss-Werkzeug: Linksklick = Block sofort weg (jeder Block), Shift + Linksklick = 3x3x3, Rechtsklick = zurückholen. -->
+	<item name="bauplanAbriss">
+		<property name="Tags" value="tool,noMods" />
+		<property name="CreativeMode" value="Player" />
+		<property name="HoldType" value="63" />
+		<property name="Meshfile" value="@:Other/Items/Tools/pickaxe_ironPrefab.prefab" />
+		<property name="Material" value="Mmetal" />
+		<property name="CustomIcon" value="meleeToolPickT1IronPickaxe" />
+		<property name="CustomIconTint" value="ff6040" />
+		<property name="DescriptionKey" value="bauplanAbrissDesc" />
+		<property name="DegradationBreaksAfter" value="false" />
+		<property name="CrosshairUpAfterShot" value="false" />
+		<property name="Stacknumber" value="1" />
+		<property name="EconomicValue" value="10" />
+		<property name="Group" value="Tools/Traps" />
+		<property class="Action0">
+			<property name="Class" value="Cancel" />
+			<property name="Delay" value="0.1" />
+			<property name="Range" value="100" />
+		</property>
+		<property class="Action1">
+			<property name="Class" value="Cancel" />
+			<property name="Delay" value="0.3" />
+			<property name="Range" value="100" />
+		</property>
+	</item>
+</append>
+</configs>

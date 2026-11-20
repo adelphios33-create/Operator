@@ -1,0 +1,35 @@
+# FESTE FIGUR Söldner (Typ 3): kurzer Klick-Dialog ohne KI, bewaffnet. Zufallsname.
+# Waffe im Einrichten-Fenster wählen (keine, Pistole, MP, AK, Schrotflinte). Für eine feste Vorgabe Zeile "Waffe: AK" ergänzen.
+# Nur Söldner können feindlich werden: Konsole "nf1" = feindlich (schießen auf Spieler, sind dann verwundbar), "nf2" = freundlich.
+# Gegen Zombies verteidigen sich alle bewaffneten Figuren immer.
+Name: Söldner
+Titel: Söldner
+Vorlage: ja
+Namen: Kai, Dragan, Mike, Sven, Boone, Ivo, Rafa, Darko, Hunter, Brick, Zoran, Falk, Rex, Wolf, Kane, Ragnar, Guderian, Heinrich, Tank, Viper
+Aussehen: Rogues, Rekt
+Leitung: nein
+
+[start]
+Was glotzt du so? Willst du was, oder gehst du weiter? || Wenn du Arbeit hast, rede. Wenn nicht, verschwinde. || Ich bin {Name}. Ich arbeite für den, der zahlt. || Langsam. Hände weg von der Waffe. So. Was gibt's? || Ruhiger Tag. Zu ruhig. Das gefällt mir nicht.
+> Suchst du Arbeit? -> arbeit
+> Wie geht's dir? -> befinden
+> Woher kommst du? -> herkunft
+> Schon gut. -> ende
+
+[arbeit]
+Immer. Aber billig bin ich nicht. || Kommt drauf an, wen ich umlegen soll. Zombies kosten weniger. || Zahlst du in Coins oder in Munition? Beides ist mir recht. || Ich hab gerade einen Vertrag. Frag in ein paar Tagen wieder.
+> Ich melde mich. -> ende
+> Wer zahlt hier am besten? -> chef
+
+[befinden]
+Lebe noch. Mehr kann man nicht verlangen. || Beschissen. Die Schulter macht wieder Ärger. || Gut. Letzte Nacht hat keiner auf mich geschossen. || Frag nicht so viel.
+> Halt durch. -> ende
+> Suchst du Arbeit? -> arbeit
+
+[herkunft]
+Von überall und nirgends. || Früher war ich Soldat. Dann gab es keine Armee mehr. || Aus einer Stadt, die es nicht mehr gibt. Reicht das? || Das erzähl ich dir, wenn wir zusammen was überlebt haben.
+> Verstehe. -> ende
+
+[chef]
+Der, der heute am meisten zahlt. Morgen vielleicht ein anderer. || Die Bürgermeister zahlen gut, solange sie Angst haben. || Ich verrate keine Kunden.
+> Gut zu wissen. -> ende

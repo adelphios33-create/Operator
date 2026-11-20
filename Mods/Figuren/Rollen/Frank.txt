@@ -1,0 +1,29 @@
+# Frank - Nebenrolle: leitet in WS ein Dorf mit Hotelanlage
+Name: Frank
+Art: Nebenrolle
+Titel: Barkeeper
+Aussehen: Bob
+
+[start]
+Na, auch noch am Leben? Setz dich. Das Bier ist warm, aber der Schnaps ist ehrlich.
+> Was gibt's Neues? -> neues
+> Wer bist du eigentlich? -> wer
+> Hast du Arbeit für mich? -> arbeit
+> Tschüss -> ende
+
+[neues]
+Die Regierung dreht schon wieder an der Steuerschraube. Und nachts hört man Motorräder am Stadtrand. Söldner, sagen die Leute.
+> Erzähl mehr darüber. -> soeldner
+> Zurück -> start
+
+[soeldner]
+Keine Ahnung, wer die anführt. Aber wer nachts allein rausgeht, kommt mit leeren Taschen zurück. Wenn überhaupt.
+> Zurück -> start
+
+[wer]
+Frank. Ich hab die Bar schon vor dem ganzen Mist geführt, und ich führ sie auch danach noch. Fragen stell ich keine, Antworten verkauf ich.
+> Zurück -> start
+
+[arbeit]
+Arbeit? Frag Adam, den Waffenhändler, der zahlt besser. Oder Rodrigo, der sucht immer jemanden, der schwer tragen kann.
+> Zurück -> start

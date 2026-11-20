@@ -1,0 +1,361 @@
+<configs>
+  <append xpath="/entity_classes">
+
+    <!-- Grundlage aller Figuren: steht, bewegt sich nicht, nimmt keinen Schaden. Aussehen kommt von den Haendler-Modellen. -->
+    <entity_class name="figurVorlage">
+      <property name="Class" value="EntityFigur, Figuren" />
+      <property name="UserSpawnType" value="None" />
+      <property name="Tags" value="entity,npc,human" />
+      <property name="EntityType" value="Player" />
+      <property name="Faction" value="whiteriver" />
+      <property name="Mesh" value="@:Entities/Traders/Prefabs/TraderJoel.prefab" />
+      <property name="AvatarController" value="AvatarNpcController" />
+      <property name="ModelType" value="Npc" />
+      <property name="HasRagdoll" value="false" />
+      <property name="Prefab" value="NPC" />
+      <property name="Parent" value="Players" />
+      <property name="PhysicsBody" value="Player" />
+      <property name="Weight" value="70" />
+      <property name="LookAtAngle" value="60" />
+      <property name="NPCID" value="figur" />
+      <property name="IsEnemyEntity" value="false" />
+      <property name="WalkType" value="7" />
+      <property name="SurfaceCategory" value="organic" />
+      <property name="MaxViewAngle" value="180" />
+      <property name="MoveSpeed" value="0" />
+      <property name="MoveSpeedAggro" value="0, 0" />
+      <property name="MoveSpeedPanic" value="0" />
+      <property name="TimeStayAfterDeath" value="180" />
+      <property name="ParticleOnDeath" value="blood_death" />
+      <property name="HasDeathAnim" value="true" />
+      <effect_group name="Base Effects">
+        <passive_effect name="HealthMax" operation="base_set" value="100000" />
+      </effect_group>
+    </entity_class>
+
+    <entity_class name="figurJoel" extends="figurVorlage">
+      <property name="Mesh" value="@:Entities/Traders/Prefabs/TraderJoel.prefab" />
+    </entity_class>
+    <entity_class name="figurJen" extends="figurVorlage">
+      <property name="Mesh" value="@:Entities/Traders/Prefabs/TraderJen.prefab" />
+    </entity_class>
+    <entity_class name="figurBob" extends="figurVorlage">
+      <property name="Mesh" value="@:Entities/Traders/Prefabs/TraderBob.prefab" />
+    </entity_class>
+    <entity_class name="figurHugh" extends="figurVorlage">
+      <property name="Mesh" value="@:Entities/Traders/Prefabs/TraderHugh.prefab" />
+    </entity_class>
+    <entity_class name="figurRekt" extends="figurVorlage">
+      <property name="Mesh" value="@:Entities/Traders/Prefabs/TraderRekt.prefab" />
+    </entity_class>
+
+
+    <!-- Modelle aus khzmusik NPC Rogues und NPC Civilians (nur die Modellpakete in Resources/, ohne NPC Core/SCore).
+         Variante 1: ModelType Standard + AvatarZombieController. Variante 2 (Name mit 2): Standard + AvatarNpcController (Ersatz).
+         Autor: khzmusik (CC0 fuer seinen Anteil, Mixamo-Fuse-Teile frei in Spielen). -->
+    <entity_class name="figurRogueBlonde" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?MaleRogueBlonde_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurRogueBlonde2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?MaleRogueBlonde_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurRogueCowboy" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?MaleRogueCowboy_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurRogueCowboy2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?MaleRogueCowboy_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurRogueYoung" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?MaleRogueYoung_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurRogueYoung2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?MaleRogueYoung_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurRogueAged" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?MaleRogueAged_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurRogueAged2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?MaleRogueAged_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurRogueFrauAlt" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?FemaleRogueAged_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurRogueFrauAlt2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?FemaleRogueAged_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurRogueFrauStark" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?FemaleRogueHeavy_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurRogueFrauStark2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?FemaleRogueHeavy_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurRogueFrauLeder1" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?FemaleRogueLeather01_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurRogueFrauLeder12" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?FemaleRogueLeather01_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurRogueFrauLeder2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?FemaleRogueLeather02_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurRogueFrauLeder22" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Rogues_KHz.unity3d?FemaleRogueLeather02_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilAlt" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleAged_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilAlt2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleAged_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilAltKittel" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleAgedScrubs_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilAltKittel2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleAgedScrubs_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilAltDunkel" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleBlackAged_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilAltDunkel2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleBlackAged_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilCowboy" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleCowboyHoodie_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilCowboy2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleCowboyHoodie_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilJerry" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleJerry_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilJerry2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleJerry_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilJung1" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleYoung01_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilJung12" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleYoung01_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilJung2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleYoung02_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilJung22" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleYoung02_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilJung3" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleYoung03_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilJung32" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianMales_KHz.unity3d?MaleYoung03_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilFrauAlt" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleAged_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilFrauAlt2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleAged_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilFrauKittel" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleScrubs_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilFrauKittel2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleScrubs_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilFrauJung1" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleYoung01_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilFrauJung12" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleYoung01_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilFrauJung2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleYoung02_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilFrauJung22" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleYoung02_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilFrauJung3" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleYoung03_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilFrauJung32" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleYoung03_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilFrauJung4" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleYoung04_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilFrauJung42" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleYoung04_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+    <entity_class name="figurZivilFrauJung5" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleYoungNativeAmerican_KHz" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZivilFrauJung52" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/CivilianFemales_KHz.unity3d?FemaleYoungNativeAmerican_KHz" />
+      <property name="ModelType" value="Standard" />
+    </entity_class>
+
+
+    <!-- Soldaten aus "Guppycur's Soldiers" (Autor: Guppycur; Paket von 2019, Unity 2019.1 - Versuch, die Mod repariert Shader beim Erzeugen).
+         Die Modelle tragen ihr Gewehr fest am Körper. -->
+    <entity_class name="figurSoldat1" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier01" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurSoldat12" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier01" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarNpcController" />
+    </entity_class>
+    <entity_class name="figurSoldat2" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier02" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurSoldat22" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier02" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarNpcController" />
+    </entity_class>
+    <entity_class name="figurSoldat3" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier03" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurSoldat32" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier03" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarNpcController" />
+    </entity_class>
+    <entity_class name="figurSoldat4" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier04" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurSoldat42" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier04" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarNpcController" />
+    </entity_class>
+    <entity_class name="figurSoldat5" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier05" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurSoldat52" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier05" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarNpcController" />
+    </entity_class>
+    <entity_class name="figurSoldat6" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier06" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurSoldat62" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier06" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarNpcController" />
+    </entity_class>
+    <entity_class name="figurSoldat7" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier07" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurSoldat72" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier07" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarNpcController" />
+    </entity_class>
+    <entity_class name="figurSoldat8" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier08" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurSoldat82" extends="figurVorlage">
+      <property name="Mesh" value="#@modfolder:Resources/Soldaten_Guppy.unity3d?guppySoldier08" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarNpcController" />
+    </entity_class>
+
+    <!-- Soldaten-Zombie aus dem Spiel als Figur (sieht aus wie der Zombie, steht aber friedlich). -->
+    <entity_class name="figurZombieSoldat" extends="figurVorlage">
+      <property name="Mesh" value="@:Entities/Zombies/Prefabs/ZSoldier.prefab" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarZombieController" />
+    </entity_class>
+    <entity_class name="figurZombieSoldat2" extends="figurVorlage">
+      <property name="Mesh" value="@:Entities/Zombies/Prefabs/ZSoldier.prefab" />
+      <property name="ModelType" value="Standard" />
+      <property name="AvatarController" value="AvatarNpcController" />
+    </entity_class>
+
+  </append>
+</configs>

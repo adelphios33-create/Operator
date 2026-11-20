@@ -1,0 +1,5 @@
+<configs>
+  <append xpath="/npc">
+    <npc_info id="figur" name="Figur" name_key="figurName" faction="whiteriver" portrait="npc_joel" greeting_type="nearby" stance="Like" voice_set="trader" dialog_id="trader" />
+  </append>
+</configs>

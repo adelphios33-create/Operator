@@ -1,0 +1,224 @@
+<configs>
+<append xpath="/windows">
+
+	<window name="figGespraechFenster" pos="-380, 310" width="760" height="620" anchor="CenterCenter" controller="FigGespraech, Figuren" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_talk"/>
+			<label style="header.name" text="{figname}" width="700" />
+		</panel>
+		<rect name="content" pos="0,-46" width="760" height="574" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="760" height="574" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="760" height="574" />
+			<label depth="3" pos="14,-10" width="732" height="30" font_size="24" color="150,200,240" justify="left" text="{figtitel}" />
+			<label depth="3" pos="14,-50" width="732" height="250" font_size="28" color="[white]" justify="left" text="{figtext}" />
+			<simplebutton name="btnWahl0" depth="3" pos="14,-312" width="732" height="42" font_size="24" caption="-" />
+			<simplebutton name="btnWahl1" depth="3" pos="14,-358" width="732" height="42" font_size="24" caption="-" />
+			<simplebutton name="btnWahl2" depth="3" pos="14,-404" width="732" height="42" font_size="24" caption="-" />
+			<simplebutton name="btnWahl3" depth="3" pos="14,-450" width="732" height="42" font_size="24" caption="-" />
+			<simplebutton name="btnEinrichten" depth="3" pos="14,-506" width="300" height="40" font_size="22" caption="Einrichten / Entfernen" />
+		</rect>
+	</window>
+
+	<window name="figEinrichtenFenster" pos="-400, 320" width="800" height="690" anchor="CenterCenter" controller="FigEinrichten, Figuren" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_talk"/>
+			<label style="header.name" text="FIGUR EINRICHTEN" width="740" />
+		</panel>
+		<rect name="content" pos="0,-46" width="800" height="644" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="800" height="644" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="800" height="644" />
+			<label depth="3" pos="14,-10" width="772" height="30" font_size="24" color="[white]" justify="left" text="{figaktuell}" />
+			<label depth="3" pos="14,-46" width="370" height="30" font_size="24" color="150,200,240" justify="left" text="1. Rolle wählen" />
+			<simplebutton name="btnL0" depth="3" pos="14,-80" width="370" height="38" font_size="22" caption="-" />
+			<simplebutton name="btnL1" depth="3" pos="14,-122" width="370" height="38" font_size="22" caption="-" />
+			<simplebutton name="btnL2" depth="3" pos="14,-164" width="370" height="38" font_size="22" caption="-" />
+			<simplebutton name="btnL3" depth="3" pos="14,-206" width="370" height="38" font_size="22" caption="-" />
+			<simplebutton name="btnL4" depth="3" pos="14,-248" width="370" height="38" font_size="22" caption="-" />
+			<simplebutton name="btnL5" depth="3" pos="14,-290" width="370" height="38" font_size="22" caption="-" />
+			<simplebutton name="btnZurueck" depth="3" pos="14,-336" width="60" height="38" font_size="28" caption="&lt;" />
+			<label depth="3" pos="80,-340" width="238" height="30" font_size="22" color="200,200,200" justify="center" text="{figseite}" />
+			<simplebutton name="btnVor" depth="3" pos="324,-336" width="60" height="38" font_size="28" caption="&gt;" />
+
+			<label depth="3" pos="404,-46" width="382" height="30" font_size="24" color="150,200,240" justify="left" text="2. Stadt" />
+			<simplebutton name="btnStadtZurueck" depth="3" pos="404,-80" width="60" height="38" font_size="28" caption="&lt;" visible="{figstadtan}" />
+			<label depth="3" pos="470,-84" width="250" height="30" font_size="26" color="[white]" justify="center" text="{figstadt}" />
+			<simplebutton name="btnStadtVor" depth="3" pos="726,-80" width="60" height="38" font_size="28" caption="&gt;" visible="{figstadtan}" />
+			<label depth="3" pos="404,-126" width="80" height="30" font_size="20" color="150,200,240" justify="left" text="Branche" visible="{figbranchean}" />
+			<simplebutton name="btnBrancheZurueck" depth="3" pos="490,-122" width="50" height="36" font_size="26" caption="&lt;" visible="{figbranchean}" />
+			<label depth="3" pos="546,-126" width="184" height="30" font_size="22" color="[white]" justify="center" text="{figbranche}" />
+			<simplebutton name="btnBrancheVor" depth="3" pos="736,-122" width="50" height="36" font_size="26" caption="&gt;" visible="{figbranchean}" />
+			<label depth="3" pos="404,-168" width="84" height="30" font_size="20" color="150,200,240" justify="left" text="Aussehen" />
+			<simplebutton name="btnAussZurueck" depth="3" pos="488,-164" width="40" height="36" font_size="26" caption="&lt;" />
+			<label depth="3" pos="530,-168" width="158" height="30" font_size="19" color="[white]" justify="center" text="{figaussehen}" />
+			<simplebutton name="btnAussVor" depth="3" pos="690,-164" width="40" height="36" font_size="26" caption="&gt;" />
+			<simplebutton name="btnAussZufall" depth="3" pos="734,-164" width="52" height="36" font_size="16" caption="Zufall" />
+			<rect depth="1" pos="0,0" width="800" height="594" visible="{figfirmaaus}">
+			<label depth="3" pos="404,-208" width="84" height="30" font_size="20" color="150,200,240" justify="left" text="Waffe" />
+			<simplebutton name="btnWaffeZurueck" depth="3" pos="488,-204" width="40" height="36" font_size="26" caption="&lt;" />
+			<label depth="3" pos="530,-208" width="214" height="30" font_size="18" color="[white]" justify="center" text="{figwaffe}" />
+			<simplebutton name="btnWaffeVor" depth="3" pos="746,-204" width="40" height="36" font_size="26" caption="&gt;" />
+			</rect>
+			<label depth="3" pos="404,-248" width="84" height="30" font_size="20" color="150,200,240" justify="left" text="Bewegung" />
+			<simplebutton name="btnBewegungZurueck" depth="3" pos="488,-244" width="40" height="36" font_size="26" caption="&lt;" />
+			<label depth="3" pos="530,-248" width="214" height="30" font_size="20" color="[white]" justify="center" text="{figbewegung}" />
+			<simplebutton name="btnBewegungVor" depth="3" pos="746,-244" width="40" height="36" font_size="26" caption="&gt;" />
+			<rect depth="1" pos="0,0" width="800" height="594" visible="{figfirmaaus}">
+			<label depth="3" pos="404,-288" width="382" height="50" font_size="16" color="200,200,200" justify="left" text="{figinfo}" />
+			<simplebutton name="btnUebernehmen" depth="3" pos="404,-344" width="382" height="42" font_size="26" caption="3. Übernehmen" />
+			<simplebutton name="btnNeuLaden" depth="3" pos="404,-392" width="186" height="38" font_size="20" caption="Rollen neu laden" />
+			<simplebutton name="btnEntfernen" depth="3" pos="600,-392" width="186" height="38" font_size="20" caption="Figur entfernen" />
+			<label depth="3" pos="14,-444" width="772" height="80" font_size="22" color="255,220,120" justify="left" text="{figmeldung}" />
+			</rect>
+			<rect depth="1" pos="0,0" width="800" height="594" visible="{figfirmaan}">
+				<label depth="3" pos="404,-126" width="80" height="30" font_size="20" color="150,200,240" justify="left" text="Firma" />
+				<textfield name="txtFirma" depth="3" pos="490,-120" width="296" height="38" font_size="22" character_limit="40" />
+				<label depth="3" pos="404,-210" width="84" height="30" font_size="20" color="150,200,240" justify="left" text="Größe" />
+				<simplebutton name="btnGr0" depth="3" pos="490,-206" width="94" height="36" font_size="18" caption="Klein" />
+				<simplebutton name="btnGr1" depth="3" pos="588,-206" width="94" height="36" font_size="18" caption="Mittel" />
+				<simplebutton name="btnGr2" depth="3" pos="686,-206" width="100" height="36" font_size="18" caption="Groß" />
+				<label depth="3" pos="404,-290" width="70" height="26" font_size="18" color="150,200,240" justify="left" text="Branche" />
+				<label depth="3" pos="476,-290" width="310" height="26" font_size="18" color="[white]" justify="left" text="{figbranche}" />
+				<simplebutton name="btnBr0" depth="3" pos="404,-318" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr1" depth="3" pos="500,-318" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr2" depth="3" pos="596,-318" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr3" depth="3" pos="692,-318" width="94" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr4" depth="3" pos="404,-351" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr5" depth="3" pos="500,-351" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr6" depth="3" pos="596,-351" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr7" depth="3" pos="692,-351" width="94" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr8" depth="3" pos="404,-384" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr9" depth="3" pos="500,-384" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr10" depth="3" pos="596,-384" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr11" depth="3" pos="692,-384" width="94" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr12" depth="3" pos="404,-417" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr13" depth="3" pos="500,-417" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr14" depth="3" pos="596,-417" width="92" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnBr15" depth="3" pos="692,-417" width="94" height="30" font_size="14" caption="-" />
+				<simplebutton name="btnUebernehmenF" depth="3" pos="404,-454" width="382" height="40" font_size="26" caption="3. Übernehmen" />
+				<simplebutton name="btnNeuLadenF" depth="3" pos="404,-498" width="186" height="34" font_size="20" caption="Rollen neu laden" />
+				<simplebutton name="btnEntfernenF" depth="3" pos="600,-498" width="186" height="34" font_size="20" caption="Figur entfernen" />
+				<label depth="3" pos="14,-400" width="372" height="100" font_size="20" color="255,220,120" justify="left" text="{figmeldung}" />
+				<label depth="3" pos="14,-504" width="372" height="76" font_size="16" color="200,200,200" justify="left" text="{figgroessetext}" />
+			</rect>
+			<rect depth="1" pos="0,0" width="800" height="644" visible="{fignamean}">
+				<label depth="3" pos="14,-602" width="64" height="30" font_size="22" color="150,200,240" justify="left" text="Name" />
+				<textfield name="txtFigName" depth="3" pos="80,-596" width="410" height="40" font_size="24" character_limit="40" />
+				<simplebutton name="btnNameAendern" depth="3" pos="500,-596" width="286" height="40" font_size="22" caption="Name ändern" />
+			</rect>
+			<simplebutton name="btnSchliessen" depth="3" pos="646,-536" width="140" height="42" font_size="26" caption="Schließen" />
+		</rect>
+	</window>
+
+	<window name="figImmoFenster" pos="-400, 300" width="800" height="600" anchor="CenterCenter" controller="FigImmo, Figuren" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_talk"/>
+			<label style="header.name" text="IMMOBILIE ZUM VERKAUF" width="740" />
+		</panel>
+		<rect name="content" pos="0,-46" width="800" height="554" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="800" height="554" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="800" height="554" />
+			<label depth="3" pos="14,-10" width="772" height="28" font_size="22" color="150,200,240" justify="left" text="{immonr}" />
+
+			<label depth="3" pos="14,-48" width="200" height="30" font_size="22" color="200,200,200" justify="left" text="Bezeichnung" />
+			<textfield name="txtImmoName" depth="3" pos="214,-42" width="572" height="40" font_size="24" character_limit="60" />
+
+			<label depth="3" pos="14,-96" width="200" height="30" font_size="22" color="200,200,200" justify="left" text="Stadt" />
+			<simplebutton name="btnImmoStadtZurueck" depth="3" pos="214,-90" width="56" height="38" font_size="26" caption="&lt;" />
+			<label depth="3" pos="276,-94" width="200" height="30" font_size="24" color="[white]" justify="center" text="{immostadt}" />
+			<simplebutton name="btnImmoStadtVor" depth="3" pos="482,-90" width="56" height="38" font_size="26" caption="&gt;" />
+
+			<label depth="3" pos="14,-144" width="200" height="30" font_size="22" color="200,200,200" justify="left" text="Art" />
+			<simplebutton name="btnImmoTypZurueck" depth="3" pos="214,-138" width="56" height="38" font_size="26" caption="&lt;" />
+			<label depth="3" pos="276,-142" width="260" height="30" font_size="24" color="[white]" justify="center" text="{immotyp}" />
+			<simplebutton name="btnImmoTypVor" depth="3" pos="542,-138" width="56" height="38" font_size="26" caption="&gt;" />
+
+			<label depth="3" pos="14,-192" width="200" height="30" font_size="22" color="200,200,200" justify="left" text="Zustand / Status" />
+			<simplebutton name="btnImmoZustand" depth="3" pos="214,-186" width="280" height="38" font_size="22" caption="-" />
+			<simplebutton name="btnImmoStatus" depth="3" pos="506,-186" width="280" height="38" font_size="22" caption="-" />
+
+			<label depth="3" pos="14,-244" width="772" height="60" font_size="19" color="170,220,170" justify="left" text="{immorichtwert}" />
+
+			<label depth="3" pos="14,-316" width="200" height="30" font_size="22" color="200,200,200" justify="left" text="Preis (Coins)" />
+			<textfield name="txtImmoPreis" depth="3" pos="214,-310" width="280" height="40" font_size="26" character_limit="9" />
+			<simplebutton name="btnImmoVorschlag" depth="3" pos="506,-310" width="280" height="40" font_size="22" caption="Richtwert einsetzen" />
+
+			<label depth="3" pos="14,-364" width="200" height="30" font_size="22" color="200,200,200" justify="left" text="Beschreibung" />
+			<textfield name="txtImmoNotiz" depth="3" pos="214,-358" width="572" height="40" font_size="22" character_limit="160" />
+
+			<label depth="3" pos="14,-414" width="772" height="56" font_size="20" color="255,220,120" justify="left" text="{immomeldung}" />
+			<simplebutton name="btnImmoSpeichern" depth="3" pos="434,-496" width="200" height="44" font_size="26" caption="Speichern" />
+			<simplebutton name="btnImmoSchliessen" depth="3" pos="646,-496" width="140" height="44" font_size="26" caption="Schließen" />
+		</rect>
+	</window>
+
+	<window name="figKiFenster" pos="-430, 340" width="860" height="680" anchor="CenterCenter" controller="FigKi, Figuren" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_talk" color="0,200,255"/>
+			<label style="header.name" text="{kiname}" width="800" />
+		</panel>
+		<rect name="content" pos="0,-46" width="860" height="634" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="860" height="634" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="860" height="634" />
+			<label depth="3" pos="14,-10" width="832" height="28" font_size="22" color="0,200,255" justify="left" text="{kititel}" />
+			<label depth="3" pos="14,-44" width="832" height="380" font_size="22" color="[white]" justify="left" text="{kiverlauf}" />
+			<simplebutton name="btnKredit" depth="4" pos="14,-430" width="400" height="36" font_size="22" caption="Kredit abschließen" visible="{kikreditan}" />
+			<simplebutton name="btnKreditNein" depth="4" pos="424,-430" width="200" height="36" font_size="22" caption="Verwerfen" visible="{kikreditneinan}" />
+			<label depth="3" pos="14,-476" width="560" height="28" font_size="20" color="255,220,120" justify="left" text="{kistatus}" />
+			<simplebutton name="btnAelter" depth="3" pos="586,-470" width="126" height="36" font_size="22" caption="Älter" />
+			<simplebutton name="btnNeuer" depth="3" pos="720,-470" width="126" height="36" font_size="22" caption="Neuer" />
+			<textfield name="txtEingabe" depth="3" pos="14,-512" width="660" height="42" font_size="26" character_limit="300" />
+			<simplebutton name="btnSenden" depth="3" pos="686,-512" width="160" height="42" font_size="26" caption="Senden" />
+			<simplebutton name="btnNeu" depth="3" pos="14,-574" width="260" height="40" font_size="22" caption="Gespräch neu beginnen" />
+			<simplebutton name="btnEinrichten" depth="3" pos="286,-574" width="260" height="40" font_size="22" caption="Einrichten / Entfernen" />
+			<simplebutton name="btnGedaechtnis" depth="3" pos="556,-574" width="140" height="40" font_size="22" caption="Gedächtnis" />
+			<simplebutton name="btnSchliessen" depth="3" pos="706,-574" width="140" height="40" font_size="24" caption="Schließen" />
+		</rect>
+	</window>
+
+	<window name="figLeitungFenster" pos="-430, 365" width="860" height="730" anchor="CenterCenter" controller="FigLeitung, Figuren" cursor_area="true">
+		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
+			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_talk" color="255,200,0"/>
+			<label style="header.name" text="LEITUNG" width="800" />
+		</panel>
+		<rect name="content" pos="0,-46" width="860" height="684" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="860" height="684" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="860" height="684" />
+			<simplebutton name="btnZurueck" depth="3" pos="14,-8" width="70" height="40" font_size="26" caption="&lt;" />
+			<label depth="3" pos="96,-14" width="668" height="28" font_size="24" color="255,200,0" justify="center" text="{lname}" />
+			<simplebutton name="btnVor" depth="3" pos="776,-8" width="70" height="40" font_size="26" caption="&gt;" />
+			<label depth="3" pos="14,-56" width="832" height="410" font_size="22" color="[white]" justify="left" text="{lverlauf}" />
+			<label depth="3" pos="14,-476" width="560" height="28" font_size="20" color="255,220,120" justify="left" text="{lstatus}" />
+			<simplebutton name="btnAelter" depth="3" pos="586,-470" width="126" height="36" font_size="22" caption="Älter" />
+			<simplebutton name="btnNeuer" depth="3" pos="720,-470" width="126" height="36" font_size="22" caption="Neuer" />
+			<textfield name="txtEingabe" depth="3" pos="14,-512" width="660" height="42" font_size="26" character_limit="300" />
+			<simplebutton name="btnSenden" depth="3" pos="686,-512" width="160" height="42" font_size="26" caption="Senden" />
+			<simplebutton name="btnNeu" depth="3" pos="14,-574" width="260" height="40" font_size="22" caption="Gespräch neu beginnen" />
+			<label depth="3" pos="284,-580" width="260" height="28" font_size="20" color="150,150,150" justify="center" text="{lzaehler}" />
+			<simplebutton name="btnGedaechtnis" depth="3" pos="556,-574" width="140" height="40" font_size="22" caption="Gedächtnis" />
+			<simplebutton name="btnSchliessen" depth="3" pos="706,-574" width="140" height="40" font_size="24" caption="Schließen" />
+			<!-- Game Operator: Gesprächsansicht -->
+			<rect depth="1" pos="0,0" width="860" height="684" visible="{lopchat}">
+				<simplebutton name="btnOpSzenarien" depth="3" pos="14,-626" width="200" height="40" font_size="22" caption="Szenarien" />
+				<simplebutton name="btnOpWelt" depth="3" pos="224,-626" width="200" height="40" font_size="22" caption="Welt entwickeln" />
+				<simplebutton name="btnOpEreignisse" depth="3" pos="434,-626" width="200" height="40" font_size="22" caption="Ereignisse" />
+				<simplebutton name="btnOpHilfe" depth="3" pos="644,-626" width="202" height="40" font_size="22" caption="Hilfe" />
+			</rect>
+			<!-- Game Operator: Ereignis-Ansicht -->
+			<rect depth="1" pos="0,0" width="860" height="684" visible="{lopev}">
+				<simplebutton name="btnEvZurueck" depth="3" pos="14,-626" width="50" height="40" font_size="22" caption="&lt;" />
+				<simplebutton name="btnEvVor" depth="3" pos="68,-626" width="50" height="40" font_size="22" caption="&gt;" />
+				<simplebutton name="btnEvFilter" depth="3" pos="122,-626" width="77" height="40" font_size="16" caption="Filter" />
+				<simplebutton name="btnEvPlanen" depth="3" pos="203,-626" width="77" height="40" font_size="16" caption="Planen" />
+				<simplebutton name="btnEvFreigeben" depth="3" pos="284,-626" width="77" height="40" font_size="16" caption="Freigeben" />
+				<simplebutton name="btnEvAktiv" depth="3" pos="365,-626" width="77" height="40" font_size="16" caption="Aktiv" />
+				<simplebutton name="btnEvFertig" depth="3" pos="446,-626" width="77" height="40" font_size="16" caption="Fertig" />
+				<simplebutton name="btnEvSpaeter" depth="3" pos="527,-626" width="77" height="40" font_size="16" caption="Später" />
+				<simplebutton name="btnEvAbbruch" depth="3" pos="608,-626" width="77" height="40" font_size="16" caption="Abbruch" />
+				<simplebutton name="btnEvFolgen" depth="3" pos="689,-626" width="77" height="40" font_size="16" caption="Folgen" />
+				<simplebutton name="btnEvGespraech" depth="3" pos="770,-626" width="76" height="40" font_size="16" caption="Gespräch" />
+			</rect>
+		</rect>
+	</window>
+
+</append>
+</configs>

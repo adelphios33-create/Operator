@@ -1,0 +1,19 @@
+<configs>
+<append xpath="/xui/ruleset[@name='default']">
+	<window_group name="figGespraech" defaultSelected="content">
+		<window name="figGespraechFenster" />
+	</window_group>
+	<window_group name="figEinrichten" defaultSelected="content">
+		<window name="figEinrichtenFenster" />
+	</window_group>
+	<window_group name="figKi" defaultSelected="content">
+		<window name="figKiFenster" />
+	</window_group>
+	<window_group name="figImmo" defaultSelected="content">
+		<window name="figImmoFenster" />
+	</window_group>
+	<window_group name="figLeitung" defaultSelected="content">
+		<window name="figLeitungFenster" />
+	</window_group>
+</append>
+</configs>
