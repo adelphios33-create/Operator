@@ -20,6 +20,7 @@ public class XUiC_WbAbm : XUiController
     bool suche;                 // Lieferanten: links stehen Suchtreffer statt der Liste
     List<Abm.Treffer> treffer = new List<Abm.Treffer>();
     string meldung = "";
+    string fehler = "";         // letzter Speicherfehler, steht über dem Formular
     string frage = "";
     float frageZeit;
 
@@ -63,7 +64,7 @@ public class XUiC_WbAbm : XUiController
         {
             int n = i;
             reiter[i] = GetChildById("btnAT" + i) as XUiC_SimpleButton;
-            FensterHilfe.Knopf(this, "btnAT" + i, (s, m) => { tab = n; seite = 0; gewaehlt = -1; suche = false; meldung = ""; Neu(); });
+            FensterHilfe.Knopf(this, "btnAT" + i, (s, m) => { tab = n; seite = 0; gewaehlt = -1; suche = false; meldung = ""; fehler = ""; Neu(); });
         }
         for (int i = 0; i < Zeilen; i++)
         {
@@ -250,6 +251,7 @@ public class XUiC_WbAbm : XUiController
         if (idx < 0 || idx >= l.Count) return;
         gewaehlt = l[idx].Nr;
         meldung = "";
+        fehler = "";
         FelderLaden();
         Neu();
     }
@@ -276,10 +278,11 @@ public class XUiC_WbAbm : XUiController
         var alt = e.Felder.Select(f => new AbmFeld { K = f.K, V = f.V }).ToList();
         for (int i = 0; i < d.Felder.Length; i++)
             if (!d.Felder[i].NurLesen) e.Setz(d.Felder[i].Key, FensterHilfe.Lesen(feld[i]));
-        string fehler = Abm.Pruefen(u, e);
-        if (fehler != null) { e.Felder = alt; FelderLaden(); Melden("Erst korrigieren: " + fehler); return; }
+        string f2 = Abm.Pruefen(u, e);
+        if (f2 != null) { e.Felder = alt; fehler = "NICHT AUSGEFÜHRT: " + f2; Melden(fehler); return; }
+        fehler = "";
         decimal menge = 0m;
-        Befehle.VersucheZahl(FensterHilfe.Lesen(txtAktion), out menge);
+        Abm.VersucheZahl(FensterHilfe.Lesen(txtAktion), out menge);
         try
         {
             string erg;
@@ -315,6 +318,7 @@ public class XUiC_WbAbm : XUiController
         Abm.Abgleichen(u);
         gewaehlt = e.Nr;
         suche = false;
+        fehler = "";
         var l = Eintraege;
         seite = Math.Max(0, l.FindIndex(w => w.Nr == e.Nr) / Zeilen);
         FelderLaden();
@@ -342,17 +346,19 @@ public class XUiC_WbAbm : XUiController
         var alt = e.Felder.Select(f => new AbmFeld { K = f.K, V = f.V }).ToList();
         for (int i = 0; i < d.Felder.Length; i++)
             if (!d.Felder[i].NurLesen) e.Setz(d.Felder[i].Key, FensterHilfe.Lesen(feld[i]));
-        string fehler = Abm.Pruefen(u, e);
+        string f2 = Abm.Pruefen(u, e);
         string hinweis = "";
-        if (fehler == null && e.Art == "Mitarbeiter") fehler = LohnkontoPruefen(u, e, out hinweis);
-        if (fehler == null && e.Art == "Lieferant") hinweis = LieferantVerknuepfen(u, e);
-        if (fehler != null)
+        if (f2 == null && e.Art == "Mitarbeiter") f2 = LohnkontoPruefen(u, e, out hinweis);
+        if (f2 == null && e.Art == "Lieferant") hinweis = LieferantVerknuepfen(u, e);
+        if (f2 != null)
         {
+            // Daten bleiben wie vorher, aber deine Eingaben bleiben im Formular stehen, damit du nur das eine Feld korrigieren musst.
             e.Felder = alt;
-            FelderLaden();
-            Melden("Nicht gespeichert: " + fehler);
+            fehler = "NICHT GESPEICHERT: " + f2;
+            Melden(fehler + " Deine Eingaben stehen noch da: korrigieren und nochmal Speichern.");
             return;
         }
+        fehler = "";
         if (e.Art == "Lieferung") hinweis += Abm.LieferungEinbuchen(u, e);
         Abm.Abgleichen(u);
         FelderLaden();
@@ -539,7 +545,7 @@ public class XUiC_WbAbm : XUiController
                 else _value = d.Titel + " Nr. " + e.Nr;
                 return true;
             case "abmwirkung":
-                _value = e == null || u == null || B == null || suche ? "" : Abm.Wirkung(B, u, e);
+                _value = e == null || u == null || B == null || suche ? "" : (fehler.Length > 0 ? fehler : Abm.Wirkung(B, u, e));
                 return true;
             case "abmuebersicht": _value = Uebersicht(); return true;
             case "abmaktionan": _value = an && e != null && !suche && Abm.AktionText(e).Length > 0 ? "true" : "false"; return true;

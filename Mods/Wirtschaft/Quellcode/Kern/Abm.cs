@@ -47,7 +47,7 @@ namespace Wirtschaft.Kern
         public decimal Zahl(string k)
         {
             decimal d;
-            return Befehle.VersucheZahl(Hol(k), out d) ? d : 0m;
+            return Abm.VersucheZahl(Hol(k), out d) ? d : 0m;
         }
 
         public bool Ist(string k, string wert) { return string.Equals(Hol(k), wert, StringComparison.OrdinalIgnoreCase); }
@@ -128,6 +128,18 @@ namespace Wirtschaft.Kern
         public static AbmArt ArtDef(string art) { return Arten.FirstOrDefault(a => a.Art == art); }
         public static List<AbmArt> ArtenVon(string modul) { return Arten.Where(a => a.Modul == modul).ToList(); }
         public static int ModulIndex(string modul) { return Array.IndexOf(Module, modul); }
+
+        /// <summary>Zahl großzügig lesen: "150 Coins", "20 Stück", "150 €", "1.500", "12,50", "1500,-" gehen alle.</summary>
+        public static bool VersucheZahl(string s, out decimal d)
+        {
+            s = (s ?? "").Trim();
+            if (s.EndsWith(",-") || s.EndsWith(".-")) s = s.Substring(0, s.Length - 2);
+            var sb = new StringBuilder();
+            foreach (char c in s)
+                if (char.IsDigit(c) || c == ',' || c == '.' || (c == '-' && sb.Length == 0)) sb.Append(c);
+            if (s.Length > 0 && !s.Any(char.IsDigit)) { d = 0m; return false; }   // "vierzig" ist keine Zahl
+            return Befehle.VersucheZahl(sb.ToString(), out d);
+        }
 
         static bool Gleich(string a, string b) { return string.Equals((a ?? "").Trim(), (b ?? "").Trim(), StringComparison.OrdinalIgnoreCase); }
 
@@ -230,8 +242,9 @@ namespace Wirtschaft.Kern
                 if (f.IstZahl && v.Length > 0)
                 {
                     decimal d;
-                    if (!Befehle.VersucheZahl(v, out d)) return f.Label + ": '" + v + "' ist keine Zahl.";
+                    if (!VersucheZahl(v, out d)) return f.Label + ": '" + v + "' ist keine Zahl (z. B. 150 oder 12,50).";
                     if (d < 0) return f.Label + " darf nicht negativ sein.";
+                    e.Setz(f.Key, Befehle.Betrag(d));   // sauber speichern: "150 Coins" wird 150
                 }
                 if (f.Werte != null && !f.Werte.Any(w => Gleich(w, v)))
                     return f.Label + ": nur " + string.Join(", ", f.Werte) + " (mit dem Knopf » durchschalten).";

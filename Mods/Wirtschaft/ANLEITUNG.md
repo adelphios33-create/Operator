@@ -1,4 +1,4 @@
-# Wirtschaft – Anleitung (Version 2.2)
+# Wirtschaft – Anleitung (Version 2.2.1)
 
 Hauptbank und Firmentresor haben jetzt eigene Fenster. Pro Firma gibst du drei Werte ein, der Mod rechnet und bucht:
 
@@ -283,3 +283,7 @@ Reiter **Produkte** (Modul „Produkte & Lager“):
 - Über jedem Formular steht jetzt in Grün, was der Eintrag gerade bewirkt, z. B. „AKTIV: +150 Coins jeden Monat aufs Firmenkonto“, „Status Entwurf: zählt NICHT“ oder „Lohn 1.500/Monat an Francis, automatisch“.
 - In der Vertragsliste steht vorne „AKTIV 150/M“, ein Entwurf steht in Klammern. Die Übersicht zeigt die aktiven Kunden und wie oft gebucht wird.
 - Neuer Reiter **Kosten** (Modul „Laufende Kosten“): Miete, Strom, Versicherung … mit Betrag pro Monat. Aktive Posten werden jeden Monat als Ausgabe abgezogen, in derselben Monatsbuchung und vor der Steuer. Steht ein Posten schon in den sonstigen Ausgaben, auf „Schon in sonst. Ausgaben? = Ja“ stellen, dann dient er nur der Übersicht.
+
+## 2.2.1: Speichern repariert
+- Zahlen dürfen jetzt Zusätze haben: „150 Coins“, „20 Stück“, „12,50 €“, „1.500“ und „1500,-“ werden alle erkannt und als reine Zahl gespeichert.
+- Passt ein Feld nicht, bleiben alle deine Eingaben stehen. Über dem Formular steht dann „NICHT GESPEICHERT: …“ mit dem Feld, das korrigiert werden muss. Bisher wurde in diesem Fall alles zurückgesetzt.
