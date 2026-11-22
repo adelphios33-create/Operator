@@ -86,7 +86,7 @@ namespace Wirtschaft.Kern
         public static readonly AbmArt[] Arten =
         {
             new AbmArt { Art = "Mitarbeiter", Modul = Personal, Titel = "Mitarbeiter", Felder = new[] {
-                T("Name", "Name"), T("Konto", "Person (Lohnkonto)"), T("Position", "Position"), T("Taetigkeit", "Tätigkeit"),
+                T("Name", "Name"), T("Konto", "Lohnkonto (Name/Nr. »)"), T("Position", "Position"), T("Taetigkeit", "Tätigkeit"),
                 T("Abteilung", "Abteilung"), Z("Lohn", "Lohn / Monat"), W("Status", "Status", "Aktiv", "Beurlaubt", "Deaktiviert"),
                 Z("Eingestellt", "Eingestellt (Spieltag)"), Z("Bonus", "Bonus / Monat"), Z("Provision", "Provision % vom Umsatz"), T("Notiz", "Notiz") } },
             new AbmArt { Art = "Gruppe", Modul = Personal, Titel = "Mitarbeitergruppe", Felder = new[] {
@@ -295,6 +295,23 @@ namespace Wirtschaft.Kern
         {
             if (!g.Ist("Status", "Aktiv") || g.Ist("InAusgaben", "Ja")) return 0m;
             return Bank.Runden(Math.Max(0m, g.Zahl("Anzahl")) * g.Zahl("Lohn"));
+        }
+
+        /// <summary>Alle Personalkosten pro Monat, auch die, die schon in den sonstigen Ausgaben stecken (für die Übersicht).</summary>
+        public static decimal PersonalBrutto(Unternehmen u, decimal umsatzMonat, out decimal davonInAusgaben)
+        {
+            decimal s = 0m; davonInAusgaben = 0m;
+            foreach (var e in u.Abm)
+            {
+                if (e.Art == "Mitarbeiter") s += LohnEinzeln(e, umsatzMonat);
+                else if (e.Art == "Gruppe" && e.Ist("Status", "Aktiv"))
+                {
+                    decimal g = Bank.Runden(Math.Max(0m, e.Zahl("Anzahl")) * e.Zahl("Lohn"));
+                    s += g;
+                    if (e.Ist("InAusgaben", "Ja")) davonInAusgaben += g;
+                }
+            }
+            return s;
         }
 
         /// <summary>Gesamte zusätzliche Personalkosten pro Monat (ohne die, die schon in den Ausgaben stecken).</summary>

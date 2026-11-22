@@ -536,7 +536,7 @@
 				<simplebutton name="btnLohnArt" depth="3" pos="14,-400" width="420" height="40" font_size="22" caption="-" />
 				<simplebutton name="btnLoehneZahlen" depth="3" pos="14,-446" width="420" height="40" font_size="22" caption="Offene Löhne jetzt zahlen" />
 				<label depth="3" pos="14,-500" width="420" height="140" font_size="17" color="180,180,180" justify="left" text="Ausschalten löscht nichts: alle Daten bleiben gespeichert. Umsatz und Ausgaben im Firmentresor zählen weiter als 'sonstiger Umsatz' und 'sonstige Ausgaben'; Verträge und Löhne kommen in derselben Monatsbuchung dazu (eine Steuerrechnung, keine Doppelbuchung)." />
-				<label depth="3" pos="450,-60" width="436" height="560" font_size="19" color="[white]" justify="left" text="{abmuebersicht}" />
+				<label depth="3" pos="450,-56" width="440" height="594" font_size="16" color="[white]" justify="left" text="{abmuebersicht}" />
 			</rect>
 
 			<!-- Modul ist aus -->

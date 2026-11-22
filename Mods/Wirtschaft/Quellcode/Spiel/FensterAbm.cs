@@ -209,6 +209,22 @@ public class XUiC_WbAbm : XUiController
         sb.AppendLine();
         int schon = u.Abm.Where(e => e.Art == "Gruppe" && e.Ist("InAusgaben", "Ja") && e.Ist("Status", "Aktiv")).Sum(e => (int)Math.Max(0m, e.Zahl("Anzahl")));
         sb.AppendLine("Mitarbeiter: " + Abm.Kopfzahl(u) + (schon > 0 ? "  (davon " + schon + " schon in den Ausgaben)" : ""));
+        if (Abm.ModulAn(u, Abm.Personal))
+        {
+            decimal inAusg;
+            decimal brutto = Abm.PersonalBrutto(u, u.UmsatzMonat + vert, out inAusg);
+            sb.AppendLine("Personal gesamt / Monat: " + FensterHilfe.B(brutto) + (inAusg > 0 ? "  (davon " + FensterHilfe.B(inAusg) + " in sonst. Ausgaben)" : ""));
+            var zeilen = new List<string>();
+            foreach (var e in u.Abm.Where(x => x.Art == "Gruppe" && x.Ist("Status", "Aktiv")))
+                zeilen.Add("  " + Befehle.Betrag(e.Zahl("Anzahl")) + "x " + e.Name + " à " + FensterHilfe.B(e.Zahl("Lohn")) + " = " + FensterHilfe.B(Bank.Runden(e.Zahl("Anzahl") * e.Zahl("Lohn"))) + (e.Ist("InAusgaben", "Ja") ? " (in Ausg.)" : ""));
+            foreach (var e in u.Abm.Where(x => x.Art == "Mitarbeiter"))
+                zeilen.Add("  " + e.Name + ": " + FensterHilfe.B(Abm.LohnEinzeln(e, u.UmsatzMonat + vert)) + (e.Hol("Konto").Length > 0 ? " an " + e.Hol("Konto") : " (kein Lohnkonto)") + (e.Ist("Status", "Aktiv") ? "" : ", " + e.Hol("Status")));
+            foreach (var z in zeilen.Take(7)) sb.AppendLine(z);
+            if (zeilen.Count > 7) sb.AppendLine("  ... und " + (zeilen.Count - 7) + " weitere");
+        }
+        if (Abm.ModulAn(u, Abm.Kosten))
+            foreach (var e in u.Abm.Where(x => x.Art == "Kosten" && x.Ist("Status", "Aktiv")).Take(5))
+                sb.AppendLine("  Kosten " + e.Name + ": " + FensterHilfe.B(e.Zahl("Betrag")) + (e.Ist("InAusgaben", "Ja") ? " (in Ausg.)" : ""));
         var empf = Abm.Lohnempfaenger(u, u.UmsatzMonat + vert);
         if (empf.Count > 0) sb.AppendLine("Lohn an Personen: " + string.Join(", ", empf.Take(6).Select(kv => kv.Key + " " + FensterHilfe.B(kv.Value)).ToArray()) + (empf.Count > 6 ? " ..." : ""));
         int unter = u.Abm.Count(e => e.Art == "Produkt" && e.Zahl("Bestand") < e.Zahl("Mindest"));
@@ -331,7 +347,21 @@ public class XUiC_WbAbm : XUiController
     {
         var e = Eintrag;
         var d = e == null ? null : Abm.ArtDef(e.Art);
-        if (d == null || i >= d.Felder.Length || d.Felder[i].Werte == null || feld[i] == null) return;
+        if (d == null || i >= d.Felder.Length || feld[i] == null) return;
+        if (e.Art == "Mitarbeiter" && d.Felder[i].Key == "Konto")
+        {
+            // durch alle Bankkonten von Personen blättern (leer = kein Lohnkonto)
+            var namen = new List<string> { "" };
+            namen.AddRange(Personen().Select(x => x.Name));
+            string jetztK = FensterHilfe.Lesen(feld[i]).Trim();
+            int kk = namen.FindIndex(x => string.Equals(x, jetztK, StringComparison.OrdinalIgnoreCase));
+            string neu = namen[FensterHilfe.Blaettern(kk, 1, namen.Count)];
+            feld[i].Text = neu;
+            var pn = neu.Length > 0 ? B.ParteiOderNull(neu) : null;
+            Melden(pn == null ? "Kein Lohnkonto gewählt." : "Lohnkonto: " + pn.Name + " (Nr. " + (B.Stand.Parteien.IndexOf(pn) + 1) + ", Konto " + FensterHilfe.B(pn.Konto) + "). Speichern nicht vergessen.");
+            return;
+        }
+        if (d.Felder[i].Werte == null) return;
         var w = d.Felder[i].Werte;
         string jetzt = FensterHilfe.Lesen(feld[i]).Trim();
         int k = Array.FindIndex(w, x => string.Equals(x, jetzt, StringComparison.OrdinalIgnoreCase));
@@ -373,22 +403,37 @@ public class XUiC_WbAbm : XUiController
         hinweis = "";
         string k = e.Hol("Konto");
         if (k.Length == 0) return null;
-        var p = B.ParteiOderNull(k);
-        if (p != null)
+        var p = PersonFinden(k);
+        if (p == null)
         {
-            if (B.IstRegierungspartei(p)) return k + " ist eine Regierung und kann kein Lohnkonto sein.";
-            e.Setz("Konto", p.Name);
-            return null;
+            if (B.FirmaOderNull(k) != null) return k + " ist eine Firma, keine Person.";
+            var vorschlag = Personen().Where(x => x.Name.IndexOf(k, StringComparison.OrdinalIgnoreCase) >= 0).Select(x => x.Name).Take(4).ToArray();
+            return "Kein Bankkonto '" + k + "'. " + (vorschlag.Length > 1 ? "Meinst du: " + string.Join(", ", vorschlag) + "? " : "")
+                 + "Erst im Börsenterminal unter Personen (oder an der Hauptbank) anlegen, dann mit » auswählen.";
         }
-        if (B.FirmaOderNull(k) != null) return k + " ist eine Firma, keine Person.";
-        try
-        {
-            var neu = B.ParteiAnlegen(k, 0m);
-            e.Setz("Konto", neu.Name);
-            hinweis = "Person " + neu.Name + " neu angelegt (Konto 0). Der Lohn geht ab jetzt jeden Monat auf ihr Konto.";
-            return null;
-        }
-        catch (WirtschaftsFehler f) { return f.Message; }
+        if (B.IstRegierungspartei(p)) return p.Name + " ist eine Regierung und kann kein Lohnkonto sein.";
+        if (!string.Equals(k, p.Name, StringComparison.Ordinal)) hinweis = "Lohnkonto: " + p.Name + " (Nr. " + (B.Stand.Parteien.IndexOf(p) + 1) + ").";
+        e.Setz("Konto", p.Name);
+        return null;
+    }
+
+    /// <summary>Personen mit Bankkonto, die Lohn bekommen können (keine Regierungen).</summary>
+    List<Partei> Personen()
+    {
+        return B == null ? new List<Partei>() : B.Stand.Parteien.Where(x => !B.IstRegierungspartei(x)).ToList();
+    }
+
+    /// <summary>Bankkonto finden: Nummer aus dem Börsenterminal (z. B. 3), genauer Name oder eindeutiger Namensanfang.</summary>
+    Partei PersonFinden(string text)
+    {
+        text = (text ?? "").Trim();
+        if (B == null || text.Length == 0) return null;
+        int nr;
+        if (int.TryParse(text, out nr) && nr >= 1 && nr <= B.Stand.Parteien.Count) return B.Stand.Parteien[nr - 1];
+        var p = B.ParteiOderNull(text);
+        if (p != null) return p;
+        var treffer = B.Stand.Parteien.Where(x => x.Name.StartsWith(text, StringComparison.OrdinalIgnoreCase)).ToList();
+        return treffer.Count == 1 ? treffer[0] : null;
     }
 
     /// <summary>Heißt der Lieferant wie eine Firma im Spiel, wird er mit ihr verknüpft (nie doppelt).</summary>
@@ -522,7 +567,7 @@ public class XUiC_WbAbm : XUiController
                 var f = d != null && i < d.Felder.Length ? d.Felder[i] : null;
                 if (_bindingName.StartsWith("abmzeile")) _value = f != null ? "true" : "false";
                 else if (_bindingName.StartsWith("abmlabel")) _value = f == null ? "" : f.Label + (f.NurLesen ? " (auto)" : "");
-                else _value = f != null && f.Werte != null ? "true" : "false";
+                else _value = f != null && (f.Werte != null || (e.Art == "Mitarbeiter" && f.Key == "Konto")) ? "true" : "false";
                 return true;
             }
         }

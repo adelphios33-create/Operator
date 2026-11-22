@@ -4,7 +4,7 @@
 	<DisplayName value="Wirtschaft - Bank, Firmen, Steuern" />
 	<Description value="Parteien, Unternehmen, Steuern, Anteile und Immobilien fuer Rollenspiel. Hauptbank und Firmentresor als Bloecke mit eigenem Fenster (E)." />
 	<Author value="Adelphios und Claude" />
-	<Version value="2.2.2" />
+	<Version value="2.3.0" />
 	<Website value="" />
 	<SkipWithAntiCheat value="true" />
 </xml>

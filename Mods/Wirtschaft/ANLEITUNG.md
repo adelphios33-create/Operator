@@ -1,4 +1,4 @@
-# Wirtschaft – Anleitung (Version 2.2.2)
+# Wirtschaft – Anleitung (Version 2.3)
 
 Hauptbank und Firmentresor haben jetzt eigene Fenster. Pro Firma gibst du drei Werte ein, der Mod rechnet und bucht:
 
@@ -292,3 +292,11 @@ Reiter **Produkte** (Modul „Produkte & Lager“):
 - „Beginn“ leer lassen heißt: Der Vertrag zählt ab heute (beim Speichern wird der heutige Spieltag eingetragen). Die Übersicht zeigt „Heute: Spieltag …“.
 - Nach dem Ausschalten des Testmodus werden Verträge mit Beginn in der Zukunft beim Laden einmalig auf heute gesetzt, ebenso bei jeder Zeitumstellung.
 - Ein Vertrag mit Laufzeit läuft ab seinem Beginn. Wer bei Beginn 1 einträgt, startet also in der Vergangenheit, und eine Laufzeit kann dann schon abgelaufen sein. Deshalb besser leer lassen.
+
+## Neu in 2.3: Lohnkonto auswählen und Personalübersicht
+- **Lohnkonto:** Die Person braucht zuerst ein Bankkonto. Das legst du im Börsenterminal unter Personen „Person anlegen“ an (einen Geldtresor kann sie optional an der Hauptbank verbinden). Im Mitarbeiter-Formular dann:
+  - mit dem Knopf **»** neben „Lohnkonto“ durch alle Personen blättern, oder
+  - den Namen eintippen (der Anfang reicht, wenn er eindeutig ist: „Fra“ wird Francis), oder
+  - die **Nummer** aus der Personenliste im Börsenterminal eintippen (z. B. `8`).
+  Gibt es das Konto nicht, wird nichts gespeichert und es erscheinen Vorschläge. Konten werden nicht mehr automatisch angelegt.
+- **Übersicht:** zeigt jetzt die gesamten Personalkosten, auch die, die in den sonstigen Ausgaben stecken, dazu jede Gruppe (Anzahl × Lohn), jeden Mitarbeiter mit Lohn und Lohnkonto sowie die laufenden Kosten einzeln.
