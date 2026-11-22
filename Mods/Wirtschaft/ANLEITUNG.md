@@ -1,4 +1,4 @@
-# Wirtschaft – Anleitung (Version 2.2.1)
+# Wirtschaft – Anleitung (Version 2.2.2)
 
 Hauptbank und Firmentresor haben jetzt eigene Fenster. Pro Firma gibst du drei Werte ein, der Mod rechnet und bucht:
 
@@ -287,3 +287,8 @@ Reiter **Produkte** (Modul „Produkte & Lager“):
 ## 2.2.1: Speichern repariert
 - Zahlen dürfen jetzt Zusätze haben: „150 Coins“, „20 Stück“, „12,50 €“, „1.500“ und „1500,-“ werden alle erkannt und als reine Zahl gespeichert.
 - Passt ein Feld nicht, bleiben alle deine Eingaben stehen. Über dem Formular steht dann „NICHT GESPEICHERT: …“ mit dem Feld, das korrigiert werden muss. Bisher wurde in diesem Fall alles zurückgesetzt.
+
+## 2.2.2: Vertragsbeginn
+- „Beginn“ leer lassen heißt: Der Vertrag zählt ab heute (beim Speichern wird der heutige Spieltag eingetragen). Die Übersicht zeigt „Heute: Spieltag …“.
+- Nach dem Ausschalten des Testmodus werden Verträge mit Beginn in der Zukunft beim Laden einmalig auf heute gesetzt, ebenso bei jeder Zeitumstellung.
+- Ein Vertrag mit Laufzeit läuft ab seinem Beginn. Wer bei Beginn 1 einträgt, startet also in der Vergangenheit, und eine Laufzeit kann dann schon abgelaufen sein. Deshalb besser leer lassen.

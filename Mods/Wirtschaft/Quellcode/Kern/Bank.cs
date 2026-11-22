@@ -100,6 +100,7 @@ namespace Wirtschaft.Kern
             foreach (var u in Stand.Unternehmen) u.ZuletztAbgerechnet = heute;
             foreach (var i in Stand.Immobilien) i.ZuletztAbgerechnet = heute;
             foreach (var k in Stand.Kredite) k.ZuletztAbgerechnet = heute;
+            Abm.TageKorrigieren(this, heute);
             ZeitNeuStarten = false;
         }
 
@@ -633,6 +634,7 @@ namespace Wirtschaft.Kern
         public List<Rechnung> Tageswechsel(int heute)
         {
             Heute = heute;
+            Abm.heuteFuerPruefen = heute;
             var ergebnisse = new List<Rechnung>();
             int t = Stand.TageProMonat;
 

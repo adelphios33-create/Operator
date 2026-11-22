@@ -45,6 +45,14 @@ namespace Wirtschaft.Spiel
                 Bank = new Bank(Speicher.Laden(ordner));
                 letzterTag = Heute;
                 Bank.Heute = letzterTag;
+                Abm.heuteFuerPruefen = letzterTag;
+                // einmalig: Spieltage aus dem früheren Testmodus (in der Zukunft) auf heute setzen
+                if (Bank.Stand.AbmTagStand < 1 && Bank.Stand.TestMinuten == 0)
+                {
+                    int n = Abm.TageKorrigieren(Bank, letzterTag);
+                    if (n > 0) Log.Out("[Wirtschaft] " + n + " Vertrags-/Einstellungstage aus dem Testmodus auf heute (Tag " + letzterTag + ") gesetzt.");
+                    Bank.Stand.AbmTagStand = 1;
+                }
                 if (Bank.ZeitNeuStarten) Bank.AlleAbHeute(letzterTag);   // älterer Spielstand: keine Nachzahlung auf einen Schlag
                 Geldtresor.Start(Bank);   // Geldtresor (Banking): Kurse einmalig umstellen
                 Schilder.Laden(ordner);   // Schild-Sicherung

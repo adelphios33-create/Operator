@@ -210,6 +210,8 @@ namespace Wirtschaft.Kern
         [XmlAttribute] public int KursStand;
         /// <summary>1 = Regierungen und Personen wurden getrennt (IstStaat).</summary>
         [XmlAttribute] public int StaatStand;
+        /// <summary>1 = Spieltage der erweiterten Verwaltung nach dem Testmodus einmal korrigiert.</summary>
+        [XmlAttribute] public int AbmTagStand;
 
         public List<Bankhaus> Banken = new List<Bankhaus>();
         public List<Zahlungsmittel> Waehrungen = new List<Zahlungsmittel>();

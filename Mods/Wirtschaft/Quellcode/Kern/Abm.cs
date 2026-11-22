@@ -102,7 +102,7 @@ namespace Wirtschaft.Kern
                 T("Vereinbarung", "Vereinbarungen") } },
             new AbmArt { Art = "Vertrag", Modul = Kunden, Titel = "Kundenvertrag", Felder = new[] {
                 T("Kunde", "Kunde"), W("Kundenart", "Kundenart", "Firma", "Person", "Organisation"), T("Name", "Vertragsbezeichnung"),
-                T("Leistung", "Leistung"), Z("Wert", "Wert / Monat"), Z("Beginn", "Beginn (Spieltag)"), Z("Laufzeit", "Laufzeit Monate (0 = offen)"),
+                T("Leistung", "Leistung"), Z("Wert", "Wert / Monat"), Z("Beginn", "Beginn (leer = ab heute)"), Z("Laufzeit", "Laufzeit Monate (0 = offen)"),
                 W("Intervall", "Abrechnung", "Monatlich", "Quartal", "Jährlich"), W("Status", "Status", "Entwurf", "Aktiv", "Pausiert", "Beendet"),
                 Z("Kuendigung", "Kündigungsfrist Monate"), T("Notiz", "Notiz") } },
             new AbmArt { Art = "Produkt", Modul = Produkte, Titel = "Produkt", Felder = new[] {
@@ -231,6 +231,9 @@ namespace Wirtschaft.Kern
         }
 
         /// <summary>Prüft einen Datensatz nach dem Bearbeiten. Liefert null oder einen Fehlertext.</summary>
+        /// <summary>Spieltag für "leer = ab heute" (vom Spiel gesetzt).</summary>
+        public static int heuteFuerPruefen;
+
         public static string Pruefen(Unternehmen u, AbmEintrag e)
         {
             var def = ArtDef(e.Art);
@@ -251,6 +254,8 @@ namespace Wirtschaft.Kern
                 if (f.Werte != null) e.Setz(f.Key, f.Werte.First(w => Gleich(w, v)));
             }
             if (e.Art == "Mitarbeiter" && e.Zahl("Provision") > 100m) return "Die Provision darf höchstens 100 % sein.";
+            if (e.Art == "Vertrag" && (e.Hol("Beginn").Length == 0 || e.Zahl("Beginn") <= 0)) e.Setz("Beginn", heuteFuerPruefen.ToString());
+            if (e.Art == "Mitarbeiter" && (e.Hol("Eingestellt").Length == 0 || e.Zahl("Eingestellt") <= 0)) e.Setz("Eingestellt", heuteFuerPruefen.ToString());
             if (e.Art == "Lieferant")
             {
                 var doppelt = u.Abm.FirstOrDefault(w => w != e && w.Art == "Lieferant" && Gleich(w.Name, e.Name));
@@ -258,6 +263,21 @@ namespace Wirtschaft.Kern
             }
             if (e.Art == "Mitarbeiter" && e.Hol("Konto").Length > 0 && Gleich(e.Hol("Konto"), u.Name)) return "Die Firma kann nicht ihr eigener Mitarbeiter sein.";
             return null;
+        }
+
+        /// <summary>Nach einer Zeitumstellung (z. B. Testmodus aus): Spieltage in der Zukunft auf heute setzen,
+        /// sonst würde ein Vertrag erst in hunderten Tagen zählen.</summary>
+        public static int TageKorrigieren(Bank bank, int heute)
+        {
+            int n = 0;
+            foreach (var u in bank.Stand.Unternehmen)
+                foreach (var e in u.Abm)
+                {
+                    if (e.Art == "Vertrag" && (int)e.Zahl("Beginn") > heute) { e.Setz("Beginn", heute.ToString()); n++; }
+                    if (e.Art == "Mitarbeiter" && (int)e.Zahl("Eingestellt") > heute) { e.Setz("Eingestellt", heute.ToString()); n++; }
+                    if (e.Angelegt > heute) e.Angelegt = heute;
+                }
+            return n;
         }
 
         // ---------- Rechnen: Löhne und Verträge ----------

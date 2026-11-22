@@ -111,6 +111,7 @@ public class XUiC_WbAbm : XUiController
     {
         base.OnOpen();
         if (B != null) B.Heute = WirtschaftMod.Heute;
+        Abm.heuteFuerPruefen = WirtschaftMod.Heute;
         tab = 0; seite = 0; gewaehlt = -1; suche = false; meldung = ""; frage = "";
         Neu();
         try { xui.playerUI.windowManager.CloseIfOpen("focusedBlockHealth"); } catch (Exception) { }
@@ -202,7 +203,7 @@ public class XUiC_WbAbm : XUiController
         sb.AppendLine("+ Personalkosten / Monat:   " + FensterHilfe.B(lohn) + (Abm.ModulAn(u, Abm.Personal) ? (u.LohnManuell ? "  (Handbetrieb, " + u.LohnOffen + " Monat/e offen)" : "  (automatisch)") : "  (Personal aus)"));
         sb.AppendLine("= Einkommen nach Steuer:    " + FensterHilfe.B(r.Einkommen));
         sb.AppendLine("Firmenkonto:                " + FensterHilfe.B(u.Konto));
-        sb.AppendLine("Monatsbuchung alle " + t + " Spieltag/e" + (bank.Stand.TestMinuten > 0 ? " (TESTMODUS: 1 Tag = " + bank.Stand.TestMinuten + " Ingame-Minuten!)" : ""));
+        sb.AppendLine("Heute: Spieltag " + heute + ",  Monatsbuchung alle " + t + " Spieltag/e" + (bank.Stand.TestMinuten > 0 ? " (TESTMODUS: 1 Tag = " + bank.Stand.TestMinuten + " Ingame-Minuten!)" : ""));
         var aktiv = u.Abm.Where(e => e.Art == "Vertrag" && e.Ist("Status", "Aktiv")).ToList();
         if (aktiv.Count > 0) sb.AppendLine("Aktive Kunden: " + string.Join(", ", aktiv.Take(4).Select(e => e.Hol("Kunde") + " " + FensterHilfe.B(e.Zahl("Wert")) + "/M").ToArray()) + (aktiv.Count > 4 ? " ..." : ""));
         sb.AppendLine();
