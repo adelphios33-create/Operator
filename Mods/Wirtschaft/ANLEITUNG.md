@@ -1,4 +1,4 @@
-# Wirtschaft – Anleitung (Version 2.1)
+# Wirtschaft – Anleitung (Version 2.2)
 
 Hauptbank und Firmentresor haben jetzt eigene Fenster. Pro Firma gibst du drei Werte ein, der Mod rechnet und bucht:
 
@@ -278,3 +278,8 @@ Reiter **Produkte** (Modul „Produkte & Lager“):
 **Logistik, „Lieferung annehmen“:** Status wird Geliefert, die Transportkosten werden bezahlt und die Menge kommt ins Lager (Material oder Produkt gleichen Namens).
 **Kundenverträge:** laufen automatisch. Aktive Verträge kommen jeden Monat aufs Firmenkonto (als Umsatz, versteuert).
 **Lieferanten:** Lieferzeit und Lieferbedingungen sind entfernt. „Firma im Spiel (auto)“ zeigt, mit welcher Spielfirma der Lieferant verknüpft ist.
+
+## Neu in 2.2: Klare Anzeige und laufende Kosten
+- Über jedem Formular steht jetzt in Grün, was der Eintrag gerade bewirkt, z. B. „AKTIV: +150 Coins jeden Monat aufs Firmenkonto“, „Status Entwurf: zählt NICHT“ oder „Lohn 1.500/Monat an Francis, automatisch“.
+- In der Vertragsliste steht vorne „AKTIV 150/M“, ein Entwurf steht in Klammern. Die Übersicht zeigt die aktiven Kunden und wie oft gebucht wird.
+- Neuer Reiter **Kosten** (Modul „Laufende Kosten“): Miete, Strom, Versicherung … mit Betrag pro Monat. Aktive Posten werden jeden Monat als Ausgabe abgezogen, in derselben Monatsbuchung und vor der Steuer. Steht ein Posten schon in den sonstigen Ausgaben, auf „Schon in sonst. Ausgaben? = Ja“ stellen, dann dient er nur der Übersicht.

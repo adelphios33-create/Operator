@@ -867,7 +867,7 @@ namespace Wirtschaft.Kern
         {
             decimal vert = Abm.VertragsUmsatzJetzt(u, Heute, Stand.TageProMonat);
             decimal lohn = Abm.LohnAutomatisch(u) ? Abm.LohnMonat(u, umsatz + vert) : 0m;
-            return RechneGesamt(u.Name, Runden(umsatz) + vert, Runden(ausgaben) + lohn, steuersatz, 1);
+            return RechneGesamt(u.Name, Runden(umsatz) + vert, Runden(ausgaben) + lohn + Abm.KostenMonat(u), steuersatz, 1);
         }
 
         /// <summary>Löhne an die Konten der Personen (Mitarbeiter mit Lohnkonto). Das Geld ist beim Aufrufer schon vom Firmenkonto abgezogen.</summary>
@@ -949,7 +949,8 @@ namespace Wirtschaft.Kern
                 }
             }
             if (Abm.ModulAn(u, Abm.Personal) && u.LohnManuell) u.LohnOffen += monate;
-            var r = RechneGesamt(u.Name, Runden(u.UmsatzMonat * monate) + vert, Runden(u.AusgabenMonat * monate) + lohn, u.Steuersatz, monate);
+            decimal kosten = Abm.KostenMonat(u) * monate;
+            var r = RechneGesamt(u.Name, Runden(u.UmsatzMonat * monate) + vert, Runden(u.AusgabenMonat * monate) + lohn + kosten, u.Steuersatz, monate);
 
             if (r.Steuer > 0)
             {
@@ -962,7 +963,8 @@ namespace Wirtschaft.Kern
             u.Konto += r.Einkommen;
             r.Ruecklage = r.Einkommen;
             Buchen(u.Verlauf, heute, (r.Einkommen < 0 ? "Verlust (" : "Einkommen (") + monate + " Monat/e"
-                + (vert > 0 ? ", davon Verträge " + Befehle.Betrag(vert) : "") + (lohn > 0 ? ", nach Löhnen " + Befehle.Betrag(lohn) : "") + ")", r.Einkommen);
+                + (vert > 0 ? ", davon Verträge " + Befehle.Betrag(vert) : "") + (lohn > 0 ? ", nach Löhnen " + Befehle.Betrag(lohn) : "")
+                + (kosten > 0 ? ", nach lfd. Kosten " + Befehle.Betrag(kosten) : "") + ")", r.Einkommen);
             // Die Löhne sind oben schon als Ausgaben abgezogen; hier gehen sie nur an die Personen mit Lohnkonto (kein zweiter Abzug).
             if (empfaenger.Count > 0)
             {

@@ -514,23 +514,25 @@
 		<rect name="content" pos="0,-46" width="900" height="740" depth="1">
 			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="900" height="740" color="[black]" type="sliced" fillcenter="false" />
 			<sprite depth="1" color="[darkGrey]" type="sliced" width="900" height="740" />
-			<simplebutton name="btnAT0" depth="3" pos="14,-6" width="120" height="38" font_size="17" caption="-" />
-			<simplebutton name="btnAT1" depth="3" pos="138,-6" width="120" height="38" font_size="17" caption="-" />
-			<simplebutton name="btnAT2" depth="3" pos="262,-6" width="120" height="38" font_size="17" caption="-" />
-			<simplebutton name="btnAT3" depth="3" pos="386,-6" width="120" height="38" font_size="17" caption="-" />
-			<simplebutton name="btnAT4" depth="3" pos="510,-6" width="120" height="38" font_size="17" caption="-" />
-			<simplebutton name="btnAT5" depth="3" pos="634,-6" width="120" height="38" font_size="17" caption="-" />
-			<simplebutton name="btnAT6" depth="3" pos="758,-6" width="120" height="38" font_size="17" caption="-" />
+			<simplebutton name="btnAT0" depth="3" pos="14,-6" width="106" height="38" font_size="16" caption="-" />
+			<simplebutton name="btnAT1" depth="3" pos="124,-6" width="106" height="38" font_size="16" caption="-" />
+			<simplebutton name="btnAT2" depth="3" pos="234,-6" width="106" height="38" font_size="16" caption="-" />
+			<simplebutton name="btnAT3" depth="3" pos="344,-6" width="106" height="38" font_size="16" caption="-" />
+			<simplebutton name="btnAT4" depth="3" pos="454,-6" width="106" height="38" font_size="16" caption="-" />
+			<simplebutton name="btnAT5" depth="3" pos="564,-6" width="106" height="38" font_size="16" caption="-" />
+			<simplebutton name="btnAT6" depth="3" pos="674,-6" width="106" height="38" font_size="16" caption="-" />
+			<simplebutton name="btnAT7" depth="3" pos="784,-6" width="106" height="38" font_size="16" caption="-" />
 
 			<!-- Übersicht: ein-/ausschalten, Module, Lohnabrechnung -->
 			<rect name="uebersicht" pos="0,0" width="900" height="740" depth="2" visible="{abmtab0}">
 				<simplebutton name="btnAbmAn" depth="3" pos="14,-60" width="420" height="44" font_size="24" caption="-" />
-				<simplebutton name="btnMod0" depth="3" pos="14,-116" width="420" height="40" font_size="22" caption="-" />
-				<simplebutton name="btnMod1" depth="3" pos="14,-162" width="420" height="40" font_size="22" caption="-" />
-				<simplebutton name="btnMod2" depth="3" pos="14,-208" width="420" height="40" font_size="22" caption="-" />
-				<simplebutton name="btnMod3" depth="3" pos="14,-254" width="420" height="40" font_size="22" caption="-" />
-				<simplebutton name="btnMod4" depth="3" pos="14,-300" width="420" height="40" font_size="22" caption="-" />
-				<simplebutton name="btnMod5" depth="3" pos="14,-346" width="420" height="40" font_size="22" caption="-" />
+				<simplebutton name="btnMod0" depth="3" pos="14,-112" width="420" height="36" font_size="20" caption="-" />
+				<simplebutton name="btnMod1" depth="3" pos="14,-152" width="420" height="36" font_size="20" caption="-" />
+				<simplebutton name="btnMod2" depth="3" pos="14,-192" width="420" height="36" font_size="20" caption="-" />
+				<simplebutton name="btnMod3" depth="3" pos="14,-232" width="420" height="36" font_size="20" caption="-" />
+				<simplebutton name="btnMod4" depth="3" pos="14,-272" width="420" height="36" font_size="20" caption="-" />
+				<simplebutton name="btnMod5" depth="3" pos="14,-312" width="420" height="36" font_size="20" caption="-" />
+				<simplebutton name="btnMod6" depth="3" pos="14,-352" width="420" height="36" font_size="20" caption="-" />
 				<simplebutton name="btnLohnArt" depth="3" pos="14,-400" width="420" height="40" font_size="22" caption="-" />
 				<simplebutton name="btnLoehneZahlen" depth="3" pos="14,-446" width="420" height="40" font_size="22" caption="Offene Löhne jetzt zahlen" />
 				<label depth="3" pos="14,-500" width="420" height="140" font_size="17" color="180,180,180" justify="left" text="Ausschalten löscht nichts: alle Daten bleiben gespeichert. Umsatz und Ausgaben im Firmentresor zählen weiter als 'sonstiger Umsatz' und 'sonstige Ausgaben'; Verträge und Löhne kommen in derselben Monatsbuchung dazu (eine Steuerrechnung, keine Doppelbuchung)." />
@@ -563,7 +565,8 @@
 					<simplebutton name="btnSuchen" depth="3" pos="14,-622" width="146" height="38" font_size="20" caption="Suchen" />
 					<simplebutton name="btnSucheNeu" depth="3" pos="166,-622" width="148" height="38" font_size="18" caption="Als neu anlegen" />
 				</rect>
-				<label depth="3" pos="330,-56" width="556" height="30" font_size="24" color="255,170,90" justify="left" text="{abmtitel}" />
+				<label depth="3" pos="330,-50" width="556" height="24" font_size="20" color="255,170,90" justify="left" text="{abmtitel}" />
+				<label depth="3" pos="330,-72" width="556" height="22" font_size="17" color="140,230,140" justify="left" text="{abmwirkung}" />
 				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmeditor}">
 				<rect depth="2" pos="0,0" width="900" height="740" visible="{abmzeile0}">
 					<label depth="3" pos="330,-96" width="222" height="30" font_size="18" color="200,200,200" justify="left" text="{abmlabel0}" />

@@ -72,9 +72,9 @@ namespace Wirtschaft.Kern
 
     public static class Abm
     {
-        public const string Personal = "Personal", Lieferanten = "Lieferanten", Kunden = "Kunden", Produkte = "Produkte", Projekte = "Projekte", Logistik = "Logistik";
-        public static readonly string[] Module = { Personal, Lieferanten, Kunden, Produkte, Projekte, Logistik };
-        public static readonly string[] ModulText = { "Personal", "Lieferanten", "Kunden & Verträge", "Produkte & Lager", "Projekte", "Lieferungen" };
+        public const string Personal = "Personal", Lieferanten = "Lieferanten", Kunden = "Kunden", Produkte = "Produkte", Projekte = "Projekte", Logistik = "Logistik", Kosten = "Kosten";
+        public static readonly string[] Module = { Personal, Lieferanten, Kunden, Produkte, Projekte, Logistik, Kosten };
+        public static readonly string[] ModulText = { "Personal", "Lieferanten", "Kunden & Verträge", "Produkte & Lager", "Projekte", "Lieferungen", "Laufende Kosten" };
 
         public const int MaxFelder = 14;
 
@@ -116,6 +116,9 @@ namespace Wirtschaft.Kern
                 T("Name", "Projekttitel"), T("Beschreibung", "Beschreibung"), T("Verantwortlich", "Verantwortlich"), T("Beteiligte", "Beteiligte Firmen"),
                 Z("Kosten", "Geschätzte Kosten"), T("Zeitraum", "Geplanter Zeitraum"),
                 W("Status", "Status", "Idee", "In Planung", "Aktiv", "Pausiert", "Abgeschlossen", "Abgebrochen"), T("Notiz", "Notizen") } },
+            new AbmArt { Art = "Kosten", Modul = Kosten, Titel = "Kostenposten", Felder = new[] {
+                T("Name", "Bezeichnung"), T("Kategorie", "Kategorie (Miete, Strom ...)"), Z("Betrag", "Betrag / Monat"),
+                W("Status", "Status", "Aktiv", "Pausiert", "Beendet"), W("InAusgaben", "Schon in sonst. Ausgaben?", "Nein", "Ja"), T("Notiz", "Notiz") } },
             new AbmArt { Art = "Lieferung", Modul = Logistik, Titel = "Lieferauftrag", Felder = new[] {
                 T("Name", "Lieferauftrag"), T("Lieferant", "Lieferant"), T("Produkt", "Material / Produkt"), Z("Menge", "Menge"), T("Termin", "Liefertermin"),
                 W("Status", "Status", "Angefragt", "Bestätigt", "Unterwegs", "Geliefert", "Verzögert", "Storniert"),
@@ -205,6 +208,7 @@ namespace Wirtschaft.Kern
             if (art == "Vertrag") { e.Setz("Beginn", heute.ToString()); e.Setz("Laufzeit", "0"); e.Setz("Status", "Entwurf"); }
             if (art == "Gruppe") e.Setz("Anzahl", "1");
             if (art == "Lieferung") e.Setz("Status", "Angefragt");
+            if (art == "Vertrag") e.Setz("Kundenart", "Firma");
             u.Abm.Add(e);
             return e;
         }
@@ -274,6 +278,56 @@ namespace Wirtschaft.Kern
         }
 
         public static bool LohnAutomatisch(Unternehmen u) { return ModulAn(u, Personal) && !u.LohnManuell; }
+
+        /// <summary>Laufende Kosten pro Monat (aktive Posten, die nicht schon in den sonstigen Ausgaben stecken).</summary>
+        public static decimal KostenMonat(Unternehmen u)
+        {
+            if (!ModulAn(u, Kosten)) return 0m;
+            return u.Abm.Where(e => e.Art == "Kosten" && e.Ist("Status", "Aktiv") && !e.Ist("InAusgaben", "Ja")).Sum(e => e.Zahl("Betrag"));
+        }
+
+        /// <summary>Kurz und klar: was dieser Eintrag gerade im System bewirkt (wird über dem Formular angezeigt).</summary>
+        public static string Wirkung(Bank bank, Unternehmen u, AbmEintrag e)
+        {
+            int t = bank.Stand.TageProMonat, heute = bank.Heute;
+            string w = " " + bank.Stand.Waehrung;
+            decimal um = u.UmsatzMonat + VertragsUmsatzJetzt(u, heute, t);
+            bool modul = ModulAn(u, ArtDef(e.Art).Modul);
+            if (!modul) return "Modul aus: wirkt gerade nicht.";
+            switch (e.Art)
+            {
+                case "Vertrag":
+                    if (!e.Ist("Status", "Aktiv")) return "Status " + e.Hol("Status") + ": zählt NICHT. Auf 'Aktiv' stellen und speichern.";
+                    if ((int)e.Zahl("Beginn") > heute) return "Aktiv ab Spieltag " + Befehle.Betrag(e.Zahl("Beginn")) + ", dann +" + Befehle.Betrag(e.Zahl("Wert")) + w + " pro Monat.";
+                    return "AKTIV: +" + Befehle.Betrag(e.Zahl("Wert")) + w + " jeden Monat aufs Firmenkonto (als Umsatz).";
+                case "Mitarbeiter":
+                    {
+                        decimal l = LohnEinzeln(e, um);
+                        if (l <= 0) return "Status " + e.Hol("Status") + ": bekommt keinen Lohn.";
+                        return "Lohn " + Befehle.Betrag(l) + w + "/Monat" + (e.Hol("Konto").Length > 0 ? " an " + e.Hol("Konto") : " (an niemanden im Spiel)")
+                             + (u.LohnManuell ? ", per Knopf (Handbetrieb)" : ", automatisch");
+                    }
+                case "Gruppe":
+                    if (!e.Ist("Status", "Aktiv")) return "Deaktiviert: kostet nichts, zählt nicht.";
+                    if (e.Ist("InAusgaben", "Ja")) return "Lohn steckt schon in den sonstigen Ausgaben: kostet nichts extra.";
+                    return "Kostet " + Befehle.Betrag(LohnGruppe(e)) + w + "/Monat" + (u.LohnManuell ? " (Handbetrieb)" : " (automatisch)");
+                case "Kosten":
+                    if (!e.Ist("Status", "Aktiv")) return "Status " + e.Hol("Status") + ": wird nicht abgebucht.";
+                    if (e.Ist("InAusgaben", "Ja")) return "Steckt schon in den sonstigen Ausgaben: nur zur Übersicht.";
+                    return "AKTIV: -" + Befehle.Betrag(e.Zahl("Betrag")) + w + " jeden Monat (als Ausgabe).";
+                case "Material":
+                    return "Lager " + Befehle.Betrag(e.Zahl("Bestand")) + (e.Zahl("Bestand") < e.Zahl("Mindest") ? " (UNTER Mindestbestand!)" : "") + ", Kauf zahlt die Firma sofort.";
+                case "Produkt":
+                    {
+                        int h = Herstellbar(u, e);
+                        return "Lager " + Befehle.Betrag(e.Zahl("Bestand")) + (h < 0 ? ", kein Rezept" : ", aus Material herstellbar: " + h);
+                    }
+                case "Projekt": return e.Hol("Bezahlt") == "ja" ? "Bezahlt, Status " + e.Hol("Status") + "." : "Noch nicht bezahlt (" + Befehle.Betrag(e.Zahl("Kosten")) + w + ").";
+                case "Lieferung": return e.Ist("Status", "Geliefert") ? "Geliefert und eingebucht." : "Offen (" + e.Hol("Status") + ").";
+                case "Lieferant": return e.Hol("Firma").Length > 0 ? "Verknüpft mit der Spielfirma " + e.Hol("Firma") + ": Einkäufe gehen auf ihr Konto." : "Externer Händler: Geld für Einkäufe verlässt das Spiel.";
+            }
+            return "";
+        }
 
         /// <summary>Löhne, die auf das Konto einer Person im Spiel gehen (Mitarbeiter mit "Person (Lohnkonto)").</summary>
         public static List<KeyValuePair<string, decimal>> Lohnempfaenger(Unternehmen u, decimal umsatzMonat)
@@ -612,7 +666,7 @@ namespace Wirtschaft.Kern
             decimal lohn = LohnMonat(u, u.UmsatzMonat + vert);
             sb.Append("- ").Append(u.Name).Append(" (").Append(u.Branche).Append(", ").Append(u.Bank).Append("): sonstiger Umsatz ").Append(Befehle.Betrag(u.UmsatzMonat))
               .Append(", Vertragsumsatz ").Append(Befehle.Betrag(vert)).Append(", sonstige Ausgaben ").Append(Befehle.Betrag(u.AusgabenMonat))
-              .Append(", Personalkosten ").Append(Befehle.Betrag(lohn)).Append(u.LohnManuell ? " (Handbetrieb, " + u.LohnOffen + " Monat/e offen)" : "")
+              .Append(", laufende Kosten ").Append(Befehle.Betrag(KostenMonat(u))).Append(", Personalkosten ").Append(Befehle.Betrag(lohn)).Append(u.LohnManuell ? " (Handbetrieb, " + u.LohnOffen + " Monat/e offen)" : "")
               .Append(", Firmenkonto ").Append(Befehle.Betrag(u.Konto)).AppendLine();
             if (ModulAn(u, Personal))
             {
@@ -641,6 +695,9 @@ namespace Wirtschaft.Kern
                 Zeilen(sb, "Material", u.Abm.Where(e => e.Art == "Material").Select(e =>
                     e.Name + " (Bestand " + Befehle.Betrag(e.Zahl("Bestand")) + (e.Zahl("Bestand") < e.Zahl("Mindest") ? " UNTER MINDESTBESTAND" : "")
                     + ", " + Befehle.Betrag(e.Zahl("Preis")) + " je Stück" + (e.Hol("Lieferant").Length > 0 ? " bei " + e.Hol("Lieferant") : "") + ")"), 10);
+            if (ModulAn(u, Kosten))
+                Zeilen(sb, "Laufende Kosten", u.Abm.Where(e => e.Art == "Kosten" && e.Ist("Status", "Aktiv")).Select(e =>
+                    e.Name + " " + Befehle.Betrag(e.Zahl("Betrag")) + "/Monat" + (e.Ist("InAusgaben", "Ja") ? " (in sonst. Ausgaben)" : "")), 10);
             if (ModulAn(u, Logistik))
                 Zeilen(sb, "Lieferungen", u.Abm.Where(e => e.Art == "Lieferung" && !e.Ist("Status", "Geliefert") && !e.Ist("Status", "Storniert")).Select(e =>
                     e.Name + " (" + e.Hol("Lieferant") + ", " + e.Hol("Produkt") + " x" + Befehle.Betrag(e.Zahl("Menge")) + ", " + e.Hol("Status") + (e.Hol("Termin").Length > 0 ? ", Termin " + e.Hol("Termin") : "") + ")"), 8);

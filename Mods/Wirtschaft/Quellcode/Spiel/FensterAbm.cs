@@ -12,7 +12,7 @@ public class XUiC_WbAbm : XUiController
     public static XUiC_WbAbm Instanz;
     public const string Gruppe = "wbAbm";
     const int Zeilen = 8;
-    const int Reiter = 7;
+    const int Reiter = 8;
 
     static string firma = "";
     int tab, seite;
@@ -25,7 +25,7 @@ public class XUiC_WbAbm : XUiController
 
     XUiC_SimpleButton[] reiter = new XUiC_SimpleButton[Reiter];
     XUiC_SimpleButton[] zeile = new XUiC_SimpleButton[Zeilen];
-    XUiC_SimpleButton[] modKnopf = new XUiC_SimpleButton[6];
+    XUiC_SimpleButton[] modKnopf = new XUiC_SimpleButton[7];
     XUiC_TextInput[] feld = new XUiC_TextInput[Abm.MaxFelder];
     XUiC_SimpleButton btnAn, btnLohnArt, btnNeu1, btnNeu2;
     XUiC_TextInput txtSuche, txtAktion;
@@ -71,7 +71,7 @@ public class XUiC_WbAbm : XUiController
             zeile[i] = GetChildById("btnE" + i) as XUiC_SimpleButton;
             FensterHilfe.Knopf(this, "btnE" + i, (s, m) => ZeileGewaehlt(n));
         }
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 7; i++)
         {
             int n = i;
             modKnopf[i] = GetChildById("btnMod" + i) as XUiC_SimpleButton;
@@ -197,9 +197,13 @@ public class XUiC_WbAbm : XUiController
         sb.AppendLine("Sonstiger Umsatz / Monat:   " + FensterHilfe.B(u.UmsatzMonat));
         sb.AppendLine("+ Kundenverträge / Monat:   " + FensterHilfe.B(vert) + "  (" + u.Abm.Count(e => e.Art == "Vertrag" && e.Ist("Status", "Aktiv")) + " aktiv)");
         sb.AppendLine("Sonstige Ausgaben / Monat:  " + FensterHilfe.B(u.AusgabenMonat));
+        sb.AppendLine("+ Laufende Kosten / Monat:  " + FensterHilfe.B(Abm.KostenMonat(u)));
         sb.AppendLine("+ Personalkosten / Monat:   " + FensterHilfe.B(lohn) + (Abm.ModulAn(u, Abm.Personal) ? (u.LohnManuell ? "  (Handbetrieb, " + u.LohnOffen + " Monat/e offen)" : "  (automatisch)") : "  (Personal aus)"));
         sb.AppendLine("= Einkommen nach Steuer:    " + FensterHilfe.B(r.Einkommen));
         sb.AppendLine("Firmenkonto:                " + FensterHilfe.B(u.Konto));
+        sb.AppendLine("Monatsbuchung alle " + t + " Spieltag/e" + (bank.Stand.TestMinuten > 0 ? " (TESTMODUS: 1 Tag = " + bank.Stand.TestMinuten + " Ingame-Minuten!)" : ""));
+        var aktiv = u.Abm.Where(e => e.Art == "Vertrag" && e.Ist("Status", "Aktiv")).ToList();
+        if (aktiv.Count > 0) sb.AppendLine("Aktive Kunden: " + string.Join(", ", aktiv.Take(4).Select(e => e.Hol("Kunde") + " " + FensterHilfe.B(e.Zahl("Wert")) + "/M").ToArray()) + (aktiv.Count > 4 ? " ..." : ""));
         sb.AppendLine();
         int schon = u.Abm.Where(e => e.Art == "Gruppe" && e.Ist("InAusgaben", "Ja") && e.Ist("Status", "Aktiv")).Sum(e => (int)Math.Max(0m, e.Zahl("Anzahl")));
         sb.AppendLine("Mitarbeiter: " + Abm.Kopfzahl(u) + (schon > 0 ? "  (davon " + schon + " schon in den Ausgaben)" : ""));
@@ -225,7 +229,8 @@ public class XUiC_WbAbm : XUiController
             case "Mitarbeiter": return e.Name + (e.Hol("Position").Length > 0 ? " - " + e.Hol("Position") : "") + (e.Ist("Status", "Aktiv") ? "" : " (" + e.Hol("Status") + ")");
             case "Gruppe": return Befehle.Betrag(e.Zahl("Anzahl")) + "x " + e.Name + (e.Ist("Status", "Aktiv") ? "" : " (aus)");
             case "Lieferant": return e.Name + " (" + e.Hol("Beziehung") + ")";
-            case "Vertrag": return e.Hol("Kunde") + ": " + e.Name + " (" + e.Hol("Status") + ")";
+            case "Vertrag": return (e.Ist("Status", "Aktiv") ? "AKTIV " + Befehle.Betrag(e.Zahl("Wert")) + "/M " : "(" + e.Hol("Status") + ") ") + e.Hol("Kunde") + ": " + e.Name;
+            case "Kosten": return (e.Ist("Status", "Aktiv") ? "-" + Befehle.Betrag(e.Zahl("Betrag")) + "/M " : "(" + e.Hol("Status") + ") ") + e.Name + (e.Ist("InAusgaben", "Ja") ? " (in Ausg.)" : "");
             case "Produkt": return e.Name + " [" + Befehle.Betrag(e.Zahl("Bestand")) + "]" + (e.Zahl("Bestand") < e.Zahl("Mindest") ? " !" : "");
             case "Material": return "Mat: " + e.Name + " [" + Befehle.Betrag(e.Zahl("Bestand")) + "]" + (e.Zahl("Bestand") < e.Zahl("Mindest") ? " !" : "");
             default: return e.Name + " (" + e.Hol("Status") + ")";
@@ -462,7 +467,7 @@ public class XUiC_WbAbm : XUiController
         for (int i = 0; i < Reiter; i++)
             if (reiter[i] != null) reiter[i].Text = (i == tab ? "> " : "") + (i == 0 ? "Übersicht" : Abm.Module[i - 1]);
         if (btnAn != null) btnAn.Text = u != null && u.AbmAn ? "Erweiterte Verwaltung: AN (ausschalten)" : "Erweiterte Verwaltung: AUS (einschalten)";
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 7; i++)
             if (modKnopf[i] != null) modKnopf[i].Text = (u != null && Abm.ModulGewaehlt(u, Abm.Module[i]) ? "[x] " : "[  ] ") + Abm.ModulText[i];
         if (btnLohnArt != null) btnLohnArt.Text = "Lohnabrechnung: " + (u != null && u.LohnManuell ? "manuell (umschalten)" : "automatisch (umschalten)");
         var arten = tab > 0 ? Abm.ArtenVon(Modul) : new List<AbmArt>();
@@ -532,6 +537,9 @@ public class XUiC_WbAbm : XUiController
                 if (suche) _value = "Suchtreffer links anklicken = als Lieferant übernehmen";
                 else if (e == null) _value = Anzahl == 0 ? "Noch nichts angelegt: links auf '+ Neu' drücken" : "Links einen Eintrag wählen";
                 else _value = d.Titel + " Nr. " + e.Nr;
+                return true;
+            case "abmwirkung":
+                _value = e == null || u == null || B == null || suche ? "" : Abm.Wirkung(B, u, e);
                 return true;
             case "abmuebersicht": _value = Uebersicht(); return true;
             case "abmaktionan": _value = an && e != null && !suche && Abm.AktionText(e).Length > 0 ? "true" : "false"; return true;
