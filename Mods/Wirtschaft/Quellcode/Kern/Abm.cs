@@ -95,8 +95,8 @@ namespace Wirtschaft.Kern
                 W("InAusgaben", "Lohn schon in Ausgaben?", "Nein", "Ja"), T("Notiz", "Notiz") } },
             new AbmArt { Art = "Lieferant", Modul = Lieferanten, Titel = "Lieferant", Felder = new[] {
                 T("Name", "Firmenname"), L("Firma", "Firma im Spiel"), T("Branche", "Branche"), T("Standort", "Standort"),
-                T("Ansprechpartner", "Ansprechpartner"), T("Produkte", "Produkte / Leistungen"), T("Preise", "Einkaufspreise"),
-                T("Bedingungen", "Lieferbedingungen"), T("Lieferzeit", "Lieferzeit"), T("Mindestmenge", "Mindestbestellung"),
+                T("Ansprechpartner", "Ansprechpartner"), T("Produkte", "Liefert (Material/Waren)"), T("Preise", "Preise (Notiz)"),
+                T("Mindestmenge", "Mindestbestellung (Notiz)"),
                 T("Zahlung", "Zahlungsbedingungen"), W("Zuverlaessigkeit", "Zuverlässigkeit", "Unbekannt", "Niedrig", "Mittel", "Hoch"),
                 W("Beziehung", "Geschäftsbeziehung", "Kontakt", "Verhandlung", "Aktiv", "Bevorzugt", "Pausiert", "Beendet"),
                 T("Vereinbarung", "Vereinbarungen") } },
@@ -107,13 +107,17 @@ namespace Wirtschaft.Kern
                 Z("Kuendigung", "Kündigungsfrist Monate"), T("Notiz", "Notiz") } },
             new AbmArt { Art = "Produkt", Modul = Produkte, Titel = "Produkt", Felder = new[] {
                 T("Name", "Produktname"), T("Beschreibung", "Beschreibung"), T("Kategorie", "Kategorie"), Z("EK", "Einkaufspreis"),
-                Z("VK", "Verkaufspreis"), Z("Bestand", "Lagerbestand"), Z("Mindest", "Mindestbestand"), T("Lieferanten", "Lieferanten"), T("Notiz", "Notiz") } },
+                Z("VK", "Verkaufspreis"), Z("Bestand", "Lagerbestand"), Z("Mindest", "Mindestbestand"),
+                T("Material", "Material pro Stück"), T("Lieferanten", "Lieferanten"), T("Notiz", "Notiz") } },
+            new AbmArt { Art = "Material", Modul = Produkte, Titel = "Material", Felder = new[] {
+                T("Name", "Material"), T("Lieferant", "Lieferant"), Z("Preis", "Preis pro Einheit"), Z("Bestand", "Lagerbestand"),
+                Z("Mindest", "Mindestbestand"), Z("Kaufmenge", "Standard-Kaufmenge"), Z("Mindestbestellung", "Mindestbestellung"), T("Notiz", "Notiz") } },
             new AbmArt { Art = "Projekt", Modul = Projekte, Titel = "Projekt", Felder = new[] {
                 T("Name", "Projekttitel"), T("Beschreibung", "Beschreibung"), T("Verantwortlich", "Verantwortlich"), T("Beteiligte", "Beteiligte Firmen"),
                 Z("Kosten", "Geschätzte Kosten"), T("Zeitraum", "Geplanter Zeitraum"),
                 W("Status", "Status", "Idee", "In Planung", "Aktiv", "Pausiert", "Abgeschlossen", "Abgebrochen"), T("Notiz", "Notizen") } },
             new AbmArt { Art = "Lieferung", Modul = Logistik, Titel = "Lieferauftrag", Felder = new[] {
-                T("Name", "Lieferauftrag"), T("Lieferant", "Lieferant"), T("Produkt", "Produkt"), Z("Menge", "Menge"), T("Termin", "Liefertermin"),
+                T("Name", "Lieferauftrag"), T("Lieferant", "Lieferant"), T("Produkt", "Material / Produkt"), Z("Menge", "Menge"), T("Termin", "Liefertermin"),
                 W("Status", "Status", "Angefragt", "Bestätigt", "Unterwegs", "Geliefert", "Verzögert", "Storniert"),
                 Z("Transport", "Transportkosten"), T("Notiz", "Notiz") } },
         };
@@ -332,13 +336,175 @@ namespace Wirtschaft.Kern
         public static string LieferungEinbuchen(Unternehmen u, AbmEintrag l)
         {
             if (l.Art != "Lieferung" || !l.Ist("Status", "Geliefert") || l.Hol("Eingebucht") == "ja") return "";
-            var p = u.Abm.FirstOrDefault(w => w.Art == "Produkt" && Gleich(w.Name, l.Hol("Produkt")));
+            var p = u.Abm.FirstOrDefault(w => w.Art == "Material" && Gleich(w.Name, l.Hol("Produkt")))
+                 ?? u.Abm.FirstOrDefault(w => w.Art == "Produkt" && Gleich(w.Name, l.Hol("Produkt")));
             if (p == null || !ModulAn(u, Produkte)) return "";
             decimal menge = l.Zahl("Menge");
             if (menge <= 0) return "";
             p.Setz("Bestand", Befehle.Betrag(p.Zahl("Bestand") + menge));
             l.Setz("Eingebucht", "ja");
             return " Lagerbestand von " + p.Name + " um " + Befehle.Betrag(menge) + " erhöht.";
+        }
+
+        // ---------- Aktionen: Einkaufen, Herstellen, Projekt bezahlen, Lieferung annehmen ----------
+        // Alles geht direkt über das Firmenkonto (das ist auch der Geldtresor der Firma). Einkäufe sind keine Monatsausgaben,
+        // sie werden sofort bezahlt und laufen deshalb nicht noch einmal durch die Monatsabrechnung.
+
+        /// <summary>Text des Aktionsknopfs für diese Art, oder "" wenn es keinen gibt.</summary>
+        public static string AktionText(AbmEintrag e)
+        {
+            switch (e.Art)
+            {
+                case "Material": return "Jetzt kaufen";
+                case "Produkt": return "Herstellen";
+                case "Projekt": return e.Hol("Bezahlt") == "ja" ? "" : "Kosten bezahlen";
+                case "Lieferung": return e.Ist("Status", "Geliefert") || e.Ist("Status", "Storniert") ? "" : "Lieferung annehmen";
+                default: return "";
+            }
+        }
+
+        public static string AktionLabel(AbmEintrag e)
+        {
+            switch (e.Art)
+            {
+                case "Material": return "Menge kaufen";
+                case "Produkt": return "Stück herstellen";
+                default: return "";
+            }
+        }
+
+        public static string AktionVorschlag(Unternehmen u, AbmEintrag e)
+        {
+            if (e.Art == "Material") { decimal k = e.Zahl("Kaufmenge"); return Befehle.Betrag(k > 0 ? k : Math.Max(1m, e.Zahl("Mindestbestellung"))); }
+            if (e.Art == "Produkt") return Math.Min(1, Herstellbar(u, e)).ToString();
+            return "";
+        }
+
+        /// <summary>Lieferfirma im Spiel zu einem Lieferantennamen (direkt oder über den Lieferanten-Eintrag), sonst null.</summary>
+        public static Unternehmen LieferfirmaImSpiel(Stand st, Unternehmen u, string lieferant)
+        {
+            lieferant = (lieferant ?? "").Trim();
+            if (lieferant.Length == 0) return null;
+            var l = u.Abm.FirstOrDefault(w => w.Art == "Lieferant" && Gleich(w.Name, lieferant));
+            string firma = l != null && l.Hol("Firma").Length > 0 ? l.Hol("Firma") : lieferant;
+            var f = st.Unternehmen.FirstOrDefault(x => Gleich(x.Name, firma));
+            return f == u ? null : f;
+        }
+
+        public static string MaterialKaufen(Bank bank, Unternehmen u, AbmEintrag m, decimal menge, int heute)
+        {
+            if (m.Art != "Material") throw new WirtschaftsFehler("Kaufen geht nur bei Material.");
+            if (menge <= 0) throw new WirtschaftsFehler("Erst eine Menge größer 0 eintragen.");
+            decimal min = m.Zahl("Mindestbestellung");
+            if (min > 0 && menge < min) throw new WirtschaftsFehler("Mindestbestellung bei " + m.Name + ": " + Befehle.Betrag(min) + " Stück.");
+            decimal preis = m.Zahl("Preis");
+            decimal kosten = Bank.Runden(preis * menge);
+            if (kosten > u.Konto) throw new WirtschaftsFehler("Zu wenig Geld: Einkauf kostet " + Befehle.Betrag(kosten) + ", Firmenkonto hat " + Befehle.Betrag(u.Konto) + ".");
+            u.Konto -= kosten;
+            m.Setz("Bestand", Befehle.Betrag(m.Zahl("Bestand") + menge));
+            var lf = LieferfirmaImSpiel(bank.Stand, u, m.Hol("Lieferant"));
+            string an = m.Hol("Lieferant").Length > 0 ? m.Hol("Lieferant") : "Händler";
+            bank.VerlaufBuchen(u, heute, "Einkauf " + Befehle.Betrag(menge) + "x " + m.Name + " bei " + an, -kosten);
+            if (lf != null && kosten > 0)
+            {
+                lf.Konto += kosten;
+                bank.VerlaufBuchen(lf, heute, "Verkauf " + Befehle.Betrag(menge) + "x " + m.Name + " an " + u.Name, kosten);
+            }
+            return Befehle.Betrag(menge) + "x " + m.Name + " gekauft für " + Befehle.Betrag(kosten) + (lf != null ? " (an " + lf.Name + " überwiesen)" : "")
+                 + ". Bestand jetzt " + Befehle.Betrag(m.Zahl("Bestand")) + ".";
+        }
+
+        /// <summary>Rezept eines Produkts: "Hardware 20; Kabel 5" = pro Stück 20 Hardware und 5 Kabel. Ohne Zahl zählt 1.</summary>
+        public static List<KeyValuePair<string, decimal>> Rezept(AbmEintrag p)
+        {
+            var l = new List<KeyValuePair<string, decimal>>();
+            foreach (var teil in p.Hol("Material").Split(';', ','))
+            {
+                string t = teil.Trim();
+                if (t.Length == 0) continue;
+                decimal menge = 1m;
+                int sp = t.LastIndexOf(' ');
+                decimal d;
+                if (sp > 0 && Befehle.VersucheZahl(t.Substring(sp + 1).TrimEnd('x', 'X'), out d) && d > 0) { menge = d; t = t.Substring(0, sp).Trim(); }
+                l.Add(new KeyValuePair<string, decimal>(t, menge));
+            }
+            return l;
+        }
+
+        static AbmEintrag MaterialVon(Unternehmen u, string name)
+        {
+            return u.Abm.FirstOrDefault(w => w.Art == "Material" && Gleich(w.Name, name));
+        }
+
+        /// <summary>Wie viele Stück sich aus dem Materiallager herstellen lassen (-1 = kein Rezept).</summary>
+        public static int Herstellbar(Unternehmen u, AbmEintrag p)
+        {
+            var r = Rezept(p);
+            if (r.Count == 0) return -1;
+            int n = int.MaxValue;
+            foreach (var kv in r)
+            {
+                var m = MaterialVon(u, kv.Key);
+                if (m == null) return 0;
+                n = Math.Min(n, (int)Math.Floor(m.Zahl("Bestand") / kv.Value));
+            }
+            return Math.Max(0, n);
+        }
+
+        public static string Herstellen(Unternehmen u, AbmEintrag p, int stueck)
+        {
+            if (p.Art != "Produkt") throw new WirtschaftsFehler("Herstellen geht nur bei Produkten.");
+            var r = Rezept(p);
+            if (r.Count == 0) throw new WirtschaftsFehler("Erst bei 'Material pro Stück' eintragen, was ein Stück braucht, z. B. Hardware 20; Kabel 5.");
+            foreach (var kv in r)
+                if (MaterialVon(u, kv.Key) == null) throw new WirtschaftsFehler("Material '" + kv.Key + "' gibt es noch nicht. Mit '+ Neu: Material' anlegen.");
+            if (stueck <= 0) throw new WirtschaftsFehler("Erst eine Stückzahl größer 0 eintragen.");
+            int moeglich = Herstellbar(u, p);
+            if (stueck > moeglich)
+            {
+                var fehlt = r.Select(kv => { var m = MaterialVon(u, kv.Key); decimal brauch = kv.Value * stueck - m.Zahl("Bestand"); return brauch > 0 ? Befehle.Betrag(brauch) + " " + m.Name : null; })
+                             .Where(s => s != null).ToArray();
+                throw new WirtschaftsFehler("Material reicht nur für " + moeglich + " Stück. Es fehlen: " + string.Join(", ", fehlt) + ".");
+            }
+            foreach (var kv in r)
+            {
+                var m = MaterialVon(u, kv.Key);
+                m.Setz("Bestand", Befehle.Betrag(m.Zahl("Bestand") - kv.Value * stueck));
+            }
+            p.Setz("Bestand", Befehle.Betrag(p.Zahl("Bestand") + stueck));
+            return stueck + "x " + p.Name + " hergestellt. Lager jetzt " + Befehle.Betrag(p.Zahl("Bestand")) + ", aus dem Material gehen noch " + Herstellbar(u, p) + " Stück.";
+        }
+
+        public static string ProjektBezahlen(Bank bank, Unternehmen u, AbmEintrag p, int heute)
+        {
+            if (p.Art != "Projekt") throw new WirtschaftsFehler("Nur bei Projekten.");
+            if (p.Hol("Bezahlt") == "ja") throw new WirtschaftsFehler("Dieses Projekt ist schon bezahlt.");
+            decimal k = p.Zahl("Kosten");
+            if (k <= 0) throw new WirtschaftsFehler("Erst die geschätzten Kosten eintragen.");
+            if (k > u.Konto) throw new WirtschaftsFehler("Zu wenig Geld: Projekt kostet " + Befehle.Betrag(k) + ", Firmenkonto hat " + Befehle.Betrag(u.Konto) + ".");
+            u.Konto -= k;
+            p.Setz("Bezahlt", "ja");
+            if (p.Ist("Status", "Idee") || p.Ist("Status", "In Planung")) p.Setz("Status", "Aktiv");
+            bank.VerlaufBuchen(u, heute, "Projekt bezahlt: " + p.Name, -k);
+            return "Projekt " + p.Name + " bezahlt (" + Befehle.Betrag(k) + "), Status " + p.Hol("Status") + ".";
+        }
+
+        public static string LieferungAnnehmen(Bank bank, Unternehmen u, AbmEintrag l, int heute)
+        {
+            if (l.Art != "Lieferung") throw new WirtschaftsFehler("Nur bei Lieferungen.");
+            if (l.Ist("Status", "Geliefert") || l.Ist("Status", "Storniert")) throw new WirtschaftsFehler("Die Lieferung ist schon " + l.Hol("Status").ToLowerInvariant() + ".");
+            decimal t = l.Zahl("Transport");
+            if (t > u.Konto) throw new WirtschaftsFehler("Zu wenig Geld für die Transportkosten (" + Befehle.Betrag(t) + ").");
+            l.Setz("Status", "Geliefert");
+            string text = "Lieferung " + l.Name + " angenommen.";
+            if (t > 0 && l.Hol("TransportBezahlt") != "ja")
+            {
+                u.Konto -= t;
+                l.Setz("TransportBezahlt", "ja");
+                bank.VerlaufBuchen(u, heute, "Transport " + l.Name, -t);
+                text += " Transport " + Befehle.Betrag(t) + " bezahlt.";
+            }
+            return text + LieferungEinbuchen(u, l);
         }
 
         // ---------- Lieferantensuche ----------
@@ -471,6 +637,10 @@ namespace Wirtschaft.Kern
                 Zeilen(sb, "Produkte", u.Abm.Where(e => e.Art == "Produkt").Select(e =>
                     e.Name + " (Bestand " + Befehle.Betrag(e.Zahl("Bestand")) + (e.Zahl("Bestand") < e.Zahl("Mindest") ? " UNTER MINDESTBESTAND " + Befehle.Betrag(e.Zahl("Mindest")) : "")
                     + ", EK " + Befehle.Betrag(e.Zahl("EK")) + ", VK " + Befehle.Betrag(e.Zahl("VK")) + ")"), 10);
+            if (ModulAn(u, Produkte))
+                Zeilen(sb, "Material", u.Abm.Where(e => e.Art == "Material").Select(e =>
+                    e.Name + " (Bestand " + Befehle.Betrag(e.Zahl("Bestand")) + (e.Zahl("Bestand") < e.Zahl("Mindest") ? " UNTER MINDESTBESTAND" : "")
+                    + ", " + Befehle.Betrag(e.Zahl("Preis")) + " je Stück" + (e.Hol("Lieferant").Length > 0 ? " bei " + e.Hol("Lieferant") : "") + ")"), 10);
             if (ModulAn(u, Logistik))
                 Zeilen(sb, "Lieferungen", u.Abm.Where(e => e.Art == "Lieferung" && !e.Ist("Status", "Geliefert") && !e.Ist("Status", "Storniert")).Select(e =>
                     e.Name + " (" + e.Hol("Lieferant") + ", " + e.Hol("Produkt") + " x" + Befehle.Betrag(e.Zahl("Menge")) + ", " + e.Hol("Status") + (e.Hol("Termin").Length > 0 ? ", Termin " + e.Hol("Termin") : "") + ")"), 8);
@@ -522,6 +692,13 @@ namespace Wirtschaft.Kern
                         lief.Add(u.Name + " kauft bei dir" + (e.Hol("Produkte").Length > 0 ? ": " + Kurz(e.Hol("Produkte"), 60) : " (Produkte noch nicht festgelegt)") + (e.Hol("Preise").Length > 0 ? ", Preise " + Kurz(e.Hol("Preise"), 50) : "")
                                  + (e.Hol("Bedingungen").Length > 0 ? ", Bedingungen " + Kurz(e.Hol("Bedingungen"), 50) : "") + (e.Hol("Zahlung").Length > 0 ? ", Zahlung " + Kurz(e.Hol("Zahlung"), 40) : "")
                                  + ", Beziehung " + e.Hol("Beziehung") + (e.Hol("Vereinbarung").Length > 0 ? ", bisher vereinbart: " + Kurz(e.Hol("Vereinbarung"), 80) : ""));
+                    if (e.Art == "Material")
+                    {
+                        var lf = LieferfirmaImSpiel(bank.Stand, u, e.Hol("Lieferant"));
+                        if (lf != null && Gleich(lf.Name, firma))
+                            lief.Add(u.Name + " kauft bei dir das Material " + e.Name + " zu " + Befehle.Betrag(e.Zahl("Preis")) + " je Stück"
+                                     + (e.Zahl("Mindestbestellung") > 0 ? ", Mindestbestellung " + Befehle.Betrag(e.Zahl("Mindestbestellung")) : ""));
+                    }
                     if (e.Art == "Vertrag" && Gleich(e.Hol("Kunde"), firma))
                         kund.Add("du bist Kunde von " + u.Name + ": " + e.Name + ", " + Befehle.Betrag(e.Zahl("Wert")) + " " + bank.Stand.Waehrung + "/Monat, " + e.Hol("Status"));
                 }
@@ -535,7 +712,7 @@ namespace Wirtschaft.Kern
             if (sb.Length == 0) return "";
             sb.AppendLine("SO VERHANDELST DU: Du hast eigene wirtschaftliche Interessen. Nimm Angebote nicht einfach an: mach Gegenangebote, verlange begründet höhere Preise, "
                         + "biete Mengenrabatte nur gegen feste Abnahme, lehne ab, wenn es sich für dich nicht lohnt. Eine Einigung ist nur eine Absprache: sag dem Spieler, dass er sie "
-                        + "im Firmentresor unter 'Erweitert' eintragen muss (z. B. Lieferanten > Vereinbarungen). Durch das Gespräch fließt kein Geld und es ändert sich nichts automatisch.");
+                        + "im Firmentresor unter 'Erweitert' eintragen muss (z. B. neuer Preis beim Material oder Lieferanten > Vereinbarungen). Durch das Gespräch fließt kein Geld und es ändert sich nichts automatisch.");
             return sb.ToString().Trim();
         }
     }

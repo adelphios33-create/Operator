@@ -1,4 +1,4 @@
-# Wirtschaft – Anleitung (Version 2.0)
+# Wirtschaft – Anleitung (Version 2.1)
 
 Hauptbank und Firmentresor haben jetzt eigene Fenster. Pro Firma gibst du drei Werte ein, der Mod rechnet und bucht:
 
@@ -265,3 +265,16 @@ Immer zweimal drücken (Rückfrage). Nur das Guthaben wird 0. Kredite, Anteile, 
 - Konsole: `wb reset person|firma|stadt <Name>` zeigt die Vorschau, mit `ja` am Ende wird ausgeführt. `wb abm <Firma>` zeigt die erweiterte Verwaltung.
 
 Die Währung heißt jetzt überall „Coins“ (ältere Spielstände werden beim Laden umgestellt).
+
+## Neu in 2.1: Material, Einkauf, Herstellung, Ausführen-Knöpfe
+Reiter **Produkte** (Modul „Produkte & Lager“):
+- **„+ Neu: Material“** z. B. Hardware: Lieferant (z. B. „BN Baufirma“), Preis pro Einheit, Lagerbestand, Mindestbestand, Standard-Kaufmenge, Mindestbestellung.
+- **Jetzt kaufen:** Menge eintragen, zweimal drücken. Das Geld geht sofort vom Firmenkonto bzw. Firmen-Geldtresor ab und der Bestand steigt. Ist der Lieferant eine Firma im Spiel, bekommt sie das Geld auf ihr Konto. Ein erfundener Händler bekommt nichts, das Geld ist dann einfach weg. Bei zu wenig Geld oder unter der Mindestbestellung wird abgelehnt.
+- **Produkt, „Material pro Stück“:** z. B. `Hardware 20` oder `Hardware 20; Kabel 5`. Neben dem Knopf steht, wie viele Stück das Lager hergibt (100 Hardware ergibt 5 Stück).
+- **Herstellen:** Stückzahl eintragen und drücken. Das Material wird abgezogen, der Produktbestand steigt.
+- Einkäufe sind keine Monatsausgaben, sie werden sofort bezahlt und nicht noch einmal abgerechnet.
+
+**Projekte, „Kosten bezahlen“:** Zieht die geschätzten Kosten einmalig vom Firmenkonto ab und setzt das Projekt auf Aktiv.
+**Logistik, „Lieferung annehmen“:** Status wird Geliefert, die Transportkosten werden bezahlt und die Menge kommt ins Lager (Material oder Produkt gleichen Namens).
+**Kundenverträge:** laufen automatisch. Aktive Verträge kommen jeden Monat aufs Firmenkonto (als Umsatz, versteuert).
+**Lieferanten:** Lieferzeit und Lieferbedingungen sind entfernt. „Firma im Spiel (auto)“ zeigt, mit welcher Spielfirma der Lieferant verknüpft ist.

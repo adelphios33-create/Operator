@@ -28,7 +28,8 @@ public class XUiC_WbAbm : XUiController
     XUiC_SimpleButton[] modKnopf = new XUiC_SimpleButton[6];
     XUiC_TextInput[] feld = new XUiC_TextInput[Abm.MaxFelder];
     XUiC_SimpleButton btnAn, btnLohnArt, btnNeu1, btnNeu2;
-    XUiC_TextInput txtSuche;
+    XUiC_TextInput txtSuche, txtAktion;
+    XUiC_SimpleButton btnAktion;
 
     Bank B { get { return WirtschaftMod.Bank; } }
     Unternehmen U { get { return B == null ? null : B.FirmaOderNull(firma); } }
@@ -95,6 +96,9 @@ public class XUiC_WbAbm : XUiController
         FensterHilfe.Knopf(this, "btnEVor", (s, m) => { seite++; Neu(); });
         FensterHilfe.Knopf(this, "btnESpeichern", (s, m) => EintragSpeichern());
         FensterHilfe.Knopf(this, "btnELoeschen", (s, m) => EintragLoeschen());
+        txtAktion = FensterHilfe.Feld(this, "txtAktion", null);
+        btnAktion = GetChildById("btnAktion") as XUiC_SimpleButton;
+        FensterHilfe.Knopf(this, "btnAktion", (s, m) => Aktion());
         txtSuche = FensterHilfe.Feld(this, "txtSuche", null);
         if (txtSuche != null) txtSuche.OnSubmitHandler += (s, t) => Suchen();
         FensterHilfe.Knopf(this, "btnSuchen", (s, m) => Suchen());
@@ -223,6 +227,7 @@ public class XUiC_WbAbm : XUiController
             case "Lieferant": return e.Name + " (" + e.Hol("Beziehung") + ")";
             case "Vertrag": return e.Hol("Kunde") + ": " + e.Name + " (" + e.Hol("Status") + ")";
             case "Produkt": return e.Name + " [" + Befehle.Betrag(e.Zahl("Bestand")) + "]" + (e.Zahl("Bestand") < e.Zahl("Mindest") ? " !" : "");
+            case "Material": return "Mat: " + e.Name + " [" + Befehle.Betrag(e.Zahl("Bestand")) + "]" + (e.Zahl("Bestand") < e.Zahl("Mindest") ? " !" : "");
             default: return e.Name + " (" + e.Hol("Status") + ")";
         }
     }
@@ -250,6 +255,48 @@ public class XUiC_WbAbm : XUiController
         var d = e == null ? null : Abm.ArtDef(e.Art);
         for (int i = 0; i < Abm.MaxFelder; i++)
             FensterHilfe.Schreiben(feld[i], d != null && i < d.Felder.Length ? e.Hol(d.Felder[i].Key) : "");
+        FensterHilfe.Schreiben(txtAktion, e == null || U == null ? "" : Abm.AktionVorschlag(U, e));
+    }
+
+    /// <summary>Kaufen, Herstellen, Projekt bezahlen, Lieferung annehmen. Ungespeicherte Änderungen werden vorher gespeichert.</summary>
+    void Aktion()
+    {
+        var u = U;
+        var e = Eintrag;
+        if (u == null || e == null || B == null) return;
+        string text = Abm.AktionText(e);
+        if (text.Length == 0) return;
+        // erst die Felder übernehmen (z. B. neuer Preis), damit mit den angezeigten Werten gerechnet wird
+        var d = Abm.ArtDef(e.Art);
+        var alt = e.Felder.Select(f => new AbmFeld { K = f.K, V = f.V }).ToList();
+        for (int i = 0; i < d.Felder.Length; i++)
+            if (!d.Felder[i].NurLesen) e.Setz(d.Felder[i].Key, FensterHilfe.Lesen(feld[i]));
+        string fehler = Abm.Pruefen(u, e);
+        if (fehler != null) { e.Felder = alt; FelderLaden(); Melden("Erst korrigieren: " + fehler); return; }
+        decimal menge = 0m;
+        Befehle.VersucheZahl(FensterHilfe.Lesen(txtAktion), out menge);
+        try
+        {
+            string erg;
+            int heute = WirtschaftMod.Heute;
+            if (e.Art == "Material")
+            {
+                decimal kosten = Bank.Runden(e.Zahl("Preis") * menge);
+                if (!Bestaetigt("kauf:" + e.Nr + ":" + menge, Befehle.Betrag(menge) + "x " + e.Name + " für " + FensterHilfe.B(kosten) + " kaufen? Nochmal 'Jetzt kaufen' drücken.")) return;
+                erg = Abm.MaterialKaufen(B, u, e, menge, heute);
+            }
+            else if (e.Art == "Produkt") erg = Abm.Herstellen(u, e, (int)Math.Floor(menge));
+            else if (e.Art == "Projekt")
+            {
+                if (!Bestaetigt("proj:" + e.Nr, "Projekt " + e.Name + " für " + FensterHilfe.B(e.Zahl("Kosten")) + " bezahlen? Nochmal drücken.")) return;
+                erg = Abm.ProjektBezahlen(B, u, e, heute);
+            }
+            else erg = Abm.LieferungAnnehmen(B, u, e, heute);
+            FelderLaden();
+            WirtschaftMod.Speichern();
+            Melden(erg);
+        }
+        catch (WirtschaftsFehler f) { Melden(f.Message); }
     }
 
     void NeuerEintrag(int welcher)
@@ -421,6 +468,8 @@ public class XUiC_WbAbm : XUiController
         var arten = tab > 0 ? Abm.ArtenVon(Modul) : new List<AbmArt>();
         if (btnNeu1 != null) btnNeu1.Text = arten.Count > 0 ? "+ Neu: " + arten[0].Titel : "-";
         if (btnNeu2 != null) btnNeu2.Text = arten.Count > 1 ? "+ Neu: " + arten[1].Titel : "-";
+        var akt = Eintrag;
+        if (btnAktion != null) btnAktion.Text = akt == null ? "-" : Abm.AktionText(akt);
 
         int anzahl = Anzahl;
         int seiten = Math.Max(1, (anzahl + Zeilen - 1) / Zeilen);
@@ -485,6 +534,15 @@ public class XUiC_WbAbm : XUiController
                 else _value = d.Titel + " Nr. " + e.Nr;
                 return true;
             case "abmuebersicht": _value = Uebersicht(); return true;
+            case "abmaktionan": _value = an && e != null && !suche && Abm.AktionText(e).Length > 0 ? "true" : "false"; return true;
+            case "abmaktionmenge": _value = e != null && Abm.AktionLabel(e).Length > 0 ? "true" : "false"; return true;
+            case "abmaktionlabel":
+                if (e == null) _value = "";
+                else if (e.Art == "Produkt") { int h = Abm.Herstellbar(u, e); _value = h < 0 ? "Stück herstellen (Rezept fehlt)" : "Stück herstellen (max " + h + ")"; }
+                else if (e.Art == "Material") _value = "Menge kaufen (" + FensterHilfe.B(e.Zahl("Preis")) + " je Stück)";
+                else if (e.Art == "Projekt") _value = "Kosten vom Firmenkonto";
+                else _value = "Ins Lager buchen";
+                return true;
             case "abmmeldung": _value = B == null ? "Erst eine Welt laden." : meldung; return true;
         }
         return base.GetBindingValue(ref _value, _bindingName);

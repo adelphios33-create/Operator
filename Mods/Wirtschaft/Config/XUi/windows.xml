@@ -635,6 +635,11 @@
 					<textfield name="txtF13" depth="3" pos="555,-560" width="280" height="34" font_size="20" character_limit="200" />
 					<simplebutton name="btnW13" depth="3" pos="840,-560" width="46" height="34" font_size="22" caption="»" visible="{abmwahl13}" />
 				</rect>
+					<rect depth="2" pos="0,0" width="900" height="740" visible="{abmaktionan}">
+						<label depth="3" pos="330,-564" width="222" height="30" font_size="18" color="150,200,240" justify="left" text="{abmaktionlabel}" />
+						<textfield name="txtAktion" depth="3" pos="555,-560" width="130" height="34" font_size="20" character_limit="12" visible="{abmaktionmenge}" />
+						<simplebutton name="btnAktion" depth="3" pos="692,-560" width="194" height="34" font_size="20" caption="-" />
+					</rect>
 					<simplebutton name="btnESpeichern" depth="3" pos="330,-606" width="270" height="40" font_size="24" caption="Speichern" />
 					<simplebutton name="btnELoeschen" depth="3" pos="610,-606" width="276" height="40" font_size="24" caption="Löschen" />
 				</rect>
