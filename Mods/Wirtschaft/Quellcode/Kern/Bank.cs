@@ -82,6 +82,9 @@ namespace Wirtschaft.Kern
                 }
                 Stand.StaatStand = 1;
             }
+            // Feste Kontonummern: wer noch keine hat, bekommt eine (in der Reihenfolge der Liste).
+            foreach (var kp in Stand.Parteien) if (kp.KontoNr > Stand.LetzteKontoNr) Stand.LetzteKontoNr = kp.KontoNr;
+            foreach (var kp in Stand.Parteien) if (kp.KontoNr <= 0) kp.KontoNr = ++Stand.LetzteKontoNr;
             // Die Währung heißt überall "Coins".
             if (string.IsNullOrEmpty(Stand.Waehrung) || string.Equals(Stand.Waehrung, "Dukes", StringComparison.OrdinalIgnoreCase)) Stand.Waehrung = "Coins";
             foreach (var zm in Stand.Waehrungen) if (string.Equals(zm.Name, "Dukes", StringComparison.OrdinalIgnoreCase)) zm.Name = "Coins";
@@ -160,7 +163,7 @@ namespace Wirtschaft.Kern
             var p = ParteiOderNull(reg);
             if (p != null && !IstRegierungspartei(p))
                 throw new WirtschaftsFehler("'" + p.Name + "' ist eine Person, keine Regierung. Anderen Namen nehmen oder das Feld leer lassen.");
-            if (p == null) { p = new Partei { Name = reg }; Stand.Parteien.Add(p); }
+            if (p == null) { p = new Partei { Name = reg , KontoNr = ++Stand.LetzteKontoNr }; Stand.Parteien.Add(p); }
             p.IstRegierung = true; p.IstStaat = true;
             var b = new Bankhaus { Name = name.Trim(), Regierung = p.Name };
             Stand.Banken.Add(b);
@@ -201,7 +204,7 @@ namespace Wirtschaft.Kern
             name = name.Trim();
             if (ParteiOderNull(name) != null || FirmaOderNull(name) != null || ImmobilieOderNull(name) != null)
                 throw new WirtschaftsFehler("Den Namen '" + name + "' gibt es schon (Person, Regierung, Firma oder Immobilie).");
-            var p = new Partei { Name = name, IstRegierung = true, IstStaat = true };
+            var p = new Partei { Name = name, IstRegierung = true, IstStaat = true , KontoNr = ++Stand.LetzteKontoNr };
             Stand.Parteien.Add(p);
             return p;
         }
@@ -282,7 +285,7 @@ namespace Wirtschaft.Kern
                 if (string.IsNullOrEmpty(b.Regierung)) b.Regierung = "Regierung " + b.Name;
                 var p = ParteiOderNull(b.Regierung);
                 if (p != null && !IstRegierungspartei(p)) { b.Regierung = "Regierung " + b.Name; p = ParteiOderNull(b.Regierung); }   // eine Person ist nie Regierung
-                if (p == null) { p = new Partei { Name = b.Regierung }; Stand.Parteien.Add(p); }
+                if (p == null) { p = new Partei { Name = b.Regierung , KontoNr = ++Stand.LetzteKontoNr }; Stand.Parteien.Add(p); }
                 p.IstRegierung = true; p.IstStaat = true;
                 return p;
             }
@@ -337,7 +340,7 @@ namespace Wirtschaft.Kern
                 if (r == null)
                 {
                     r = ParteiOderNull("Regierung");
-                    if (r == null) { r = new Partei { Name = "Regierung" }; Stand.Parteien.Insert(0, r); }
+                    if (r == null) { r = new Partei { Name = "Regierung" , KontoNr = ++Stand.LetzteKontoNr }; Stand.Parteien.Insert(0, r); }
                     r.IstRegierung = true; r.IstStaat = true;
                 }
                 return r;
@@ -346,11 +349,24 @@ namespace Wirtschaft.Kern
 
         // ---------- Anlegen und Ändern ----------
 
+        /// <summary>Kontonummer dreistellig, z. B. "013".</summary>
+        public static string KontoText(Partei p) { return p == null ? "" : p.KontoNr.ToString("000"); }
+
+        /// <summary>Person/Regierung zu einer Kontonummer ("013", "13", "Konto 13", "#13"), sonst null.</summary>
+        public Partei ParteiPerNummer(string text)
+        {
+            string t = (text ?? "").Trim().TrimStart('#');
+            if (t.StartsWith("Konto", StringComparison.OrdinalIgnoreCase)) t = t.Substring(5).Trim();
+            int nr;
+            if (!int.TryParse(t, out nr) || nr <= 0) return null;
+            return Stand.Parteien.FirstOrDefault(w => w.KontoNr == nr);
+        }
+
         public Partei ParteiAnlegen(string name, decimal startkapital)
         {
             NameGueltig(name);
             if (ParteiOderNull(name) != null) throw new WirtschaftsFehler("Partei '" + name + "' gibt es schon.");
-            var p = new Partei { Name = name.Trim(), Konto = Runden(startkapital) };
+            var p = new Partei { Name = name.Trim(), Konto = Runden(startkapital), KontoNr = ++Stand.LetzteKontoNr };
             Stand.Parteien.Add(p);
             if (string.IsNullOrEmpty(Stand.AktivePartei)) Stand.AktivePartei = p.Name;
             return p;
@@ -399,7 +415,7 @@ namespace Wirtschaft.Kern
             var p = ParteiOderNull(BuergerName);
             if (p == null)
             {
-                p = new Partei { Name = BuergerName };
+                p = new Partei { Name = BuergerName , KontoNr = ++Stand.LetzteKontoNr };
                 Stand.Parteien.Add(p);
                 if (string.IsNullOrEmpty(Stand.AktivePartei)) Stand.AktivePartei = p.Name;
             }

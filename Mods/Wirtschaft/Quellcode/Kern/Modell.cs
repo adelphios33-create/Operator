@@ -11,6 +11,8 @@ namespace Wirtschaft.Kern
     {
         [XmlAttribute] public string Name = "";
         [XmlAttribute] public decimal Konto;
+        /// <summary>Feste Kontonummer (001, 002 ...). Wird nie neu vergeben, auch wenn andere gelöscht werden.</summary>
+        [XmlAttribute] public int KontoNr;
         [XmlAttribute] public bool IstRegierung;
         /// <summary>True = eigenständige Regierung (Staat). Personen, auch Hauptfiguren, sind nie eine Regierung.</summary>
         [XmlAttribute] public bool IstStaat;
@@ -212,6 +214,8 @@ namespace Wirtschaft.Kern
         [XmlAttribute] public int StaatStand;
         /// <summary>1 = Spieltage der erweiterten Verwaltung nach dem Testmodus einmal korrigiert.</summary>
         [XmlAttribute] public int AbmTagStand;
+        /// <summary>Höchste vergebene Kontonummer.</summary>
+        [XmlAttribute] public int LetzteKontoNr;
 
         public List<Bankhaus> Banken = new List<Bankhaus>();
         public List<Zahlungsmittel> Waehrungen = new List<Zahlungsmittel>();

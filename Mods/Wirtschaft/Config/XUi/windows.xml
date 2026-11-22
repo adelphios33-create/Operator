@@ -109,7 +109,7 @@
 				<label depth="3" pos="14,-644" width="60" height="30" font_size="26" color="200,200,200" justify="left" text="Neu" />
 				<textfield name="txtNeu" depth="3" pos="80,-640" width="300" height="40" font_size="28" character_limit="40" />
 				<simplebutton name="btnNeueFirma" depth="3" pos="392,-640" width="190" height="40" font_size="26" caption="Neue Firma" />
-				<simplebutton name="btnNeuePartei" depth="3" pos="594,-640" width="192" height="40" font_size="26" caption="Neue Person" />
+				<simplebutton name="btnNeuePartei" depth="3" pos="594,-640" width="192" height="40" font_size="26" caption="Konto eröffnen" />
 			</rect>
 
 			<label depth="3" pos="14,-700" width="470" height="30" font_size="22" color="255,220,120" justify="left" text="{wbmeldung}" />

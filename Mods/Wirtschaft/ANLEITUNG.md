@@ -1,4 +1,4 @@
-# Wirtschaft – Anleitung (Version 2.3)
+# Wirtschaft – Anleitung (Version 2.4)
 
 Hauptbank und Firmentresor haben jetzt eigene Fenster. Pro Firma gibst du drei Werte ein, der Mod rechnet und bucht:
 
@@ -300,3 +300,8 @@ Reiter **Produkte** (Modul „Produkte & Lager“):
   - die **Nummer** aus der Personenliste im Börsenterminal eintippen (z. B. `8`).
   Gibt es das Konto nicht, wird nichts gespeichert und es erscheinen Vorschläge. Konten werden nicht mehr automatisch angelegt.
 - **Übersicht:** zeigt jetzt die gesamten Personalkosten, auch die, die in den sonstigen Ausgaben stecken, dazu jede Gruppe (Anzahl × Lohn), jeden Mitarbeiter mit Lohn und Lohnkonto sowie die laufenden Kosten einzeln.
+
+## Neu in 2.4: Feste Kontonummern
+- Jede Person und Regierung hat eine feste **Kontonummer** (001, 002 …). Bestehende bekommen beim ersten Laden eine Nummer in der Reihenfolge der Liste, neue die nächste freie. Gelöschte Nummern werden nie neu vergeben.
+- Der Knopf an der Hauptbank heißt jetzt **„Konto eröffnen“** und meldet die neue Nummer, z. B. „Kontonummer 013“. An der Hauptbank steht bei Auszahlungen der Name mit Nummer, z. B. „Francis (Konto 013)“. Im Börsenterminal stehen die Nummern vor den Namen.
+- Lohnkonto in der erweiterten Verwaltung: `013`, `13`, den Namen eintippen oder mit » auswählen.

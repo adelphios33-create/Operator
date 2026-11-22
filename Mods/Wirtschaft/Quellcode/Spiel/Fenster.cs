@@ -330,7 +330,7 @@ public class XUiC_WbHauptbank : XUiController
             name = firma.Name; konto = firma.Konto; return true;
         }
         partei = quelle == 1 ? B.RegierungVon(h.Name) : personen[quelle - 2];
-        name = partei.Name; konto = partei.Konto; return true;
+        name = partei.Name + " (Konto " + Bank.KontoText(partei) + ")"; konto = partei.Konto; return true;
     }
 
     Zahlungsmittel Waehrung
@@ -403,7 +403,7 @@ public class XUiC_WbHauptbank : XUiController
             var p = B.ParteiAnlegen(FensterHilfe.Lesen(txtNeu), 0m);
             FensterHilfe.Schreiben(txtNeu, "");
             WirtschaftMod.Speichern();
-            Melden("Partei " + p.Name + " angelegt.");
+            Melden("Konto eröffnet: " + p.Name + ", Kontonummer " + Bank.KontoText(p) + ".");
         }
         catch (WirtschaftsFehler f) { Melden(f.Message); }
     }
@@ -1089,7 +1089,7 @@ public class XUiC_WbBoerse : XUiController
             if (idx < l.Count)
             {
                 var p = l[idx];
-                string t = (idx + 1) + "  " + p.Name;
+                string t = Bank.KontoText(p) + "  " + p.Name;
                 if (B != null && B.IstRegierungspartei(p)) t += B.StaedteVon(p.Name).Count > 0 ? " (Regierung)" : " (Regierung, frei)";
                 if (u != null && (tab == 1 || tab == 2))
                 {
@@ -1484,7 +1484,7 @@ public class XUiC_WbBoerse : XUiController
             person = p.Name;
             seite = Math.Max(0, (B.Stand.Parteien.IndexOf(p)) / Zeilen);
             WirtschaftMod.Speichern();
-            Melden("Person " + p.Name + " angelegt.");
+            Melden("Person " + p.Name + " angelegt, Kontonummer " + Bank.KontoText(p) + ".");
         }
         catch (WirtschaftsFehler f) { Melden(f.Message); }
     }
@@ -1618,7 +1618,7 @@ public class XUiC_WbBoerse : XUiController
             case "wbpersonkonto":
                 {
                     var p = person == "" ? null : bank.ParteiOderNull(person);
-                    _value = p == null ? "" : "Konto: " + FensterHilfe.B(p.Konto) + "\nVermögen (Konto + Anteile): " + FensterHilfe.B(bank.Vermoegen(p));
+                    _value = p == null ? "" : "Kontonummer " + Bank.KontoText(p) + "\nKonto: " + FensterHilfe.B(p.Konto) + "\nVermögen (Konto + Anteile): " + FensterHilfe.B(bank.Vermoegen(p));
                     return true;
                 }
             case "wbpersonanteile":

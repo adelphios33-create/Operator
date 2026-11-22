@@ -86,7 +86,7 @@ namespace Wirtschaft.Kern
         public static readonly AbmArt[] Arten =
         {
             new AbmArt { Art = "Mitarbeiter", Modul = Personal, Titel = "Mitarbeiter", Felder = new[] {
-                T("Name", "Name"), T("Konto", "Lohnkonto (Name/Nr. »)"), T("Position", "Position"), T("Taetigkeit", "Tätigkeit"),
+                T("Name", "Name"), T("Konto", "Lohnkonto (Kontonr./Name »)"), T("Position", "Position"), T("Taetigkeit", "Tätigkeit"),
                 T("Abteilung", "Abteilung"), Z("Lohn", "Lohn / Monat"), W("Status", "Status", "Aktiv", "Beurlaubt", "Deaktiviert"),
                 Z("Eingestellt", "Eingestellt (Spieltag)"), Z("Bonus", "Bonus / Monat"), Z("Provision", "Provision % vom Umsatz"), T("Notiz", "Notiz") } },
             new AbmArt { Art = "Gruppe", Modul = Personal, Titel = "Mitarbeitergruppe", Felder = new[] {

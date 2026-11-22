@@ -218,7 +218,7 @@ public class XUiC_WbAbm : XUiController
             foreach (var e in u.Abm.Where(x => x.Art == "Gruppe" && x.Ist("Status", "Aktiv")))
                 zeilen.Add("  " + Befehle.Betrag(e.Zahl("Anzahl")) + "x " + e.Name + " à " + FensterHilfe.B(e.Zahl("Lohn")) + " = " + FensterHilfe.B(Bank.Runden(e.Zahl("Anzahl") * e.Zahl("Lohn"))) + (e.Ist("InAusgaben", "Ja") ? " (in Ausg.)" : ""));
             foreach (var e in u.Abm.Where(x => x.Art == "Mitarbeiter"))
-                zeilen.Add("  " + e.Name + ": " + FensterHilfe.B(Abm.LohnEinzeln(e, u.UmsatzMonat + vert)) + (e.Hol("Konto").Length > 0 ? " an " + e.Hol("Konto") : " (kein Lohnkonto)") + (e.Ist("Status", "Aktiv") ? "" : ", " + e.Hol("Status")));
+                zeilen.Add("  " + e.Name + ": " + FensterHilfe.B(Abm.LohnEinzeln(e, u.UmsatzMonat + vert)) + (e.Hol("Konto").Length > 0 ? " an " + e.Hol("Konto") + (B.ParteiOderNull(e.Hol("Konto")) != null ? " (" + Bank.KontoText(B.ParteiOderNull(e.Hol("Konto"))) + ")" : "") : " (kein Lohnkonto)") + (e.Ist("Status", "Aktiv") ? "" : ", " + e.Hol("Status")));
             foreach (var z in zeilen.Take(7)) sb.AppendLine(z);
             if (zeilen.Count > 7) sb.AppendLine("  ... und " + (zeilen.Count - 7) + " weitere");
         }
@@ -358,7 +358,7 @@ public class XUiC_WbAbm : XUiController
             string neu = namen[FensterHilfe.Blaettern(kk, 1, namen.Count)];
             feld[i].Text = neu;
             var pn = neu.Length > 0 ? B.ParteiOderNull(neu) : null;
-            Melden(pn == null ? "Kein Lohnkonto gewählt." : "Lohnkonto: " + pn.Name + " (Nr. " + (B.Stand.Parteien.IndexOf(pn) + 1) + ", Konto " + FensterHilfe.B(pn.Konto) + "). Speichern nicht vergessen.");
+            Melden(pn == null ? "Kein Lohnkonto gewählt." : "Lohnkonto: " + pn.Name + " (Konto " + Bank.KontoText(pn) + ", Guthaben " + FensterHilfe.B(pn.Konto) + "). Speichern nicht vergessen.");
             return;
         }
         if (d.Felder[i].Werte == null) return;
@@ -412,7 +412,7 @@ public class XUiC_WbAbm : XUiController
                  + "Erst im Börsenterminal unter Personen (oder an der Hauptbank) anlegen, dann mit » auswählen.";
         }
         if (B.IstRegierungspartei(p)) return p.Name + " ist eine Regierung und kann kein Lohnkonto sein.";
-        if (!string.Equals(k, p.Name, StringComparison.Ordinal)) hinweis = "Lohnkonto: " + p.Name + " (Nr. " + (B.Stand.Parteien.IndexOf(p) + 1) + ").";
+        if (!string.Equals(k, p.Name, StringComparison.Ordinal)) hinweis = "Lohnkonto: " + p.Name + " (Konto " + Bank.KontoText(p) + ").";
         e.Setz("Konto", p.Name);
         return null;
     }
@@ -428,9 +428,9 @@ public class XUiC_WbAbm : XUiController
     {
         text = (text ?? "").Trim();
         if (B == null || text.Length == 0) return null;
-        int nr;
-        if (int.TryParse(text, out nr) && nr >= 1 && nr <= B.Stand.Parteien.Count) return B.Stand.Parteien[nr - 1];
-        var p = B.ParteiOderNull(text);
+        var p = B.ParteiPerNummer(text);
+        if (p != null) return p;
+        p = B.ParteiOderNull(text);
         if (p != null) return p;
         var treffer = B.Stand.Parteien.Where(x => x.Name.StartsWith(text, StringComparison.OrdinalIgnoreCase)).ToList();
         return treffer.Count == 1 ? treffer[0] : null;
