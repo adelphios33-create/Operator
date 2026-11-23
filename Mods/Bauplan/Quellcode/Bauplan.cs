@@ -34,6 +34,17 @@ namespace Bauplan
         public static Prefab Gewaehlt;          // so wie geladen
         public static Prefab Platz;             // gedreht, wird eingefügt
         public static string GewaehltName = "";
+        /// <summary>Datei des gewählten Gebäudes ohne Endung (für das Vorschaubild).</summary>
+        public static string GewaehltPfad = "";
+
+        /// <summary>Vorschaubild: .jpg neben dem Gebäude (Spiel-Gebäude haben eins, eigene Kopien meist nicht).</summary>
+        public static string GewaehltBildPfad()
+        {
+            if (string.IsNullOrEmpty(GewaehltPfad)) return "";
+            foreach (var endung in new[] { ".jpg", ".png" })
+                if (System.IO.File.Exists(GewaehltPfad + endung)) return GewaehltPfad + endung;
+            return "";
+        }
         public static bool GewaehltEigen;
         public static int Drehung;              // 0..3 (×90° im Uhrzeigersinn)
         public static bool MitLuft = true;      // Luftblöcke einfügen = Fläche wird frei geräumt
@@ -202,6 +213,7 @@ namespace Bauplan
                 Gewaehlt = p;
                 GewaehltName = e.Name;
                 GewaehltEigen = e.Eigen;
+                GewaehltPfad = e.Pfad ?? "";
                 Drehung = 0;
                 NeuDrehen();
                 return "Ausgewählt: " + e.Name + " (" + p.size.x + " × " + p.size.z + ", " + p.size.y + " hoch).";

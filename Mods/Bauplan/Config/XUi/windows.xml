@@ -2,15 +2,21 @@
 <append xpath="/windows">
 
 	<!-- ============ BAUPLAN ============ -->
-	<window name="bauplanFenster" pos="-420, 380" width="840" height="760" anchor="CenterCenter" controller="Bauplan, Bauplan" cursor_area="true">
+	<window name="bauplanFenster" pos="-590, 380" width="1180" height="760" anchor="CenterCenter" controller="Bauplan, Bauplan" cursor_area="true">
 		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
 			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_coin"/>
 			<label depth="2" pos="42,-6" width="560" height="32" font_size="32" color="[white]" justify="left" text="BAUPLAN – Gebäude kopieren und einfügen" />
-			<label depth="2" pos="830,-8" width="240" height="32" font_size="24" color="200,200,200" justify="right" pivot="topright" text="{bpmodus}" />
+			<label depth="2" pos="1170,-8" width="240" height="32" font_size="24" color="200,200,200" justify="right" pivot="topright" text="{bpmodus}" />
 		</panel>
-		<rect name="content" pos="0,-46" width="840" height="714" depth="1">
-			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="840" height="714" color="[black]" type="sliced" fillcenter="false" />
-			<sprite depth="1" color="[darkGrey]" type="sliced" width="840" height="714" />
+		<rect name="content" pos="0,-46" width="1180" height="714" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="1180" height="714" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="1180" height="714" />
+
+			<!-- Vorschaubild des gewählten Gebäudes -->
+			<label depth="3" pos="842,-10" width="324" height="30" font_size="28" color="255,170,90" justify="left" text="Vorschau" />
+			<sprite depth="2" pos="840,-42" width="328" height="328" color="26,26,26" type="sliced" />
+			<texture name="bpBild" depth="4" pos="844,-46" width="320" height="320" visible="{bpbildan}" />
+			<label depth="3" pos="850,-180" width="308" height="60" font_size="20" color="160,160,160" justify="center" text="{bpbildtext}" />
 
 			<!-- 1. Markierung speichern -->
 			<label depth="3" pos="14,-10" width="400" height="30" font_size="28" color="255,170,90" justify="left" text="1. Markierte Fläche speichern" />

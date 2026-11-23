@@ -162,6 +162,34 @@ public class XUiC_Bauplan : XUiController
         Melden(Plan.Loeschen(e));
     }
 
+    // ---------- Vorschaubild ----------
+    // Spiel-Gebäude haben neben der .tts ein .jpg (z. B. Data/Prefabs/POIs/hospital_01.jpg). Das wird geladen und angezeigt.
+    string bildFuer = null;
+    bool bildGeladen;
+    UnityEngine.Texture2D bildTex;
+
+    void BildAktualisieren()
+    {
+        string pfad = Plan.Platz == null ? "" : Plan.GewaehltBildPfad();
+        if (pfad == bildFuer) return;
+        bildFuer = pfad;
+        bildGeladen = false;
+        try
+        {
+            var v = GetChildById("bpBild");
+            var tv = v == null ? null : v.ViewComponent as XUiV_Texture;
+            if (tv == null) return;
+            if (bildTex != null) { UnityEngine.Object.Destroy(bildTex); bildTex = null; }
+            if (pfad.Length == 0 || !System.IO.File.Exists(pfad)) { tv.Texture = null; return; }
+            var tex = new UnityEngine.Texture2D(2, 2);
+            if (!UnityEngine.ImageConversion.LoadImage(tex, System.IO.File.ReadAllBytes(pfad))) { UnityEngine.Object.Destroy(tex); tv.Texture = null; return; }
+            bildTex = tex;
+            tv.Texture = tex;
+            bildGeladen = true;
+        }
+        catch (Exception e) { Log.Warning("[Bauplan] Vorschaubild " + pfad + ": " + e.Message); }
+    }
+
     public override bool GetBindingValue(ref string _value, string _bindingName)
     {
         switch (_bindingName)
@@ -181,6 +209,11 @@ public class XUiC_Bauplan : XUiController
                          + "\nGröße: " + Plan.Platz.size.x + " × " + Plan.Platz.size.z + ", " + Plan.Platz.size.y + " hoch"
                          + (Plan.GewaehltEigen || Plan.Platz.yOffset == 0 ? "" : "\nKeller: " + (-Plan.Platz.yOffset) + " Blöcke unter dem Boden")
                          + "\nDrehung: " + Plan.Drehung * 90 + "°";
+                return true;
+            case "bpbildan": BildAktualisieren(); _value = bildGeladen ? "true" : "false"; return true;
+            case "bpbildtext":
+                BildAktualisieren();
+                _value = bildGeladen ? "" : (Plan.Platz == null ? "Gebäude links auswählen" : "Kein Vorschaubild\nfür dieses Gebäude");
                 return true;
             case "bprueck": _value = Plan.KannRueckgaengig ? "true" : "false"; return true;
             case "bpmeldung": _value = Plan.Meldung; return true;

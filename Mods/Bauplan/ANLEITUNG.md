@@ -57,3 +57,6 @@ Holen: `giveself bauplanAbriss` oder craften (1 Holz). Rote Spitzhacke.
 - Einfügen ist kostenlos, wie im Kreativmodus.
 - Eingefügte Spiel-Gebäude bekommen keine Schläfer-Zombies und keine Quests; es sind nur die Blöcke.
 - Große Gebäude (über 100 Blöcke) können kurz ruckeln.
+
+## Neu in 1.3: Vorschaubild
+Rechts im Bauplan-Fenster steht jetzt ein Bild des gewählten Gebäudes. Spiel-Gebäude bringen eins mit (z. B. `Data/Prefabs/POIs/hospital_01.jpg`). Eigene Kopien haben meist keins. Legst du ein Bild mit gleichem Namen als `.jpg` oder `.png` neben die gespeicherte Kopie, wird es ebenfalls angezeigt.
