@@ -75,6 +75,7 @@ public class XUiC_Bauplan : XUiController
             Knopf("btnL" + i, (s, m) => Waehlen(k));
         }
         Knopf("btnDrehen", (s, m) => { Plan.Drehen(); Neu(); });
+        Knopf("btnBoden", (s, m) => Melden(Plan.BodenReparieren()));
         Knopf("btnLuft", (s, m) => { Plan.MitLuft = !Plan.MitLuft; Neu(); });
         Knopf("btnKeller", (s, m) => { Plan.MitKeller = !Plan.MitKeller; Neu(); });
         btnZombies = GetChildById("btnZombies") as XUiC_SimpleButton;

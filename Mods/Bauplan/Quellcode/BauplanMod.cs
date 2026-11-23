@@ -79,6 +79,7 @@ namespace Bauplan
             "bau                       Stand und Fenster öffnen\n" +
             "bau ecke1 / bau ecke2     Ecke auf den Block setzen, auf den du schaust\n" +
             "bau kopieren <Name>       Markierung als eigenes Gebäude speichern\n" +
+            "bau boden                 Boden unter eingefügtem Gebäude reparieren (terrainFiller)\n" +
             "bau liste [Suche]         Gebäude suchen (eigene zuerst)\n" +
             "bau waehlen <Name>        Gebäude zum Einfügen auswählen\n" +
             "bau platzieren            Platzieren mit dem Werkzeug starten\n" +
@@ -124,6 +125,7 @@ namespace Bauplan
                 case "abbrechen": Plan.Abbrechen(); antwort = "Platzieren beendet."; break;
                 case "rueckgaengig": case "rückgängig": antwort = Plan.Rueckgaengig(); break;
                 case "leeren": antwort = Plan.FlaecheLeeren(rest.Trim().ToLowerInvariant() == "alles"); break;
+                case "boden": antwort = Plan.BodenReparieren(); break;
                 case "abrissrueck": Abriss.Zurueck(sp); antwort = Plan.Meldung; break;
                 default: antwort = Hilfe; break;
             }

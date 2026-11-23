@@ -17,6 +17,8 @@
 			<sprite depth="2" pos="840,-42" width="328" height="328" color="26,26,26" type="sliced" />
 			<texture name="bpBild" depth="4" pos="844,-46" width="320" height="320" visible="{bpbildan}" />
 			<label depth="3" pos="850,-180" width="308" height="60" font_size="20" color="160,160,160" justify="center" text="{bpbildtext}" />
+			<simplebutton name="btnBoden" depth="3" pos="840,-384" width="328" height="38" font_size="20" caption="Boden reparieren" />
+			<label depth="3" pos="842,-428" width="326" height="90" font_size="16" color="180,180,180" justify="left" text="Rutscht nach dem Einfügen Erde nach? Gebäude markieren (oder direkt nach dem Einfügen) und hier drücken: Platzhalter werden zu Erde." />
 
 			<!-- 1. Markierung speichern -->
 			<label depth="3" pos="14,-10" width="400" height="30" font_size="28" color="255,170,90" justify="left" text="1. Markierte Fläche speichern" />

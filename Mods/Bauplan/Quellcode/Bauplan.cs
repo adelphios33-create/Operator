@@ -325,7 +325,10 @@ namespace Bauplan
                     Platz.SleeperVolumes.Clear();
                     Platz.TriggerVolumes.Clear();
                 }
+                int fueller = FuellerErsetzen(Platz, alt);
                 Platz.CopyIntoRPC(GameManager.Instance, ziel, MitLuft);
+                letztesEinfuegen = ziel; letzteGroesse = Platz.size; hatLetztes = true;
+                if (fueller > 0) Log.Out("[Bauplan] " + fueller + " terrainFiller-Blöcke durch Boden ersetzt.");
                 if (zombies > 0) Log.Out("[Bauplan] " + zombies + " Zombie-Zonen von " + GewaehltName + " entfernt.");
                 Log.Out("[Bauplan] Eingefügt: " + GewaehltName + " bei " + Pos(ziel) + ", Drehung " + Drehung * 90 + "°");
                 return GewaehltName + " eingefügt bei " + Pos(ziel) + ". Rückgängig im Fenster oder mit 'bau rueckgaengig'.";
@@ -335,6 +338,69 @@ namespace Bauplan
                 Log.Error("[Bauplan] Einfügen fehlgeschlagen: " + e);
                 return "Einfügen fehlgeschlagen: " + e.Message;
             }
+        }
+
+        // ---------- Platzhalter "terrainFiller" ----------
+        // Spiel-Gebäude enthalten "terrainFiller" = "hier gehört Gelände hin". Beim Erzeugen der Welt ersetzt das Spiel
+        // ihn durch Boden; beim Einfügen muss das der Bauplan tun, sonst hat die Erde darüber keinen Halt und rieselt nach.
+
+        static Vector3i letztesEinfuegen, letzteGroesse;
+        static bool hatLetztes;
+
+        static bool IstFueller(BlockValue b)
+        {
+            if (b.isair || b.Block == null) return false;
+            string n = b.Block.GetBlockName() ?? "";
+            return n.StartsWith("terrainFiller", StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>Ersetzt im Prefab alle terrainFiller durch den Block, der vorher in der Welt war; war dort nichts, durch Erde.</summary>
+        static int FuellerErsetzen(Prefab p, Prefab welt)
+        {
+            int n = 0;
+            BlockValue erde = Block.GetBlockValue("terrDirt");
+            var s = p.size;
+            for (int x = 0; x < s.x; x++)
+                for (int y = 0; y < s.y; y++)
+                    for (int z = 0; z < s.z; z++)
+                    {
+                        if (!IstFueller(p.GetBlock(x, y, z))) continue;
+                        BlockValue alt = welt != null ? welt.GetBlock(x, y, z) : BlockValue.Air;
+                        if (alt.isair || IstFueller(alt)) { p.SetBlock(x, y, z, erde); p.SetDensity(x, y, z, MarchingCubes.DensityTerrain); }
+                        else { p.SetBlock(x, y, z, alt); p.SetDensity(x, y, z, welt.GetDensity(x, y, z)); }
+                        n++;
+                    }
+            return n;
+        }
+
+        /// <summary>Repariert schon eingefügte Gebäude: terrainFiller im letzten Einfügebereich (oder in der Markierung) werden zu Erde.</summary>
+        public static string BodenReparieren()
+        {
+            var w = Welt;
+            if (w == null) return "Keine Welt.";
+            Vector3i a, b;
+            if (HatEcke1 && HatEcke2) Min(out a, out b);
+            else if (hatLetztes) { a = letztesEinfuegen; b = new Vector3i(a.x + letzteGroesse.x - 1, a.y + letzteGroesse.y - 1, a.z + letzteGroesse.z - 1); }
+            else return "Erst das Gebäude mit dem Werkzeug markieren (Linksklick / Rechtsklick auf zwei Ecken), dann nochmal.";
+            long vol = (long)(b.x - a.x + 1) * (b.y - a.y + 1) * (b.z - a.z + 1);
+            if (vol > MaxLeeren) return "Bereich zu groß (" + vol + " Blöcke).";
+            if (!Geladen(a, b)) return "Ein Teil des Bereichs ist nicht geladen. Geh näher heran.";
+            BlockValue erde = Block.GetBlockValue("terrDirt");
+            var liste = new List<BlockChangeInfo>();
+            int n = 0;
+            for (int x = a.x; x <= b.x; x++)
+                for (int y = a.y; y <= b.y; y++)
+                    for (int z = a.z; z <= b.z; z++)
+                    {
+                        var q = new Vector3i(x, y, z);
+                        if (!IstFueller(w.GetBlock(q))) continue;
+                        liste.Add(new BlockChangeInfo(0, q, erde, MarchingCubes.DensityTerrain));
+                        n++;
+                        if (liste.Count >= 20000) { w.SetBlocksRPC(liste); liste = new List<BlockChangeInfo>(); }
+                    }
+            if (liste.Count > 0) w.SetBlocksRPC(liste);
+            Log.Out("[Bauplan] Boden repariert: " + n + " terrainFiller in " + Pos(a) + " bis " + Pos(b));
+            return n == 0 ? "Keine Platzhalter gefunden, der Boden ist in Ordnung." : n + " Platzhalter durch Erde ersetzt. Das Nachrutschen sollte aufhören.";
         }
 
         // ---------- Fläche leeren (Gebäude entfernen) ----------

@@ -63,3 +63,6 @@ Rechts im Bauplan-Fenster steht jetzt ein Bild des gewählten Gebäudes. Spiel-G
 
 ## Neu in 1.4: Ohne Zombies einfügen
 Knopf **„Zombies: AUS (keine)“** (Standard): Beim Einfügen werden die Schläfer-Zonen des Gebäudes und ihre Auslöser entfernt, im Krankenhaus wacht also niemand auf. Zum Umschalten draufdrücken, dann „Zombies: AN (wie im Spiel)“. Nur das Einfügen ist betroffen, die Gebäudedatei bleibt unverändert. Zombies, die von außen herumlaufen (normale Spawns, Horden), verhindert das nicht.
+
+## 1.4.1: Erde rutscht nicht mehr nach
+Spiel-Gebäude enthalten „terrainFiller“, Platzhalter für Gelände. Beim Einfügen werden sie jetzt durch den Boden ersetzt, der vorher da war, oder durch Erde, wenn dort nichts war. Für schon eingefügte Gebäude: das Gebäude mit dem Werkzeug markieren und im Fenster **„Boden reparieren“** drücken, oder `bau boden` in die Konsole eingeben. Direkt nach einem Einfügen geht es auch ohne Markierung.
