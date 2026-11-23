@@ -60,3 +60,6 @@ Holen: `giveself bauplanAbriss` oder craften (1 Holz). Rote Spitzhacke.
 
 ## Neu in 1.3: Vorschaubild
 Rechts im Bauplan-Fenster steht jetzt ein Bild des gewählten Gebäudes. Spiel-Gebäude bringen eins mit (z. B. `Data/Prefabs/POIs/hospital_01.jpg`). Eigene Kopien haben meist keins. Legst du ein Bild mit gleichem Namen als `.jpg` oder `.png` neben die gespeicherte Kopie, wird es ebenfalls angezeigt.
+
+## Neu in 1.4: Ohne Zombies einfügen
+Knopf **„Zombies: AUS (keine)“** (Standard): Beim Einfügen werden die Schläfer-Zonen des Gebäudes und ihre Auslöser entfernt, im Krankenhaus wacht also niemand auf. Zum Umschalten draufdrücken, dann „Zombies: AN (wie im Spiel)“. Nur das Einfügen ist betroffen, die Gebäudedatei bleibt unverändert. Zombies, die von außen herumlaufen (normale Spawns, Horden), verhindert das nicht.

@@ -48,7 +48,8 @@ namespace Bauplan
         public static bool GewaehltEigen;
         public static int Drehung;              // 0..3 (×90° im Uhrzeigersinn)
         public static bool MitLuft = true;      // Luftblöcke einfügen = Fläche wird frei geräumt
-        public static bool MitKeller = true;    // yOffset der Spiel-Prefabs anwenden (Keller im Boden)
+        public static bool MitKeller = true;
+        public static bool OhneZombies = true;  // Schläfer-Zonen (Zombies) des Gebäudes beim Einfügen entfernen    // yOffset der Spiel-Prefabs anwenden (Keller im Boden)
 
         public static bool HatZiel;
         public static Vector3i Ziel;            // linke untere Ecke beim Einfügen
@@ -316,7 +317,16 @@ namespace Bauplan
                 alt.copyFromWorld(w, ziel, ende);
                 rueck = alt;
                 rueckPos = ziel;
+                int zombies = 0;
+                if (OhneZombies)
+                {
+                    // Schläfer-Zonen und ihre Auslöser entfernen: im eingefügten Gebäude wachen keine Zombies auf
+                    zombies = Platz.SleeperVolumes.Count;
+                    Platz.SleeperVolumes.Clear();
+                    Platz.TriggerVolumes.Clear();
+                }
                 Platz.CopyIntoRPC(GameManager.Instance, ziel, MitLuft);
+                if (zombies > 0) Log.Out("[Bauplan] " + zombies + " Zombie-Zonen von " + GewaehltName + " entfernt.");
                 Log.Out("[Bauplan] Eingefügt: " + GewaehltName + " bei " + Pos(ziel) + ", Drehung " + Drehung * 90 + "°");
                 return GewaehltName + " eingefügt bei " + Pos(ziel) + ". Rückgängig im Fenster oder mit 'bau rueckgaengig'.";
             }

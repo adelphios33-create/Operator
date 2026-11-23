@@ -14,7 +14,7 @@ public class XUiC_Bauplan : XUiController
     const int Zeilen = 8;
 
     XUiC_TextInput txtName, txtSuche;
-    XUiC_SimpleButton btnFilter, btnDrehen, btnLuft, btnKeller, btnKopieren;
+    XUiC_SimpleButton btnFilter, btnDrehen, btnLuft, btnKeller, btnKopieren, btnZombies;
     readonly XUiC_SimpleButton[] zeile = new XUiC_SimpleButton[Zeilen];
     int filter;          // 0 alle, 1 eigene, 2 Spiel
     int seite;
@@ -77,6 +77,8 @@ public class XUiC_Bauplan : XUiController
         Knopf("btnDrehen", (s, m) => { Plan.Drehen(); Neu(); });
         Knopf("btnLuft", (s, m) => { Plan.MitLuft = !Plan.MitLuft; Neu(); });
         Knopf("btnKeller", (s, m) => { Plan.MitKeller = !Plan.MitKeller; Neu(); });
+        btnZombies = GetChildById("btnZombies") as XUiC_SimpleButton;
+        Knopf("btnZombies", (s, m) => { Plan.OhneZombies = !Plan.OhneZombies; Neu(); });
         Knopf("btnPlatzieren", (s, m) => Platzieren());
         Knopf("btnAblage", (s, m) => Melden(Plan.Platz == null ? "Erst ein Gebäude auswählen." :
             (Plan.InZwischenablage(Plan.Platz) ? Plan.GewaehltName + " liegt in der Zwischenablage. Werkzeug in die Hand, Rahmen setzen, Strg+V." : "Zwischenablage nicht verfügbar.")));
@@ -101,6 +103,7 @@ public class XUiC_Bauplan : XUiController
         if (btnDrehen != null) btnDrehen.Text = "Drehen: " + Plan.Drehung * 90 + "°";
         if (btnLuft != null) btnLuft.Text = "Fläche freiräumen: " + (Plan.MitLuft ? "AN" : "AUS");
         if (btnKeller != null) btnKeller.Text = "Keller einsenken: " + (Plan.MitKeller ? "AN" : "AUS");
+        if (btnZombies != null) btnZombies.Text = Plan.OhneZombies ? "Zombies: AUS (keine)" : "Zombies: AN (wie im Spiel)";
         var l = Gefiltert();
         int seiten = Math.Max(1, (l.Count + Zeilen - 1) / Zeilen);
         if (seite >= seiten) seite = seiten - 1;

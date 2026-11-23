@@ -51,8 +51,9 @@
 			<label depth="3" pos="80,-630" width="374" height="30" font_size="22" color="200,200,200" justify="center" text="{bpseite}" />
 			<simplebutton name="btnVor" depth="3" pos="454,-626" width="60" height="36" font_size="28" caption="&gt;" />
 
-			<sprite depth="2" pos="524,-302" width="302" height="150" color="26,26,26" type="sliced" />
-			<label depth="3" pos="532,-308" width="288" height="138" font_size="20" color="[white]" justify="left" text="{bpauswahl}" />
+			<sprite depth="2" pos="524,-302" width="302" height="112" color="26,26,26" type="sliced" />
+			<simplebutton name="btnZombies" depth="3" pos="524,-420" width="302" height="36" font_size="20" caption="Zombies: AUS (keine)" />
+			<label depth="3" pos="532,-306" width="288" height="104" font_size="18" color="[white]" justify="left" text="{bpauswahl}" />
 			<simplebutton name="btnDrehen" depth="3" pos="524,-462" width="302" height="36" font_size="22" caption="Drehen: 0°" />
 			<simplebutton name="btnLuft" depth="3" pos="524,-502" width="302" height="36" font_size="20" caption="Fläche freiräumen: AN" />
 			<simplebutton name="btnKeller" depth="3" pos="524,-542" width="302" height="36" font_size="20" caption="Keller einsenken: AN" />
