@@ -4,7 +4,7 @@
 	<DisplayName value="Bauplan - Gebaeude kopieren und einfuegen" />
 	<Description value="Werkzeug zum Markieren, Kopieren, Speichern und Einfuegen von Gebaeuden (eigene Kopien und Spiel-Prefabs) im laufenden Spiel, plus Abriss-Werkzeug." />
 	<Author value="Adelphios und Claude" />
-	<Version value="1.5.1" />
+	<Version value="1.5.2" />
 	<Website value="" />
 	<SkipWithAntiCheat value="true" />
 </xml>

@@ -79,3 +79,6 @@ Konsole: `bau fuellen beton` (oder stahl, ziegel, kopfstein, holz), 2x eingeben.
 
 ## 1.5.1: Textur beim Füllen
 Unter Material/Fläche füllen: **&lt; Textur &gt;** blättert durch alle Texturen des Farbrollers (156 Stück), **Gruppe** schränkt ein (Holz, Mauerwerk, Metall …), das Feld rechts sucht nach Namen. Textur anklicken = zurück auf Standard. Beim Füllen bekommen alle neuen Blöcke auf allen Seiten diese Textur. Konsole: `bau textur Ziegel`.
+
+## 1.5.2: Textur-Vorschau
+Sobald du mit &lt; &gt;, Gruppe oder Suche eine Textur wählst, zeigt das Vorschau-Feld oben rechts die Textur groß mit Namen (wie im Farbroller-Menü). Wählst du links wieder ein Gebäude oder klickst die Textur auf Standard, kommt das Gebäudebild zurück.

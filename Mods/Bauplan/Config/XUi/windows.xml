@@ -13,9 +13,11 @@
 			<sprite depth="1" color="[darkGrey]" type="sliced" width="1180" height="778" />
 
 			<!-- Vorschaubild des gewählten Gebäudes -->
-			<label depth="3" pos="842,-10" width="324" height="30" font_size="28" color="255,170,90" justify="left" text="Vorschau" />
+			<label depth="3" pos="842,-10" width="324" height="30" font_size="28" color="255,170,90" justify="left" text="{bpvorschau}" />
 			<sprite depth="2" pos="840,-42" width="328" height="328" color="26,26,26" type="sliced" />
 			<texture name="bpBild" depth="4" pos="844,-46" width="320" height="320" visible="{bpbildan}" />
+			<texture name="bpTex" depth="4" pos="844,-46" width="320" height="320" material="Materials/Transparent Colored" globalopacity="false" visible="{bptexan}" />
+			<label depth="5" pos="846,-338" width="316" height="26" font_size="20" color="[white]" justify="center" effect="outline" text="{bptexname}" />
 			<label depth="3" pos="850,-180" width="308" height="60" font_size="20" color="160,160,160" justify="center" text="{bpbildtext}" />
 			<simplebutton name="btnBoden" depth="3" pos="840,-384" width="328" height="38" font_size="20" caption="Boden reparieren" />
 			<simplebutton name="btnAuffuellen" depth="3" pos="840,-428" width="162" height="38" font_size="18" caption="Auffüllen: Erde" />

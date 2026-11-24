@@ -84,11 +84,11 @@ public class XUiC_Bauplan : XUiController
         btnTextur = GetChildById("btnTextur") as XUiC_SimpleButton;
         btnTexGruppe = GetChildById("btnTexGruppe") as XUiC_SimpleButton;
         txtTextur = GetChildById("txtTextur") as XUiC_TextInput;
-        Knopf("btnTexZurueck", (s, m) => { Plan.TexturWeiter(-1, TexturSuche()); Neu(); });
-        Knopf("btnTexVor", (s, m) => { Plan.TexturWeiter(1, TexturSuche()); Neu(); });
-        Knopf("btnTextur", (s, m) => { Plan.TexturId = 0; Neu(); Melden("Textur: Standard (wie das Material normal aussieht)."); });
-        Knopf("btnTexGruppe", (s, m) => { Plan.GruppeWeiter(); Neu(); });
-        if (txtTextur != null) txtTextur.OnChangeHandler += (s, t, c) => { Plan.TexturId = 0; Plan.TexturWeiter(1, TexturSuche()); Neu(); };
+        Knopf("btnTexZurueck", (s, m) => { Plan.TexturWeiter(-1, TexturSuche()); TexturGewechselt(); });
+        Knopf("btnTexVor", (s, m) => { Plan.TexturWeiter(1, TexturSuche()); TexturGewechselt(); });
+        Knopf("btnTextur", (s, m) => { Plan.TexturId = 0; TexturGewechselt(); Melden("Textur: Standard (wie das Material normal aussieht)."); });
+        Knopf("btnTexGruppe", (s, m) => { Plan.GruppeWeiter(); Plan.TexturWeiter(1, TexturSuche()); TexturGewechselt(); });
+        if (txtTextur != null) txtTextur.OnChangeHandler += (s, t, c) => { Plan.TexturId = 0; Plan.TexturWeiter(1, TexturSuche()); TexturGewechselt(); };
         Knopf("btnLuft", (s, m) => { Plan.MitLuft = !Plan.MitLuft; Neu(); });
         Knopf("btnKeller", (s, m) => { Plan.MitKeller = !Plan.MitKeller; Neu(); });
         btnZombies = GetChildById("btnZombies") as XUiC_SimpleButton;
@@ -152,6 +152,7 @@ public class XUiC_Bauplan : XUiController
         if (idx >= l.Count) return;
         markiert = idx;
         loeschName = "";
+        texVorschau = false;
         Melden(Plan.Waehlen(l[idx]));
     }
 
@@ -182,6 +183,50 @@ public class XUiC_Bauplan : XUiController
         loeschName = "";
         markiert = -1;
         Melden(Plan.Loeschen(e));
+    }
+
+    // ---------- Textur-Vorschau ----------
+    // Wie im Farbroller-Menü (XUiC_MaterialStack): Block-Atlas als Textur, bei Texture-Array Index/Größe ans Material.
+    bool texVorschau;
+    int texFuer = -1;
+    bool texGeladen;
+
+    void TexturGewechselt()
+    {
+        texVorschau = Plan.TexturId > 0;
+        Neu();
+    }
+
+    void TexturAktualisieren()
+    {
+        int id = texVorschau ? Plan.TexturId : 0;
+        if (id == texFuer) return;
+        texFuer = id;
+        texGeladen = false;
+        try
+        {
+            var v = GetChildById("bpTex");
+            var tv = v == null ? null : v.ViewComponent as XUiV_Texture;
+            if (tv == null || id <= 0) return;
+            var alle = BlockTextureData.list;
+            if (alle == null || id >= alle.Length || alle[id] == null) return;
+            int tid = alle[id].TextureID;
+            var mesh = MeshDescription.meshes[0];
+            var atlas = mesh == null ? null : mesh.textureAtlas;
+            if (atlas == null || atlas.uvMapping == null || tid < 0 || tid >= atlas.uvMapping.Length) return;
+            var map = atlas.uvMapping[tid];
+            tv.CreateMaterial();
+            tv.Texture = atlas.diffuseTexture;
+            if (mesh.bTextureArray)
+            {
+                tv.Material.SetTexture("_BumpMap", atlas.normalTexture);
+                tv.Material.SetFloat("_Index", map.index);
+                tv.Material.SetFloat("_Size", map.blockW);
+            }
+            tv.UVRect = map.uv;
+            texGeladen = true;
+        }
+        catch (Exception e) { Log.Warning("[Bauplan] Textur-Vorschau " + id + ": " + e.Message); }
     }
 
     // ---------- Vorschaubild ----------
@@ -232,9 +277,14 @@ public class XUiC_Bauplan : XUiController
                          + (Plan.GewaehltEigen || Plan.Platz.yOffset == 0 ? "" : "\nKeller: " + (-Plan.Platz.yOffset) + " Blöcke unter dem Boden")
                          + "\nDrehung: " + Plan.Drehung * 90 + "°";
                 return true;
-            case "bpbildan": BildAktualisieren(); _value = bildGeladen ? "true" : "false"; return true;
+            case "bptexan": TexturAktualisieren(); _value = texVorschau && texGeladen ? "true" : "false"; return true;
+            case "bptexname": _value = texVorschau ? Plan.TexturText() : ""; return true;
+            case "bpvorschau": _value = texVorschau ? "Vorschau: Textur" : "Vorschau"; return true;
+            case "bpbildan": BildAktualisieren(); _value = bildGeladen && !texVorschau ? "true" : "false"; return true;
             case "bpbildtext":
                 BildAktualisieren();
+                TexturAktualisieren();
+                if (texVorschau) { _value = texGeladen ? "" : "Textur-Bild nicht verfügbar"; return true; }
                 _value = bildGeladen ? "" : (Plan.Platz == null ? "Gebäude links auswählen" : "Kein Vorschaubild\nfür dieses Gebäude");
                 return true;
             case "bprueck": _value = Plan.KannRueckgaengig ? "true" : "false"; return true;
