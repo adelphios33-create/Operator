@@ -404,9 +404,13 @@ namespace Bauplan
         }
 
         static float fuellenBis;
+        static bool fuellenAsphalt;
 
         /// <summary>Füllt in der Markierung alle Löcher (Luft und Platzhalter) bis zur Höhe der oberen Ecke mit Erde. Zwei Klicks, Rückgängig geht.</summary>
-        public static string BodenAuffuellen()
+        public static string BodenAuffuellen() { return BodenAuffuellen(false); }
+
+        /// <summary>asphalt = true: Löcher werden Erde, die oberste Schicht (Höhe der oberen Ecke) wird komplett Asphalt – für Straßen und Plätze.</summary>
+        public static string BodenAuffuellen(bool asphalt)
         {
             var w = Welt;
             if (w == null) return "Keine Welt geladen.";
@@ -419,10 +423,14 @@ namespace Bauplan
             if (volumen > MaxLeeren) return "Zu groß: höchstens " + MaxLeeren.ToString("N0") + " Blöcke auf einmal (markiert: " + volumen.ToString("N0") + "). Bitte in Teilen auffüllen.";
             if (!Geladen(a, b)) return "Ein Teil der Fläche ist nicht geladen. Geh näher heran und versuch es noch einmal.";
             float jetzt = Time.time;
-            if (jetzt > fuellenBis)
+            if (jetzt > fuellenBis || fuellenAsphalt != asphalt)
             {
                 fuellenBis = jetzt + 5f;
-                return "Alle Löcher im Rahmen bis Höhe " + b.y + " mit Erde füllen? Zum Bestätigen innerhalb von 5 Sekunden nochmal drücken. Danach geht 'Rückgängig'.";
+                fuellenAsphalt = asphalt;
+                return (asphalt
+                    ? "Löcher bis Höhe " + b.y + " mit Erde füllen und die oberste Schicht (Höhe " + b.y + ") komplett zu Asphalt machen?"
+                    : "Alle Löcher im Rahmen bis Höhe " + b.y + " mit Erde füllen?")
+                    + " Zum Bestätigen innerhalb von 5 Sekunden nochmal drücken. Danach geht 'Rückgängig'.";
             }
             fuellenBis = 0f;
             try
@@ -434,6 +442,8 @@ namespace Bauplan
                 rueckPos = a;
 
                 BlockValue erde = Block.GetBlockValue("terrDirt");
+                BlockValue belag = asphalt ? Block.GetBlockValue("terrAsphalt") : erde;
+                if (asphalt && belag.isair) return "Asphalt-Block (terrAsphalt) nicht gefunden.";
                 var liste = new List<BlockChangeInfo>();
                 int n = 0;
                 for (int x = a.x; x <= b.x; x++)
@@ -442,15 +452,18 @@ namespace Bauplan
                         {
                             var q = new Vector3i(x, y, z);
                             BlockValue bv = w.GetBlock(q);
-                            if (!bv.isair && !IstFueller(bv)) continue;
-                            liste.Add(new BlockChangeInfo(0, q, erde, MarchingCubes.DensityTerrain));
+                            bool oben = asphalt && y == b.y;
+                            bool gelaende = !bv.isair && bv.Block != null && bv.Block.shape != null && bv.Block.shape.IsTerrain();
+                            if (oben) { if (!bv.isair && !IstFueller(bv) && !gelaende) continue; if (bv.type == belag.type) continue; }
+                            else if (!bv.isair && !IstFueller(bv)) continue;
+                            liste.Add(new BlockChangeInfo(0, q, oben ? belag : erde, MarchingCubes.DensityTerrain));
                             n++;
                             if (liste.Count >= 20000) { w.SetBlocksRPC(liste); liste = new List<BlockChangeInfo>(); }
                         }
                 if (liste.Count > 0) w.SetBlocksRPC(liste);
-                Log.Out("[Bauplan] Boden aufgefüllt: " + n + " Blöcke in " + Pos(a) + " bis " + Pos(b));
+                Log.Out("[Bauplan] " + (asphalt ? "Asphalt" : "Boden") + " aufgefüllt: " + n + " Blöcke in " + Pos(a) + " bis " + Pos(b));
                 if (n == 0) { rueck = null; return "Keine Löcher gefunden."; }
-                return n.ToString("N0") + " Blöcke Erde aufgefüllt bis Höhe " + b.y + ". 'Rückgängig' nimmt es zurück.";
+                return n.ToString("N0") + (asphalt ? " Blöcke aufgefüllt, oben Asphalt auf Höhe " : " Blöcke Erde aufgefüllt bis Höhe ") + b.y + ". 'Rückgängig' nimmt es zurück.";
             }
             catch (Exception e)
             {

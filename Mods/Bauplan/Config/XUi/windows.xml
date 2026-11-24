@@ -18,8 +18,9 @@
 			<texture name="bpBild" depth="4" pos="844,-46" width="320" height="320" visible="{bpbildan}" />
 			<label depth="3" pos="850,-180" width="308" height="60" font_size="20" color="160,160,160" justify="center" text="{bpbildtext}" />
 			<simplebutton name="btnBoden" depth="3" pos="840,-384" width="328" height="38" font_size="20" caption="Boden reparieren" />
-			<simplebutton name="btnAuffuellen" depth="3" pos="840,-428" width="328" height="38" font_size="20" caption="Grube auffüllen" />
-			<label depth="3" pos="842,-472" width="326" height="80" font_size="16" color="180,180,180" justify="left" text="Boden reparieren: Platzhalter werden Erde. Grube auffüllen: eine Ecke unten in der Grube, andere oben auf Straßenhöhe, 2x drücken." />
+			<simplebutton name="btnAuffuellen" depth="3" pos="840,-428" width="162" height="38" font_size="18" caption="Auffüllen: Erde" />
+			<simplebutton name="btnAsphalt" depth="3" pos="1006,-428" width="162" height="38" font_size="18" caption="Auffüllen: Asphalt" />
+			<label depth="3" pos="842,-472" width="326" height="90" font_size="16" color="180,180,180" justify="left" text="Ecke 1 unten in der Grube, Ecke 2 oben auf Straßenhöhe, 2x drücken. Erde: Löcher werden Erde. Asphalt: Löcher Erde, oberste Schicht Asphalt (Straßen)." />
 
 			<!-- 1. Markierung speichern -->
 			<label depth="3" pos="14,-10" width="400" height="30" font_size="28" color="255,170,90" justify="left" text="1. Markierte Fläche speichern" />

@@ -69,3 +69,6 @@ Spiel-Gebäude enthalten „terrainFiller“, Platzhalter für Gelände. Beim Ei
 
 ## 1.4.2: Grube auffüllen
 Neuer Knopf **Grube auffüllen** (Konsole: `bau auffuellen`). Markiere eine Ecke unten in der Grube und die gegenüberliegende Ecke oben auf der gewünschten Bodenhöhe (z. B. Straße). Zweimal drücken: alle Luftlöcher und Platzhalter im Rahmen werden bis zur oberen Ecke mit Erde gefüllt. Gebäude- und Restblöcke bleiben stehen. Rückgängig geht.
+
+## 1.4.3: Asphalt auffüllen
+Der Knopf heißt jetzt **Auffüllen: Erde**, daneben **Auffüllen: Asphalt** (Konsole: `bau asphalt`). Asphalt füllt Löcher wie gewohnt mit Erde, macht aber die oberste Schicht (Höhe der oberen Ecke) im ganzen Rahmen zu Asphalt, auch dort, wo schon Erde, Sand oder Schutt liegt. Gebäudeblöcke bleiben. Rückgängig geht. Für eine Straße: Rahmen so breit wie die Straße, Ecke 2 auf Straßenhöhe.
