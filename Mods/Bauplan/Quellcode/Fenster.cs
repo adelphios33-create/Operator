@@ -13,8 +13,8 @@ public class XUiC_Bauplan : XUiController
     public const string Gruppe = "bauplan";
     const int Zeilen = 8;
 
-    XUiC_TextInput txtName, txtSuche;
-    XUiC_SimpleButton btnFilter, btnDrehen, btnLuft, btnKeller, btnKopieren, btnZombies, btnMaterial;
+    XUiC_TextInput txtName, txtSuche, txtTextur;
+    XUiC_SimpleButton btnFilter, btnDrehen, btnLuft, btnKeller, btnKopieren, btnZombies, btnMaterial, btnTextur, btnTexGruppe;
     readonly XUiC_SimpleButton[] zeile = new XUiC_SimpleButton[Zeilen];
     int filter;          // 0 alle, 1 eigene, 2 Spiel
     int seite;
@@ -81,6 +81,14 @@ public class XUiC_Bauplan : XUiController
         btnMaterial = GetChildById("btnMaterial") as XUiC_SimpleButton;
         Knopf("btnMaterial", (s, m) => { Plan.MaterialWeiter(); Neu(); });
         Knopf("btnFuellen", (s, m) => Melden(Plan.FlaecheFuellen()));
+        btnTextur = GetChildById("btnTextur") as XUiC_SimpleButton;
+        btnTexGruppe = GetChildById("btnTexGruppe") as XUiC_SimpleButton;
+        txtTextur = GetChildById("txtTextur") as XUiC_TextInput;
+        Knopf("btnTexZurueck", (s, m) => { Plan.TexturWeiter(-1, TexturSuche()); Neu(); });
+        Knopf("btnTexVor", (s, m) => { Plan.TexturWeiter(1, TexturSuche()); Neu(); });
+        Knopf("btnTextur", (s, m) => { Plan.TexturId = 0; Neu(); Melden("Textur: Standard (wie das Material normal aussieht)."); });
+        Knopf("btnTexGruppe", (s, m) => { Plan.GruppeWeiter(); Neu(); });
+        if (txtTextur != null) txtTextur.OnChangeHandler += (s, t, c) => { Plan.TexturId = 0; Plan.TexturWeiter(1, TexturSuche()); Neu(); };
         Knopf("btnLuft", (s, m) => { Plan.MitLuft = !Plan.MitLuft; Neu(); });
         Knopf("btnKeller", (s, m) => { Plan.MitKeller = !Plan.MitKeller; Neu(); });
         btnZombies = GetChildById("btnZombies") as XUiC_SimpleButton;
@@ -110,6 +118,8 @@ public class XUiC_Bauplan : XUiController
         if (btnLuft != null) btnLuft.Text = "Fläche freiräumen: " + (Plan.MitLuft ? "AN" : "AUS");
         if (btnKeller != null) btnKeller.Text = "Keller einsenken: " + (Plan.MitKeller ? "AN" : "AUS");
         if (btnMaterial != null) btnMaterial.Text = "Material: " + Plan.MaterialNamen[Plan.Material];
+        if (btnTextur != null) btnTextur.Text = "Textur: " + Plan.TexturText();
+        if (btnTexGruppe != null) btnTexGruppe.Text = "Gruppe: " + Plan.GruppeText();
         if (btnZombies != null) btnZombies.Text = Plan.OhneZombies ? "Zombies: AUS (keine)" : "Zombies: AN (wie im Spiel)";
         var l = Gefiltert();
         int seiten = Math.Max(1, (l.Count + Zeilen - 1) / Zeilen);
@@ -124,6 +134,8 @@ public class XUiC_Bauplan : XUiController
     }
 
     void Melden(string text) { Plan.Meldung = text; Neu(); }
+
+    string TexturSuche() { return txtTextur == null ? "" : txtTextur.Text; }
 
     List<Eintrag> Gefiltert() { return Liste.Gefiltert(filter, txtSuche == null ? "" : txtSuche.Text); }
 

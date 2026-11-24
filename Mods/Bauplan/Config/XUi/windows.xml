@@ -2,15 +2,15 @@
 <append xpath="/windows">
 
 	<!-- ============ BAUPLAN ============ -->
-	<window name="bauplanFenster" pos="-590, 380" width="1180" height="760" anchor="CenterCenter" controller="Bauplan, Bauplan" cursor_area="true">
+	<window name="bauplanFenster" pos="-590, 412" width="1180" height="824" anchor="CenterCenter" controller="Bauplan, Bauplan" cursor_area="true">
 		<panel name="header" height="43" depth="1" backgroundspritename="ui_game_panel_header">
 			<sprite depth="2" name="windowIcon" style="icon32px" pos="4,-5" sprite="ui_game_symbol_coin"/>
 			<label depth="2" pos="42,-6" width="560" height="32" font_size="32" color="[white]" justify="left" text="BAUPLAN – Gebäude kopieren und einfügen" />
 			<label depth="2" pos="1170,-8" width="240" height="32" font_size="24" color="200,200,200" justify="right" pivot="topright" text="{bpmodus}" />
 		</panel>
-		<rect name="content" pos="0,-46" width="1180" height="714" depth="1">
-			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="1180" height="714" color="[black]" type="sliced" fillcenter="false" />
-			<sprite depth="1" color="[darkGrey]" type="sliced" width="1180" height="714" />
+		<rect name="content" pos="0,-46" width="1180" height="778" depth="1">
+			<sprite depth="8" name="backgroundMain" sprite="menu_empty3px" pos="0,0" width="1180" height="778" color="[black]" type="sliced" fillcenter="false" />
+			<sprite depth="1" color="[darkGrey]" type="sliced" width="1180" height="778" />
 
 			<!-- Vorschaubild des gewählten Gebäudes -->
 			<label depth="3" pos="842,-10" width="324" height="30" font_size="28" color="255,170,90" justify="left" text="Vorschau" />
@@ -24,7 +24,12 @@
 			<label depth="3" pos="842,-566" width="324" height="28" font_size="24" color="255,170,90" justify="left" text="Fläche füllen (Fundament)" />
 			<simplebutton name="btnMaterial" depth="3" pos="840,-598" width="162" height="38" font_size="18" caption="Material: Beton" />
 			<simplebutton name="btnFuellen" depth="3" pos="1006,-598" width="162" height="38" font_size="18" caption="Fläche füllen" />
-			<label depth="3" pos="842,-642" width="326" height="64" font_size="16" color="180,180,180" justify="left" text="Rahmen markieren, Höhe = Dicke der Platte. Material anklicken zum Wechseln, Fläche füllen 2x drücken. Gebäudeblöcke bleiben." />
+			<simplebutton name="btnTexZurueck" depth="3" pos="840,-642" width="40" height="38" font_size="26" caption="&lt;" />
+			<simplebutton name="btnTextur" depth="3" pos="884,-642" width="240" height="38" font_size="17" caption="Textur: Standard" />
+			<simplebutton name="btnTexVor" depth="3" pos="1128,-642" width="40" height="38" font_size="26" caption="&gt;" />
+			<simplebutton name="btnTexGruppe" depth="3" pos="840,-686" width="162" height="38" font_size="17" caption="Gruppe: Alle" />
+			<textfield name="txtTextur" depth="3" pos="1006,-686" width="162" height="38" font_size="20" character_limit="30" />
+			<label depth="3" pos="842,-730" width="326" height="44" font_size="15" color="180,180,180" justify="left" text="Höhe des Rahmens = Dicke. &lt; &gt; wählt die Textur, Textur anklicken = Standard, Feld rechts = suchen. Füllen 2x drücken." />
 
 			<!-- 1. Markierung speichern -->
 			<label depth="3" pos="14,-10" width="400" height="30" font_size="28" color="255,170,90" justify="left" text="1. Markierte Fläche speichern" />

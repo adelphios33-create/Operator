@@ -481,6 +481,88 @@ namespace Bauplan
 
         public static void MaterialWeiter() { Material = (Material + 1) % MaterialNamen.Length; fuellBlockBis = 0f; }
 
+        // ---------- Textur (Farbe wie mit dem Farbroller) ----------
+
+        /// <summary>0 = Standard-Textur des Materials, sonst Paint-ID aus painting.xml.</summary>
+        public static int TexturId;
+        public static string TexturGruppe = "";   // "" = alle Gruppen
+
+        static string Lok(string schluessel)
+        {
+            try { string t = Localization.Get(schluessel); return string.IsNullOrEmpty(t) ? schluessel : t; } catch (Exception) { return schluessel; }
+        }
+
+        static string TexturAnzeige(BlockTextureData t)
+        {
+            string n = null;
+            try { n = t.LocalizedName; } catch (Exception) { }
+            if (string.IsNullOrEmpty(n)) n = Lok(t.Name);
+            return n;
+        }
+
+        /// <summary>Alle wählbaren Texturen, nach Gruppe und Name sortiert, optional nach Gruppe und Suchtext gefiltert.</summary>
+        public static List<BlockTextureData> Texturen(string suche)
+        {
+            var l = new List<BlockTextureData>();
+            var alle = BlockTextureData.list;
+            if (alle == null) return l;
+            string su = (suche ?? "").Trim().ToLowerInvariant();
+            for (int i = 0; i < alle.Length; i++)
+            {
+                var t = alle[i];
+                if (t == null || t.ID <= 0 || t.Hidden) continue;
+                if (t.Group == "txGroupExcluded") continue;
+                if (TexturGruppe.Length > 0 && t.Group != TexturGruppe) continue;
+                if (su.Length > 0 && TexturAnzeige(t).ToLowerInvariant().IndexOf(su) < 0 && (t.Name ?? "").ToLowerInvariant().IndexOf(su) < 0) continue;
+                l.Add(t);
+            }
+            l.Sort((x, y) => { int c = string.Compare(x.Group, y.Group, StringComparison.Ordinal); return c != 0 ? c : string.Compare(TexturAnzeige(x), TexturAnzeige(y), StringComparison.CurrentCultureIgnoreCase); });
+            return l;
+        }
+
+        public static List<string> TexturGruppen()
+        {
+            var g = new List<string>();
+            var alle = BlockTextureData.list;
+            if (alle == null) return g;
+            foreach (var t in alle)
+                if (t != null && t.ID > 0 && !t.Hidden && !string.IsNullOrEmpty(t.Group) && t.Group != "txGroupExcluded" && !g.Contains(t.Group)) g.Add(t.Group);
+            g.Sort(StringComparer.Ordinal);
+            return g;
+        }
+
+        public static void TexturWeiter(int richtung, string suche)
+        {
+            var l = Texturen(suche);
+            if (l.Count == 0) { TexturId = 0; return; }
+            int pos = l.FindIndex(t => t.ID == TexturId);   // -1 = Standard
+            pos += richtung;
+            if (pos < -1) pos = l.Count - 1;
+            if (pos >= l.Count) pos = -1;
+            TexturId = pos < 0 ? 0 : l[pos].ID;
+            fuellBlockBis = 0f;
+        }
+
+        public static void GruppeWeiter()
+        {
+            var g = TexturGruppen();
+            int i = TexturGruppe.Length == 0 ? -1 : g.IndexOf(TexturGruppe);
+            i++;
+            TexturGruppe = i >= g.Count ? "" : g[i];
+            TexturId = 0;
+            fuellBlockBis = 0f;
+        }
+
+        public static string GruppeText() { return TexturGruppe.Length == 0 ? "Alle" : Lok(TexturGruppe); }
+
+        public static string TexturText()
+        {
+            if (TexturId <= 0) return "Standard";
+            var alle = BlockTextureData.list;
+            if (alle == null || TexturId >= alle.Length || alle[TexturId] == null) return "Standard";
+            return TexturAnzeige(alle[TexturId]);
+        }
+
         /// <summary>Füllt den ganzen markierten Rahmen mit Baumaterial (z. B. Beton-Fundament). Luft, Platzhalter und Gelände werden ersetzt, Gebäudeblöcke bleiben. Zwei Klicks, Rückgängig geht.</summary>
         public static string FlaecheFuellen()
         {
@@ -501,7 +583,7 @@ namespace Bauplan
             if (jetzt > fuellBlockBis)
             {
                 fuellBlockBis = jetzt + 5f;
-                return "Rahmen " + (b.x - a.x + 1) + " x " + (b.z - a.z + 1) + ", " + (b.y - a.y + 1) + " Block dick, mit " + name + " füllen? Zum Bestätigen innerhalb von 5 Sekunden nochmal drücken. Danach geht 'Rückgängig'.";
+                return "Rahmen " + (b.x - a.x + 1) + " x " + (b.z - a.z + 1) + ", " + (b.y - a.y + 1) + " Block dick, mit " + name + (TexturId > 0 ? " (Textur: " + TexturText() + ")" : "") + " füllen? Zum Bestätigen innerhalb von 5 Sekunden nochmal drücken. Danach geht 'Rückgängig'.";
             }
             fuellBlockBis = 0f;
             try
@@ -512,6 +594,7 @@ namespace Bauplan
                 rueck = alt;
                 rueckPos = a;
 
+                long tex = TexturId > 0 ? Chunk.TextureIdxToTextureFullValue64(TexturId) : 0L;
                 var liste = new List<BlockChangeInfo>();
                 int n = 0;
                 for (int x = a.x; x <= b.x; x++)
@@ -522,14 +605,16 @@ namespace Bauplan
                             BlockValue bv = w.GetBlock(q);
                             bool gelaende = !bv.isair && bv.Block != null && bv.Block.shape != null && bv.Block.shape.IsTerrain();
                             if (!bv.isair && !IstFueller(bv) && !gelaende) continue;
-                            liste.Add(new BlockChangeInfo(0, q, mat, MarchingCubes.DensityAir));
+                            var info = new BlockChangeInfo(0, q, mat, MarchingCubes.DensityAir);
+                            if (TexturId > 0) { info.textureFull = tex; info.bChangeTexture = true; }
+                            liste.Add(info);
                             n++;
                             if (liste.Count >= 20000) { w.SetBlocksRPC(liste); liste = new List<BlockChangeInfo>(); }
                         }
                 if (liste.Count > 0) w.SetBlocksRPC(liste);
-                Log.Out("[Bauplan] Fläche gefüllt mit " + name + ": " + n + " Blöcke in " + Pos(a) + " bis " + Pos(b));
+                Log.Out("[Bauplan] Fläche gefüllt mit " + name + (TexturId > 0 ? " / Textur " + TexturId : "") + ": " + n + " Blöcke in " + Pos(a) + " bis " + Pos(b));
                 if (n == 0) { rueck = null; return "Im Rahmen ist kein Platz frei."; }
-                return n.ToString("N0") + " Blöcke " + name + " gesetzt. 'Rückgängig' nimmt es zurück.";
+                return n.ToString("N0") + " Blöcke " + name + (TexturId > 0 ? " mit Textur " + TexturText() : "") + " gesetzt. 'Rückgängig' nimmt es zurück.";
             }
             catch (Exception e)
             {

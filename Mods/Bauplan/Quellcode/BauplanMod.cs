@@ -83,6 +83,7 @@ namespace Bauplan
             "bau auffuellen            Löcher in der Markierung bis zur oberen Ecke mit Erde füllen, 2x eingeben\n" +
             "bau asphalt               wie auffuellen, oberste Schicht wird Asphalt (Straßen), 2x eingeben\n" +
             "bau fuellen [beton|stahl|ziegel|kopfstein|holz]  ganze Markierung mit Baumaterial füllen (Fundament), 2x eingeben\n" +
+            "bau textur [Suchwort]     Textur zum Füllen wählen (leer = Standard)\n" +
             "bau liste [Suche]         Gebäude suchen (eigene zuerst)\n" +
             "bau waehlen <Name>        Gebäude zum Einfügen auswählen\n" +
             "bau platzieren            Platzieren mit dem Werkzeug starten\n" +
@@ -131,6 +132,15 @@ namespace Bauplan
                 case "boden": antwort = Plan.BodenReparieren(); break;
                 case "auffuellen": antwort = Plan.BodenAuffuellen(); break;
                 case "asphalt": antwort = Plan.BodenAuffuellen(true); break;
+                case "textur":
+                    {
+                        string su = rest.Trim();
+                        if (su.Length == 0 || su.ToLowerInvariant() == "standard") { Plan.TexturId = 0; antwort = "Textur: Standard"; break; }
+                        Plan.TexturId = 0;
+                        Plan.TexturWeiter(1, su);
+                        antwort = Plan.TexturId == 0 ? "Keine Textur mit '" + su + "' gefunden." : "Textur: " + Plan.TexturText() + " (" + Plan.Texturen(su).Count + " Treffer, 'bau textur' + Suchwort)";
+                        break;
+                    }
                 case "fuellen":
                     {
                         string mn = rest.Trim().ToLowerInvariant();

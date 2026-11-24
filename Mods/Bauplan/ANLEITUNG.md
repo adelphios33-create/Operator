@@ -76,3 +76,6 @@ Der Knopf heißt jetzt **Auffüllen: Erde**, daneben **Auffüllen: Asphalt** (Ko
 ## 1.5.0: Fläche füllen (Fundament)
 Unten rechts im Fenster: **Material** (anklicken wechselt: Beton, Stahl, Ziegel, Kopfstein, Holz) und **Fläche füllen**. Rahmen mit dem Werkzeug markieren; die Höhe des Rahmens ist die Dicke der Platte (Ecke 1 und Ecke 2 auf gleicher Höhe = 1 Block dick). Zweimal drücken: Luft, Erde und Platzhalter im Rahmen werden zu vollen Blöcken aus dem Material. Gebäudeblöcke bleiben. Rückgängig geht.
 Konsole: `bau fuellen beton` (oder stahl, ziegel, kopfstein, holz), 2x eingeben.
+
+## 1.5.1: Textur beim Füllen
+Unter Material/Fläche füllen: **&lt; Textur &gt;** blättert durch alle Texturen des Farbrollers (156 Stück), **Gruppe** schränkt ein (Holz, Mauerwerk, Metall …), das Feld rechts sucht nach Namen. Textur anklicken = zurück auf Standard. Beim Füllen bekommen alle neuen Blöcke auf allen Seiten diese Textur. Konsole: `bau textur Ziegel`.
