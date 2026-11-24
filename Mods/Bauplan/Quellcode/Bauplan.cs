@@ -472,6 +472,72 @@ namespace Bauplan
             }
         }
 
+        // ---------- Fläche mit Baumaterial füllen (Fundament) ----------
+
+        public static readonly string[] MaterialNamen = { "Beton", "Stahl", "Ziegel", "Kopfstein", "Holz" };
+        public static readonly string[] MaterialBloecke = { "concreteShapes:cube", "steelShapes:cube", "brickShapes:cube", "cobblestoneShapes:cube", "woodShapes:cube" };
+        public static int Material;
+        static float fuellBlockBis;
+
+        public static void MaterialWeiter() { Material = (Material + 1) % MaterialNamen.Length; fuellBlockBis = 0f; }
+
+        /// <summary>Füllt den ganzen markierten Rahmen mit Baumaterial (z. B. Beton-Fundament). Luft, Platzhalter und Gelände werden ersetzt, Gebäudeblöcke bleiben. Zwei Klicks, Rückgängig geht.</summary>
+        public static string FlaecheFuellen()
+        {
+            var w = Welt;
+            if (w == null) return "Keine Welt geladen.";
+            if (!HatEcke1 || !HatEcke2) return "Erst die Fläche markieren (Linksklick und Rechtsklick mit dem Werkzeug). Die Höhe des Rahmens ist die Dicke der Platte.";
+            Vector3i a, b;
+            Min(out a, out b);
+            if (a.y < 1) a = new Vector3i(a.x, 1, a.z);
+            if (b.y > 254) b = new Vector3i(b.x, 254, b.z);
+            long volumen = (long)(b.x - a.x + 1) * (b.y - a.y + 1) * (b.z - a.z + 1);
+            if (volumen > MaxLeeren) return "Zu groß: höchstens " + MaxLeeren.ToString("N0") + " Blöcke auf einmal (markiert: " + volumen.ToString("N0") + ").";
+            if (!Geladen(a, b)) return "Ein Teil der Fläche ist nicht geladen. Geh näher heran und versuch es noch einmal.";
+            string name = MaterialNamen[Material];
+            BlockValue mat = Block.GetBlockValue(MaterialBloecke[Material]);
+            if (mat.isair) return name + "-Block (" + MaterialBloecke[Material] + ") nicht gefunden.";
+            float jetzt = Time.time;
+            if (jetzt > fuellBlockBis)
+            {
+                fuellBlockBis = jetzt + 5f;
+                return "Rahmen " + (b.x - a.x + 1) + " x " + (b.z - a.z + 1) + ", " + (b.y - a.y + 1) + " Block dick, mit " + name + " füllen? Zum Bestätigen innerhalb von 5 Sekunden nochmal drücken. Danach geht 'Rückgängig'.";
+            }
+            fuellBlockBis = 0f;
+            try
+            {
+                var alt = new Prefab();
+                alt.copyFromWorld(w, a, b);
+                alt.bCopyAirBlocks = true;
+                rueck = alt;
+                rueckPos = a;
+
+                var liste = new List<BlockChangeInfo>();
+                int n = 0;
+                for (int x = a.x; x <= b.x; x++)
+                    for (int z = a.z; z <= b.z; z++)
+                        for (int y = a.y; y <= b.y; y++)
+                        {
+                            var q = new Vector3i(x, y, z);
+                            BlockValue bv = w.GetBlock(q);
+                            bool gelaende = !bv.isair && bv.Block != null && bv.Block.shape != null && bv.Block.shape.IsTerrain();
+                            if (!bv.isair && !IstFueller(bv) && !gelaende) continue;
+                            liste.Add(new BlockChangeInfo(0, q, mat, MarchingCubes.DensityAir));
+                            n++;
+                            if (liste.Count >= 20000) { w.SetBlocksRPC(liste); liste = new List<BlockChangeInfo>(); }
+                        }
+                if (liste.Count > 0) w.SetBlocksRPC(liste);
+                Log.Out("[Bauplan] Fläche gefüllt mit " + name + ": " + n + " Blöcke in " + Pos(a) + " bis " + Pos(b));
+                if (n == 0) { rueck = null; return "Im Rahmen ist kein Platz frei."; }
+                return n.ToString("N0") + " Blöcke " + name + " gesetzt. 'Rückgängig' nimmt es zurück.";
+            }
+            catch (Exception e)
+            {
+                Log.Error("[Bauplan] Füllen fehlgeschlagen: " + e);
+                return "Füllen fehlgeschlagen: " + e.Message;
+            }
+        }
+
         // ---------- Fläche leeren (Gebäude entfernen) ----------
 
         /// <summary>Höchstens so viele Blöcke (Volumen) auf einmal leeren.</summary>

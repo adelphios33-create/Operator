@@ -21,6 +21,10 @@
 			<simplebutton name="btnAuffuellen" depth="3" pos="840,-428" width="162" height="38" font_size="18" caption="Auffüllen: Erde" />
 			<simplebutton name="btnAsphalt" depth="3" pos="1006,-428" width="162" height="38" font_size="18" caption="Auffüllen: Asphalt" />
 			<label depth="3" pos="842,-472" width="326" height="90" font_size="16" color="180,180,180" justify="left" text="Ecke 1 unten in der Grube, Ecke 2 oben auf Straßenhöhe, 2x drücken. Erde: Löcher werden Erde. Asphalt: Löcher Erde, oberste Schicht Asphalt (Straßen)." />
+			<label depth="3" pos="842,-566" width="324" height="28" font_size="24" color="255,170,90" justify="left" text="Fläche füllen (Fundament)" />
+			<simplebutton name="btnMaterial" depth="3" pos="840,-598" width="162" height="38" font_size="18" caption="Material: Beton" />
+			<simplebutton name="btnFuellen" depth="3" pos="1006,-598" width="162" height="38" font_size="18" caption="Fläche füllen" />
+			<label depth="3" pos="842,-642" width="326" height="64" font_size="16" color="180,180,180" justify="left" text="Rahmen markieren, Höhe = Dicke der Platte. Material anklicken zum Wechseln, Fläche füllen 2x drücken. Gebäudeblöcke bleiben." />
 
 			<!-- 1. Markierung speichern -->
 			<label depth="3" pos="14,-10" width="400" height="30" font_size="28" color="255,170,90" justify="left" text="1. Markierte Fläche speichern" />

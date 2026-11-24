@@ -14,7 +14,7 @@ public class XUiC_Bauplan : XUiController
     const int Zeilen = 8;
 
     XUiC_TextInput txtName, txtSuche;
-    XUiC_SimpleButton btnFilter, btnDrehen, btnLuft, btnKeller, btnKopieren, btnZombies;
+    XUiC_SimpleButton btnFilter, btnDrehen, btnLuft, btnKeller, btnKopieren, btnZombies, btnMaterial;
     readonly XUiC_SimpleButton[] zeile = new XUiC_SimpleButton[Zeilen];
     int filter;          // 0 alle, 1 eigene, 2 Spiel
     int seite;
@@ -78,6 +78,9 @@ public class XUiC_Bauplan : XUiController
         Knopf("btnBoden", (s, m) => Melden(Plan.BodenReparieren()));
         Knopf("btnAuffuellen", (s, m) => Melden(Plan.BodenAuffuellen()));
         Knopf("btnAsphalt", (s, m) => Melden(Plan.BodenAuffuellen(true)));
+        btnMaterial = GetChildById("btnMaterial") as XUiC_SimpleButton;
+        Knopf("btnMaterial", (s, m) => { Plan.MaterialWeiter(); Neu(); });
+        Knopf("btnFuellen", (s, m) => Melden(Plan.FlaecheFuellen()));
         Knopf("btnLuft", (s, m) => { Plan.MitLuft = !Plan.MitLuft; Neu(); });
         Knopf("btnKeller", (s, m) => { Plan.MitKeller = !Plan.MitKeller; Neu(); });
         btnZombies = GetChildById("btnZombies") as XUiC_SimpleButton;
@@ -106,6 +109,7 @@ public class XUiC_Bauplan : XUiController
         if (btnDrehen != null) btnDrehen.Text = "Drehen: " + Plan.Drehung * 90 + "°";
         if (btnLuft != null) btnLuft.Text = "Fläche freiräumen: " + (Plan.MitLuft ? "AN" : "AUS");
         if (btnKeller != null) btnKeller.Text = "Keller einsenken: " + (Plan.MitKeller ? "AN" : "AUS");
+        if (btnMaterial != null) btnMaterial.Text = "Material: " + Plan.MaterialNamen[Plan.Material];
         if (btnZombies != null) btnZombies.Text = Plan.OhneZombies ? "Zombies: AUS (keine)" : "Zombies: AN (wie im Spiel)";
         var l = Gefiltert();
         int seiten = Math.Max(1, (l.Count + Zeilen - 1) / Zeilen);

@@ -82,6 +82,7 @@ namespace Bauplan
             "bau boden                 Boden unter eingefügtem Gebäude reparieren (terrainFiller)\n" +
             "bau auffuellen            Löcher in der Markierung bis zur oberen Ecke mit Erde füllen, 2x eingeben\n" +
             "bau asphalt               wie auffuellen, oberste Schicht wird Asphalt (Straßen), 2x eingeben\n" +
+            "bau fuellen [beton|stahl|ziegel|kopfstein|holz]  ganze Markierung mit Baumaterial füllen (Fundament), 2x eingeben\n" +
             "bau liste [Suche]         Gebäude suchen (eigene zuerst)\n" +
             "bau waehlen <Name>        Gebäude zum Einfügen auswählen\n" +
             "bau platzieren            Platzieren mit dem Werkzeug starten\n" +
@@ -130,6 +131,19 @@ namespace Bauplan
                 case "boden": antwort = Plan.BodenReparieren(); break;
                 case "auffuellen": antwort = Plan.BodenAuffuellen(); break;
                 case "asphalt": antwort = Plan.BodenAuffuellen(true); break;
+                case "fuellen":
+                    {
+                        string mn = rest.Trim().ToLowerInvariant();
+                        if (mn.Length > 0)
+                        {
+                            int gef = -1;
+                            for (int i = 0; i < Plan.MaterialNamen.Length; i++) if (Plan.MaterialNamen[i].ToLowerInvariant().StartsWith(mn)) gef = i;
+                            if (gef < 0) { antwort = "Material: " + string.Join(", ", Plan.MaterialNamen); break; }
+                            Plan.Material = gef;
+                        }
+                        antwort = Plan.FlaecheFuellen();
+                        break;
+                    }
                 case "abrissrueck": Abriss.Zurueck(sp); antwort = Plan.Meldung; break;
                 default: antwort = Hilfe; break;
             }

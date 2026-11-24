@@ -72,3 +72,7 @@ Neuer Knopf **Grube auffüllen** (Konsole: `bau auffuellen`). Markiere eine Ecke
 
 ## 1.4.3: Asphalt auffüllen
 Der Knopf heißt jetzt **Auffüllen: Erde**, daneben **Auffüllen: Asphalt** (Konsole: `bau asphalt`). Asphalt füllt Löcher wie gewohnt mit Erde, macht aber die oberste Schicht (Höhe der oberen Ecke) im ganzen Rahmen zu Asphalt, auch dort, wo schon Erde, Sand oder Schutt liegt. Gebäudeblöcke bleiben. Rückgängig geht. Für eine Straße: Rahmen so breit wie die Straße, Ecke 2 auf Straßenhöhe.
+
+## 1.5.0: Fläche füllen (Fundament)
+Unten rechts im Fenster: **Material** (anklicken wechselt: Beton, Stahl, Ziegel, Kopfstein, Holz) und **Fläche füllen**. Rahmen mit dem Werkzeug markieren; die Höhe des Rahmens ist die Dicke der Platte (Ecke 1 und Ecke 2 auf gleicher Höhe = 1 Block dick). Zweimal drücken: Luft, Erde und Platzhalter im Rahmen werden zu vollen Blöcken aus dem Material. Gebäudeblöcke bleiben. Rückgängig geht.
+Konsole: `bau fuellen beton` (oder stahl, ziegel, kopfstein, holz), 2x eingeben.
