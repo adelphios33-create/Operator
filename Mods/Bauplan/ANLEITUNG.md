@@ -66,3 +66,6 @@ Knopf **„Zombies: AUS (keine)“** (Standard): Beim Einfügen werden die Schl�
 
 ## 1.4.1: Erde rutscht nicht mehr nach
 Spiel-Gebäude enthalten „terrainFiller“, Platzhalter für Gelände. Beim Einfügen werden sie jetzt durch den Boden ersetzt, der vorher da war, oder durch Erde, wenn dort nichts war. Für schon eingefügte Gebäude: das Gebäude mit dem Werkzeug markieren und im Fenster **„Boden reparieren“** drücken, oder `bau boden` in die Konsole eingeben. Direkt nach einem Einfügen geht es auch ohne Markierung.
+
+## 1.4.2: Grube auffüllen
+Neuer Knopf **Grube auffüllen** (Konsole: `bau auffuellen`). Markiere eine Ecke unten in der Grube und die gegenüberliegende Ecke oben auf der gewünschten Bodenhöhe (z. B. Straße). Zweimal drücken: alle Luftlöcher und Platzhalter im Rahmen werden bis zur oberen Ecke mit Erde gefüllt. Gebäude- und Restblöcke bleiben stehen. Rückgängig geht.

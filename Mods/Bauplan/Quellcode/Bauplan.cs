@@ -403,6 +403,62 @@ namespace Bauplan
             return n == 0 ? "Keine Platzhalter gefunden, der Boden ist in Ordnung." : n + " Platzhalter durch Erde ersetzt. Das Nachrutschen sollte aufhören.";
         }
 
+        static float fuellenBis;
+
+        /// <summary>Füllt in der Markierung alle Löcher (Luft und Platzhalter) bis zur Höhe der oberen Ecke mit Erde. Zwei Klicks, Rückgängig geht.</summary>
+        public static string BodenAuffuellen()
+        {
+            var w = Welt;
+            if (w == null) return "Keine Welt geladen.";
+            if (!HatEcke1 || !HatEcke2) return "Erst die Grube markieren: eine Ecke unten in der Grube, die gegenüberliegende Ecke oben auf Straßenhöhe.";
+            Vector3i a, b;
+            Min(out a, out b);
+            if (a.y < 1) a = new Vector3i(a.x, 1, a.z);
+            if (b.y > 254) b = new Vector3i(b.x, 254, b.z);
+            long volumen = (long)(b.x - a.x + 1) * (b.y - a.y + 1) * (b.z - a.z + 1);
+            if (volumen > MaxLeeren) return "Zu groß: höchstens " + MaxLeeren.ToString("N0") + " Blöcke auf einmal (markiert: " + volumen.ToString("N0") + "). Bitte in Teilen auffüllen.";
+            if (!Geladen(a, b)) return "Ein Teil der Fläche ist nicht geladen. Geh näher heran und versuch es noch einmal.";
+            float jetzt = Time.time;
+            if (jetzt > fuellenBis)
+            {
+                fuellenBis = jetzt + 5f;
+                return "Alle Löcher im Rahmen bis Höhe " + b.y + " mit Erde füllen? Zum Bestätigen innerhalb von 5 Sekunden nochmal drücken. Danach geht 'Rückgängig'.";
+            }
+            fuellenBis = 0f;
+            try
+            {
+                var alt = new Prefab();
+                alt.copyFromWorld(w, a, b);
+                alt.bCopyAirBlocks = true;
+                rueck = alt;
+                rueckPos = a;
+
+                BlockValue erde = Block.GetBlockValue("terrDirt");
+                var liste = new List<BlockChangeInfo>();
+                int n = 0;
+                for (int x = a.x; x <= b.x; x++)
+                    for (int z = a.z; z <= b.z; z++)
+                        for (int y = a.y; y <= b.y; y++)
+                        {
+                            var q = new Vector3i(x, y, z);
+                            BlockValue bv = w.GetBlock(q);
+                            if (!bv.isair && !IstFueller(bv)) continue;
+                            liste.Add(new BlockChangeInfo(0, q, erde, MarchingCubes.DensityTerrain));
+                            n++;
+                            if (liste.Count >= 20000) { w.SetBlocksRPC(liste); liste = new List<BlockChangeInfo>(); }
+                        }
+                if (liste.Count > 0) w.SetBlocksRPC(liste);
+                Log.Out("[Bauplan] Boden aufgefüllt: " + n + " Blöcke in " + Pos(a) + " bis " + Pos(b));
+                if (n == 0) { rueck = null; return "Keine Löcher gefunden."; }
+                return n.ToString("N0") + " Blöcke Erde aufgefüllt bis Höhe " + b.y + ". 'Rückgängig' nimmt es zurück.";
+            }
+            catch (Exception e)
+            {
+                Log.Error("[Bauplan] Auffüllen fehlgeschlagen: " + e);
+                return "Auffüllen fehlgeschlagen: " + e.Message;
+            }
+        }
+
         // ---------- Fläche leeren (Gebäude entfernen) ----------
 
         /// <summary>Höchstens so viele Blöcke (Volumen) auf einmal leeren.</summary>
